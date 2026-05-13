@@ -31,7 +31,6 @@
 
 \begin{figure}[h]
     \centering
-    \caption{نتایج بصری رمزنگاری برای تصاویر آزمایشی}
     \begin{tabular}{ccc}
     \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11} &
     \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image12} &
@@ -50,6 +49,7 @@
     \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17} \\
     (الف) تصویر اصلی \lr{Airplane} & (ب) تصویر رمزشده & (ج) تصویر رمزگشایی‌شده
     \end{tabular}
+    \caption{نتایج بصری رمزنگاری برای تصاویر آزمایشی}
 \end{figure}
 
 \section{تحلیل هیستوگرام و بررسی یکنواختی توزیع}
@@ -86,14 +86,14 @@
 \end{table}
 
 \section{تحلیل همبستگی پیکسل‌های مجاور}
-در تصاویر رمزشده، مقدار همبستگی به کمتر از ۰.۰۰۸ رسیده است که نشان‌دهنده شکستن ساختار مکانی تصویر است. این کاهش شدید (حدود ۹۹.۵٪) نشان می‌دهد که سیستم \lr{Chen} در مرحله جایگشت، ساختار مکانی تصویر را کاملاً از بین برده است و تصویر رمز شده از دید تحلیل‌گر، یک آرایه تصادفی بدون ساختار تلقی می‌شود. این بخش عینی‌ترین تایید برای فرضیه ۲ است.
+در تصاویر رمزشده، مقدار همبستگی به کمتر از ۰.۰۰۸ رسیده است که نشان‌دهنده شکستن ساختار مکانی تصویر است. این کاهش شدید (حدود \lr{99.5\%}) نشان می‌دهد که سیستم \lr{Chen} در مرحله جایگشت، ساختار مکانی تصویر را کاملاً از بین برده است و تصویر رمز شده از دید تحلیل‌گر، یک آرایه تصادفی بدون ساختار تلقی می‌شود. این بخش عینی‌ترین تایید برای فرضیه ۲ است.
 
 \begin{table}[h]
 \centering
 \caption{ضریب همبستگی کلی (۱۰۰۰۰ جفت تصادفی)}
 \begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{تصویر} & \textbf{همبستگی اصلی} & \textbf{همبستگی رمز شده} & \textbf{کاهش} \\ \hline
+\textbf{تصویر} & \textbf{همبستگی اصلی (میانگین سه جهت)} & \textbf{همبستگی رمز شده} & \textbf{کاهش} \\ \hline
 \lr{Tree} & \lr{~0.96} & \lr{0.0047} & \lr{99.51\%} \\ \hline
 \lr{Peppers} & \lr{~0.97} & \lr{0.0083} & \lr{99.14\%} \\ \hline
 \lr{Baboon} & \lr{~0.94} & \lr{0.0034} & \lr{99.64\%} \\ \hline
@@ -109,7 +109,7 @@
 \caption{نتایج تحلیل \lr{NPCR} و \lr{UACI}}
 \begin{tabular}{|c|c|c|}
 \hline
-\textbf{تصویر} & \textbf{UACI (\%)} & \textbf{NPCR (\%)} \\ \hline
+\textbf{تصویر} & \textbf{\lr{UACI} (\%)} & \textbf{\lr{NPCR} (\%)} \\ \hline
 \lr{Tree} & \lr{32.13} & \lr{99.61} \\ \hline
 \lr{Peppers} & \lr{32.69} & \lr{99.63} \\ \hline
 \lr{Baboon} & \lr{31.24} & \lr{99.63} \\ \hline

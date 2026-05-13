@@ -9,61 +9,62 @@
 \begin{document}
 
 % ============================================================================
-% SECTION 1: TITLE PAGE
+% SECTION 1: TITLE PAGE & PRELIMINARY (Abjad numbering)
 % ============================================================================
-\pagenumbering{gobble} % No numbering for title page
-\input{01_titlepage}
+\pagenumbering{abjad} 
+
+% 1. Blank Page
+\mbox{}
+\thispagestyle{empty}
+\newpage
+
+\input{01_titlepage} % Should be Page 'ب' (hidden)
+\newpage
+
+\input{01_bismillah} % Page 'ج'
+\input{01_jury}
+\input{01_originality}
+\input{01_ethics}
+\input{02_dedication}
+\input{02_acknowledgments}
+\input{02_frontmatter} % TOC, LOT, LOF
+\input{02_abbreviations}
 \newpage
 
 % ============================================================================
-% SECTION 2: FRONT MATTER (Abjad Numbering)
-% ============================================================================
-\pagenumbering{abjad}
-\input{02_frontmatter}
-\newpage
-
-% ============================================================================
-% SECTION 3: ABSTRACT (Arabic Numbering starts at 1)
+% SECTION 2: ABSTRACT & CHAPTERS (Arabic Numbering starts at 1)
 % ============================================================================
 \pagenumbering{arabic}
 \input{02_abstract}
 \newpage
 
-% ============================================================================
-% CHAPTER 1: RESEARCH FUNDAMENTALS
-% ============================================================================
 \input{03_chapter1}
 \newpage
-
-% ============================================================================
-% CHAPTER 2: BASIC CONCEPTS AND LITERATURE REVIEW
-% ============================================================================
 \input{04_chapter2}
 \newpage
-
-% ============================================================================
-% CHAPTER 3: PROPOSED ALGORITHM INTRODUCTION
-% ============================================================================
 \input{05_chapter3}
 \newpage
-
-% ============================================================================
-% CHAPTER 4: IMPLEMENTATION
-% ============================================================================
 \input{06_chapter4}
 \newpage
-
-% ============================================================================
-% CHAPTER 5: DISCUSSION AND CONCLUSION
-% ============================================================================
 \input{07_chapter5}
 \newpage
 
 % ============================================================================
-% REFERENCES
+% SECTION 3: BACK MATTER
 % ============================================================================
 \input{08_references}
 \newpage
 \input{09_appendix}
+\newpage
+
+% English Section (with mirrored margins for left-side binding)
+\newgeometry{top=3cm,bottom=3cm,left=3cm,right=2cm,footskip=1.5cm}
+\input{10_abstract_en}
+\input{11_titlepage_en}
+
+% 8. Blank Page
+\newpage
+\mbox{}
+\thispagestyle{empty}
 
 \end{document}
