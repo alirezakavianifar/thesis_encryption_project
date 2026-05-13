@@ -28,15 +28,15 @@
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Map Name} & \textbf{Mathematical Definition} \\ \hline
-LEL & $x_{i+1} = (4ax_i(1-x_i))^{1 + 4bx_i(1-x_i)}$ \\ \hline
-LES & $x_{i+1} = (4ax_i(1-x_i))^{1 + b\sin(\pi x_i)}$ \\ \hline
-LET & $x_{i+1} = (4ax_i(1-x_i))^{1 + 2b\min(x_i, 1-x_i)}$ \\ \hline
-SEL & $x_{i+1} = (a\sin(\pi x_i))^{1 + 4bx_i(1-x_i)}$ \\ \hline
-SES & $x_{i+1} = (a\sin(\pi x_i))^{1 + b\sin(\pi x_i)}$ \\ \hline
-SET & $x_{i+1} = (a\sin(\pi x_i))^{1 + 2b\min(x_i, 1-x_i)}$ \\ \hline
-TEL & $x_{i+1} = (2a\min(x_i, 1-x_i))^{1 + 4bx_i(1-x_i)}$ \\ \hline
-TES & $x_{i+1} = (2a\min(x_i, 1-x_i))^{1 + b\sin(\pi x_i)}$ \\ \hline
-TET & $x_{i+1} = (2a\min(x_i, 1-x_i))^{1 + 2b\min(x_i, 1-x_i)}$ \\ \hline
+LEL Map & $x_{i+1} = L(a, x_i) \ln(L(b, x_i) + c) = (4ax_i(1-x_i)) \ln(4bx_i(1-x_i) + c)$ \\ \hline
+LES Map & $x_{i+1} = L(a, x_i) \ln(S(b, x_i) + c) = (4ax_i(1-x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
+LET Map & $x_{i+1} = L(a, x_i) \ln(T(b, x_i) + c) = (4ax_i(1-x_i)) \ln(2b \min(x_i, 1-x_i) + c)$ \\ \hline
+SEL Map & $x_{i+1} = S(a, x_i) \ln(L(b, x_i) + c) = (a \sin(\pi x_i)) \ln(4bx_i(1-x_i) + c)$ \\ \hline
+SES Map & $x_{i+1} = S(a, x_i) \ln(S(b, x_i) + c) = (a \sin(\pi x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
+SET Map & $x_{i+1} = S(a, x_i) \ln(T(b, x_i) + c) = (a \sin(\pi x_i)) \ln(2b \min(x_i, 1-x_i) + c)$ \\ \hline
+TEL Map & $x_{i+1} = T(a, x_i) \ln(L(b, x_i) + c) = (2a \min(x_i, 1-x_i)) \ln(4bx_i(1-x_i) + c)$ \\ \hline
+TES Map & $x_{i+1} = T(a, x_i) \ln(S(b, x_i) + c) = (2a \min(x_i, 1-x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
+TET Map & $x_{i+1} = T(a, x_i) \ln(T(b, x_i) + c) = (2a \min(x_i, 1-x_i)) \ln(2b \min(x_i, 1-x_i) + c)$ \\ \hline
 \end{tabular}
 \end{latin}
 \end{table}
@@ -62,9 +62,9 @@ TET & $x_{i+1} = (2a\min(x_i, 1-x_i))^{1 + 2b\min(x_i, 1-x_i)}$ \\ \hline
     \item \textbf{جایگشت پیکسل‌ها با سیستم \lr{Chen}:} برای شکستن همبستگی میان پیکسل‌ها، از سیستم آشوبی چن برای تولید دنباله‌ای تصادفی استفاده می‌شود. جایگشت به گونه‌ای انجام می‌شود که موقعیت پیکسل‌ها در تصویر تغییر کند:
     \begin{equation}
     \begin{cases}
-        \frac{dx}{dt} = a(y - x) \\
-        \frac{dy}{dt} = (c - a)x - xz + cy \\
-        \frac{dz}{dt} = xy - bz
+        \dot{x} = a(y - x) \\
+        \dot{y} = (c - a)x - xz + cy \\
+        \dot{z} = xy - bz
     \end{cases}
     \end{equation}
     پارامترهای $a$، $b$ و $c$ مقادیر ثابت هستند.

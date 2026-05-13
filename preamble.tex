@@ -1,4 +1,13 @@
 \documentclass[a4paper,12pt]{report}
+
+\usepackage{expl3}
+\ExplSyntaxOn
+% Force-define hyperref variables that are being lost/corrupted in 2024 kernel + xepersian
+\int_if_exist:NF \g__hyp_link_int { \int_new:N \g__hyp_link_int }
+\int_if_exist:NF \g__hyp_linknestlevel_int { \int_new:N \g__hyp_linknestlevel_int }
+\bool_if_exist:NF \l__hyp_annot_GoTo_bool { \bool_new:N \l__hyp_annot_GoTo_bool }
+\ExplSyntaxOff
+
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -27,29 +36,8 @@
   breakatwhitespace=false
 }
 
-\usepackage[unicode=true,hidelinks,linktoc=all]{hyperref}
+\usepackage[unicode=true,hidelinks]{hyperref}
 \usepackage{iftex}
-
-% Compatibility fix for bidi/xepersian with newer LaTeX kernels
-\makeatletter
-% Fix for \IfClassLoadedTF and its variants
-\ifdefined\IfClassLoadedTF
-  \ifdefined\IfClassLoadedT\else \newcommand{\IfClassLoadedT}[2]{\IfClassLoadedTF{#1}{#2}{}} \fi
-  \ifdefined\IfClassLoadedF\else \newcommand{\IfClassLoadedF}[2]{\IfClassLoadedTF{#1}{}{#2}} \fi
-\fi
-% Fix for \IfPackageLoadedTF and its variants
-\ifdefined\IfPackageLoadedTF
-  \ifdefined\IfPackageLoadedT\else \newcommand{\IfPackageLoadedT}[2]{\IfPackageLoadedTF{#1}{#2}{}} \fi
-  \ifdefined\IfPackageLoadedF\else \newcommand{\IfPackageLoadedF}[2]{\IfPackageLoadedTF{#1}{}{#2}} \fi
-\else
-  % Fallback for older kernels if bidi expects these
-  \ifdefined\@ifpackageloaded
-    \newcommand{\IfPackageLoadedTF}[3]{\@ifpackageloaded{#1}{#2}{#3}}
-    \newcommand{\IfPackageLoadedT}[2]{\@ifpackageloaded{#1}{#2}{}}
-    \newcommand{\IfPackageLoadedF}[2]{\@ifpackageloaded{#1}{}{#2}}
-  \fi
-\fi
-\makeatother
 
 \ifXeTeX
   \usepackage{fontspec}
@@ -57,6 +45,7 @@
   \settextfont{B Lotus}
   \setlatintextfont{Arial}
   \setdigitfont{B Lotus}
+  \SepMark{-}
 \else
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
