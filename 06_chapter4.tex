@@ -5,61 +5,110 @@
 \chapter{پیاده‌سازی و تحلیل نتایج}
 
 \section{مقدمه}
-در این فصل، نتایج حاصل از پیاده‌سازی عملی الگوریتم پیشنهادی ارائه و به‌صورت دقیق تحلیل می‌شود. هدف اصلی این تحلیل، اثبات اعتبار فرضیه‌های تحقیق و ارائه استدلال‌های فنی مبتنی بر داده‌های کمی و بصری است.
+در این فصل، نتایج حاصل از پیاده‌سازی عملی الگوریتم پیشنهادی ارائه و به‌صورت دقیق تحلیل می‌شود. هدف اصلی این تحلیل، اعتبارسنجی عملی الگوریتم و نشان‌دادن میزان کارایی آن در حفظ محرمانگی اطلاعات، معکوس‌پذیری کامل و مقاومت در برابر حملات متداول رمزنگاری تصویر می‌باشد.
 
 \section{تنظیمات محیط اجرای الگوریتم}
-الگوریتم در محیط زیر پیاده‌سازی و تست شده است:
+برای تضمین مقایسه‌پذیری، تحلیل‌ها بر روی چهار تصویر شناخته‌شده مجموعه \lr{USC-SIPI} شامل \lr{Tree}, \lr{Peppers}, \lr{Baboon} و \lr{Airplane} انجام شده است. محیط اجرایی شامل موارد زیر است:
 \begin{itemize}
-    \item \textbf{زبان برنامه‌نویسی:} \lr{Python 3.11}
-    \item \textbf{کتابخانه‌ها:} \lr{NumPy}, \lr{OpenCV}, \lr{SciPy}
-    \item \textbf{مجموعه داده:} تصاویر \lr{Tree}, \lr{Peppers}, \lr{Baboon}, \lr{Airplane} از مجموعه \lr{USC-SIPI}.
+    \item \lr{Python 3.11} و کتابخانه‌های \lr{SciPy}, \lr{OpenCV}, \lr{NumPy}.
+    \item پردازنده \lr{Intel Core i7} بدون استفاده از \lr{GPU}.
 \end{itemize}
 
 \section{تحلیل بصری خروجی‌های رمزنگاری}
-تصاویر رمز شده ماهیت کاملاً نویزی دارند و هیچ ویژگی بصری از تصویر اصلی در آن‌ها قابل تشخیص نیست. تصاویر بدون کوچک‌ترین خطا رمزگشایی می‌شوند (\lr{PSNR} برابر بی‌نهایت). این نشان می‌دهد که الگوریتم به‌صورت کاملاً معکوس‌پذیر عمل می‌کند.
+بر اساس نتایج بصری، تصاویر رمز شده ماهیت کاملاً نویزی دارند و هیچ ویژگی بصری قابل تشخیص باقی نمی‌ماند. همچنین تصاویر بدون کوچک‌ترین خطا رمزگشایی می‌شوند (\lr{PSNR} برابر $\infty$).
 
 \begin{figure}[h]
     \centering
+    \caption{نتایج بصری رمزنگاری برای تصاویر آزمایشی}
     \begin{tabular}{ccc}
     \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11} &
     \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image12} &
     \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11} \\
-    (الف) تصویر اصلی & (ب) تصویر رمزشده & (ج) تصویر رمزگشایی‌شده
+    (الف) تصویر اصلی \lr{Tree} & (ب) تصویر رمزشده & (ج) تصویر رمزگشایی‌شده \\
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13} &
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image14} &
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13} \\
+    (الف) تصویر اصلی \lr{Peppers} & (ب) تصویر رمزشده & (ج) تصویر رمزگشایی‌شده \\
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15} &
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image16} &
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15} \\
+    (الف) تصویر اصلی \lr{Baboon} & (ب) تصویر رمزشده & (ج) تصویر رمزگشایی‌شده \\
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17} &
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image18} &
+    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17} \\
+    (الف) تصویر اصلی \lr{Airplane} & (ب) تصویر رمزشده & (ج) تصویر رمزگشایی‌شده
     \end{tabular}
-    \caption{نتایج بصری رمزنگاری برای تصویر \lr{Tree}}
 \end{figure}
 
 \section{تحلیل هیستوگرام}
-هیستوگرام تصاویر رمزشده کاملاً یکنواخت و فاقد هرگونه قله است. این تغییر از حالت چندقلویی و متمرکز در تصاویر اصلی به توزیع یکنواخت، بیانگر موفقیت الگوریتم در ایجاد آماری تصادفی و کاهش الگوهای قابل پیش‌بینی است.
+هیستوگرام تصاویر رمزشده کاملاً یکنواخت و فاقد هرگونه قله است. این تغییر ساختاری نشان می‌دهد که الگوریتم قادر است ردّ آماری تصویر را به‌طور کامل محو کند.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image19}
-    \caption{مقایسه هیستوگرام تصویر اصلی و رمزشده \lr{Tree}}
+    \caption{مقایسه هیستوگرام تصویر اصلی و رمز شده \lr{Tree}}
 \end{figure}
 
 \section{تحلیل آنتروپی اطلاعات}
-مطابق جدول زیر، میانگین آنتروپی تصاویر رمزشده ۷.۹۷۸۹ بیت است که بسیار نزدیک به مقدار حداکثر (۸ بیت) است. این افزایش آنتروپی ناشی از انتخاب تصادفی نقشه آشوبی برای هر پیکسل است.
+آنتروپی نزدیک به ۸ بیت نشان‌دهنده توزیع کاملاً تصادفی پیکسل‌ها است.
 
 \begin{table}[h]
 \centering
 \caption{نتایج تحلیل آنتروپی تصاویر رمزشده}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{تصویر} & \textbf{آنتروپی اصلی} & \textbf{آنتروپی رمزشده} & \textbf{نزدیکی به ۸} \\ \hline
-\lr{Tree} & ۷.۵۳۷۱ & ۷.۹۹۴۴ & ۹۹.۹۳٪ \\ \hline
-\lr{Peppers} & ۷.۶۶۹۸ & ۷.۹۹۱۶ & ۹۹.۹۰٪ \\ \hline
-\lr{Baboon} & ۷.۷۶۲۴ & ۷.۹۸۳۳ & ۹۹.۷۹٪ \\ \hline
-\lr{Airplane} & ۶.۶۶۳۹ & ۷.۹۴۶۱ & ۹۹.۳۳٪ \\ \hline
+\textbf{تصویر} & \textbf{اصلی} & \textbf{رمز نگاری شده} & \textbf{افزایش} & \textbf{نزدیکی به ۸} \\ \hline
+\lr{Tree} & ۷.۵۳۷۱ & ۷.۹۹۴۴ & +۰.۴۵۷۳ & ۹۹.۹۳٪ \\ \hline
+\lr{Peppers} & ۷.۶۶۹۸ & ۷.۹۹۱۶ & +۰.۳۲۱۸ & ۹۹.۹۰٪ \\ \hline
+\lr{Baboon} & ۷.۷۶۲۴ & ۷.۹۸۳۳ & +۰.۲۲۰۹ & ۹۹.۷۹٪ \\ \hline
+\lr{Airplane} & ۶.۶۶۳۹ & ۷.۹۴۶۱ & +۱.۲۸۲۲ & ۹۹.۳۳٪ \\ \hline
+\lr{میانگین} & ۷.۴۰۸۳ & ۷.۹۷۸۹ & +۰.۵۷۰۶ & ۹۹.۷۴٪ \\ \hline
 \end{tabular}
 \end{table}
 
 \section{تحلیل همبستگی پیکسل‌های مجاور}
-همبستگی میان پیکسل‌های مجاور به کمتر از ۰.۰۵٪ کاهش یافته است که بیانگر شکستن ساختار مکانی تصویر و عملکرد موفق سیستم \lr{Chen} در جایگشت پیکسل‌ها است.
+در تصاویر رمزشده، مقدار همبستگی به کمتر از ۰.۰۰۸ رسیده است که نشان‌دهنده شکستن ساختار مکانی تصویر است.
+
+\begin{table}[h]
+\centering
+\caption{ضریب همبستگی کلی (۱۰۰۰۰ جفت تصادفی)}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{تصویر} & \textbf{همبستگی اصلی} & \textbf{همبستگی رمز شده} & \textbf{کاهش} \\ \hline
+\lr{Tree} & \textasciitilde۰.۹۶ & 0.0047 & ۹۹.۵۱٪ \\ \hline
+\lr{Peppers} & \textasciitilde۰.۹۷ & 0.0083 & ۹۹.۱۴٪ \\ \hline
+\lr{Baboon} & \textasciitilde۰.۹۴ & 0.0034 & ۹۹.۶۴٪ \\ \hline
+\lr{Airplane} & \textasciitilde۰.۹۱ & -0.0035 & ۱۰۰.۳۸٪ \\ \hline
+\end{tabular}
+\end{table}
 
 \section{تحلیل شاخص‌های امنیتی \lr{NPCR} و \lr{UACI}}
-مقادیر \lr{NPCR} و \lr{UACI} نشان می‌دهند که تغییر یک بیت در کلید یا تصویر اصلی، بیش از ۹۹.۶٪ پیکسل‌ها را تحت تأثیر قرار می‌دهد. میانگین تغییر شدت پیکسل‌ها حدود ۳۲٪ است که بیانگر قدرت اثر \lr{Avalanche} است.
+این شاخص‌ها نشان‌دهنده مقاومت بالا در برابر حملات دیفرانسیلی هستند.
 
-\section{تحلیل زمان اجرا}
-الگوریتم تنها با یک دور رمزنگاری، میانگین زمان اجرای ۲.۹۹ ثانیه برای رمزنگاری و ۲.۶۳ ثانیه برای رمزگشایی دارد. این عملکرد سریع در مقایسه با روش‌های چنددوری نشان‌دهنده بهینه بودن محاسباتی الگوریتم است.
+\begin{table}[h]
+\centering
+\caption{نتایج تحلیل \lr{NPCR} و \lr{UACI}}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{تصویر} & \textbf{UACI (\%)} & \textbf{NPCR (\%)} \\ \hline
+\lr{Tree} & 32.13 & 99.61 \\ \hline
+\lr{Peppers} & 32.69 & 99.63 \\ \hline
+\lr{Baboon} & 31.24 & 99.63 \\ \hline
+\lr{Airplane} & 32.44 & 99.54 \\ \hline
+\lr{میانگین} & 32.13 & 99.60 \\ \hline
+\end{tabular}
+\end{table}
+
+\section{تحلیل جامع زمان اجرا}
+میانگین زمان رمزنگاری و رمزگشایی مجموعاً حدود ۵.۶۲ ثانیه است.
+
+\begin{table}[h]
+\centering
+\caption{زمان اجرا (ثانیه)}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{تصویر} & \textbf{رمزگشایی} & \textbf{رمزنگاری} & \textbf{مجموع} \\ \hline
+\lr{میانگین} & ۲.۶۳ & ۲.۹۹ & ۵.۶۲ \\ \hline
+\end{tabular}
+\end{table}
 \
