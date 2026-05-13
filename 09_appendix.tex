@@ -1,0 +1,134 @@
+% ============================================================================
+% APPENDIX: PYTHON IMPLEMENTATION CODE
+% ============================================================================
+
+\chapter*{پیوست: کد اجرایی الگوریتم (پایتون)}
+\addcontentsline{toc}{chapter}{پیوست: کد اجرایی الگوریتم (پایتون)}
+
+در این بخش، کد پیاده‌سازی شده برای الگوریتم پیشنهادی در محیط پایتون ارائه شده است. این کد شامل توابع اصلی رمزنگاری، تولید مسیرهای آشوبی و تحلیل‌های آماری می‌باشد.
+
+\begin{latin}
+\begin{lstlisting}[language=Python]
+import numpy as np
+import cv2
+import time
+import os
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# =========================================================
+# Resize utility
+# =========================================================
+def resize_to_square(img, size):
+    return cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
+
+# =========================================================
+# Base chaotic maps
+# =========================================================
+def base_logistic(x, r=3.99):
+    return r * x * (1 - x)
+
+def base_sine(x, r=0.99):
+    return r * np.sin(np.pi * x)
+
+def base_tent(x, r=1.99):
+    return r * x if x < 0.5 else r * (1 - x)
+
+# =========================================================
+# Exponential Chaotic Model (9 maps)
+# =========================================================
+def make_ecm_func(base, exp):
+    base_f = {'L': base_logistic, 'S': base_sine, 'T': base_tent}[base]
+    exp_f  = {'L': base_logistic, 'S': base_sine, 'T': base_tent}[exp]
+    return lambda x: base_f(x) ** (1 + exp_f(x))
+
+ecm_names = ['LEL','LES','LET','SEL','SES','SET','TEL','TES','TET']
+ecm_funcs = []
+for name in ecm_names:
+    ecm_funcs.append(make_ecm_func(name[0], name[2]))
+
+# =========================================================
+# Chen chaotic system (Permutation key)
+# =========================================================
+def chen_system(t, state, a=35, b=3, c=28):
+    x, y, z = state
+    dx = a * (y - x)
+    dy = (c - a) * x - x * z + c * y
+    dz = x * y - b * z
+    return [dx, dy, dz]
+
+def generate_chen_key(n):
+    t_eval = np.linspace(0, 50, n)
+    sol = solve_ivp(chen_system, (0, 50), [0.1, 0.2, 0.3], 
+                    t_eval=t_eval, method="RK45")
+    data = sol.y[0]
+    return ((data - data.min()) / (data.max() - data.min()) * 255).astype(np.uint8)
+
+# =========================================================
+# Permutation
+# =========================================================
+def permute_image(img, seed):
+    h, w, c = img.shape
+    flat = img.reshape(-1, 3)
+    np.random.seed(seed)
+    idx = np.random.permutation(len(flat))
+    return flat[idx].reshape(h, w, c), idx
+
+def invert_permutation(img, idx):
+    flat = img.reshape(-1, 3)
+    inv = np.empty_like(flat)
+    inv[idx] = flat
+    return inv.reshape(img.shape)
+
+# =========================================================
+# Selector + ECM keystream
+# =========================================================
+def generate_selector(n, seed):
+    np.random.seed(seed)
+    return np.random.randint(0, len(ecm_funcs), size=n)
+
+def generate_ecm_keystream(n, selector):
+    ks = np.zeros(n, dtype=np.uint8)
+    x = 0.123456  # initial key
+    for i in range(n):
+        x = ecm_funcs[selector[i]](x)
+        ks[i] = int((x % 1) * 255)
+    return ks
+
+# =========================================================
+# Encryption / Decryption
+# =========================================================
+def encrypt_image(img, seed=42):
+    h, w, c = img.shape
+    total = h * w * c
+    permuted, idx = permute_image(img, seed)
+    ks_chen = generate_chen_key(total)
+    selector = generate_selector(total, seed)
+    ks_ecm = generate_ecm_keystream(total, selector)
+    flat = permuted.reshape(-1)
+    cipher = flat ^ ks_chen ^ ks_ecm
+    return cipher.reshape(h, w, c), idx, ks_chen, ks_ecm, selector
+
+def decrypt_image(cipher, idx, ks_chen, ks_ecm):
+    flat = cipher.reshape(-1)
+    plain_flat = flat ^ ks_chen ^ ks_ecm
+    plain = plain_flat.reshape(cipher.shape)
+    return invert_permutation(plain, idx)
+
+# =========================================================
+# Analysis
+# =========================================================
+def shannon_entropy(img):
+    flat = img.flatten()
+    prob = np.bincount(flat, minlength=256) / len(flat)
+    prob = prob[prob > 0]
+    return -np.sum(prob * np.log2(prob))
+
+def NPCR_UACI(img1, img2):
+    D = img1 != img2
+    NPCR = np.sum(D) / img1.size * 100
+    UACI = np.mean(np.abs(img1.astype(int) - img2.astype(int)) / 255) * 100
+    return NPCR, UACI
+\end{lstlisting}
+\end{latin}
+\

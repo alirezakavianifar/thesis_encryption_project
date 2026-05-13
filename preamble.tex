@@ -2,9 +2,31 @@
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{listings}
 
-% Load hyperref with linktoc=none to avoid the severe conflict with xepersian 
-% that causes the repeating numbers and flipped layout in the TOC.
+% listings configuration for Python
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green!60!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=10pt,
+  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  frame=single,
+  rulecolor=\color{black},
+  tabsize=4,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=false
+}
+
 \usepackage[unicode=true,hidelinks,linktoc=none]{hyperref}
 \usepackage{iftex}
 
@@ -12,13 +34,13 @@
 \makeatletter
 % Fix for \IfClassLoadedTF and its variants
 \ifdefined\IfClassLoadedTF
-  \ifdefined\IfClassLoadedT\else \let\IfClassLoadedT\IfClassLoadedTF \fi
-  \ifdefined\IfClassLoadedF\else \let\IfClassLoadedF\IfClassLoadedTF \fi
+  \ifdefined\IfClassLoadedT\else \newcommand{\IfClassLoadedT}[2]{\IfClassLoadedTF{#1}{#2}{}} \fi
+  \ifdefined\IfClassLoadedF\else \newcommand{\IfClassLoadedF}[2]{\IfClassLoadedTF{#1}{}{#2}} \fi
 \fi
 % Fix for \IfPackageLoadedTF and its variants
 \ifdefined\IfPackageLoadedTF
-  \ifdefined\IfPackageLoadedT\else \let\IfPackageLoadedT\IfPackageLoadedTF \fi
-  \ifdefined\IfPackageLoadedF\else \let\IfPackageLoadedF\IfPackageLoadedTF \fi
+  \ifdefined\IfPackageLoadedT\else \newcommand{\IfPackageLoadedT}[2]{\IfPackageLoadedTF{#1}{#2}{}} \fi
+  \ifdefined\IfPackageLoadedF\else \newcommand{\IfPackageLoadedF}[2]{\IfPackageLoadedTF{#1}{}{#2}} \fi
 \else
   % Fallback for older kernels if bidi expects these
   \ifdefined\@ifpackageloaded
@@ -39,6 +61,9 @@
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
 \fi
+
+\usepackage[top=3cm,bottom=3cm,left=2.5cm,right=3.5cm]{geometry}
+\linespread{1.5}
 
 \author{}
 \date{}
