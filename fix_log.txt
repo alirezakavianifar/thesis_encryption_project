@@ -1,5 +1,0 @@
-03_chapter1.tex: ok
-04_chapter2.tex: ok
-05_chapter3.tex: ok
-06_chapter4.tex: ok
-07_chapter5.tex: ok

@@ -1,8 +1,0 @@
-ECM caption at: 1815
-\centering
-\caption{ساختار ۹ سیستم آشوبی نمایی ترکیبی (\lr{ECM})}
-\begin{latin}
-\small
-\begin{tabular}{|l|l|}
-\hline
-\te
