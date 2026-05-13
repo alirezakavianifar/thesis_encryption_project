@@ -1,14 +1,13 @@
 % ============================================================================
-% APPENDIX: PYTHON IMPLEMENTATION CODE
+% APPENDIX: SOURCE CODE
 % ============================================================================
 
-\chapter*{پیوست: کد اجرایی الگوریتم (پایتون)}
-\addcontentsline{toc}{chapter}{پیوست: کد اجرایی الگوریتم (پایتون)}
+\chapter{پیوست: کد اجرایی الگوریتم (پایتون)}
 
-در این بخش، کد پیاده‌سازی شده برای الگوریتم پیشنهادی در محیط پایتون ارائه شده است. این کد شامل توابع اصلی رمزنگاری، تولید مسیرهای آشوبی و تحلیل‌های آماری می‌باشد.
+در این بخش، پیاده‌سازی کامل الگوریتم پیشنهادی با استفاده از زبان برنامه‌نویسی پایتون و کتابخانه‌های علمی ارائه شده است.
 
 \begin{latin}
-\begin{lstlisting}[language=Python]
+\begin{lstlisting}[language=Python, caption={Implementation of Proposed Chaotic Image Encryption Algorithm}]
 import numpy as np
 import cv2
 import time
@@ -39,7 +38,7 @@ def base_tent(x, r=1.99):
 # =========================================================
 def make_ecm_func(base, exp):
     base_f = {'L': base_logistic, 'S': base_sine, 'T': base_tent}[base]
-    exp_f  = {'L': base_logistic, 'S': base_sine, 'T': base_tent}[exp]
+    exp_f = {'L': base_logistic, 'S': base_sine, 'T': base_tent}[exp]
     return lambda x: base_f(x) ** (1 + exp_f(x))
 
 ecm_names = ['LEL','LES','LET','SEL','SES','SET','TEL','TES','TET']
@@ -59,8 +58,7 @@ def chen_system(t, state, a=35, b=3, c=28):
 
 def generate_chen_key(n):
     t_eval = np.linspace(0, 50, n)
-    sol = solve_ivp(chen_system, (0, 50), [0.1, 0.2, 0.3], 
-                    t_eval=t_eval, method="RK45")
+    sol = solve_ivp(chen_system, (0, 50), [0.1, 0.2, 0.3], t_eval=t_eval, method="RK45")
     data = sol.y[0]
     return ((data - data.min()) / (data.max() - data.min()) * 255).astype(np.uint8)
 
@@ -129,6 +127,36 @@ def NPCR_UACI(img1, img2):
     NPCR = np.sum(D) / img1.size * 100
     UACI = np.mean(np.abs(img1.astype(int) - img2.astype(int)) / 255) * 100
     return NPCR, UACI
+
+# =========================================================
+# Main
+# =========================================================
+if __name__ == "__main__":
+    images = ["tree.png", "Baboon.png", "Peppers.png", "Airplane.png"]
+    os.makedirs("encrypted", exist_ok=True)
+    os.makedirs("results", exist_ok=True)
+    for name in images:
+        img = cv2.imread(f"images/{name}")
+        if img is None:
+            print(f"Cannot open {name}")
+            continue
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = resize_to_square(img, 512)
+        print(f"\nProcessing {name}")
+        t0 = time.time()
+        enc, idx, ks1, ks2, sel = encrypt_image(img)
+        t1 = time.time()
+        dec = decrypt_image(enc, idx, ks1, ks2)
+        t2 = time.time()
+        cv2.imwrite(f"encrypted/{name}", cv2.cvtColor(enc, cv2.COLOR_RGB2BGR))
+        cv2.imwrite(f"results/dec_{name}", cv2.cvtColor(dec, cv2.COLOR_RGB2BGR))
+        entropy_o = shannon_entropy(img)
+        entropy_e = shannon_entropy(enc)
+        NPCR, UACI = NPCR_UACI(img, enc)
+        print(f"Encryption time: {t1-t0:.2f}s | Decryption time: {t2-t1:.2f}s")
+        print(f"Entropy: original={entropy_o:.4f}, encrypted={entropy_e:.4f}")
+        print(f"NPCR={NPCR:.2f}%, UACI={UACI:.2f}%")
+        print(f"Perfect recovery: {np.array_equal(img, dec)}")
 \end{lstlisting}
 \end{latin}
 \
