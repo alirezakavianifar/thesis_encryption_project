@@ -10,9 +10,21 @@
 
 % Compatibility fix for bidi/xepersian with newer LaTeX kernels
 \makeatletter
+% Fix for \IfClassLoadedTF and its variants
 \ifdefined\IfClassLoadedTF
-  \ifdefined\IfClassLoadedT\else
-    \let\IfClassLoadedT\IfClassLoadedTF
+  \ifdefined\IfClassLoadedT\else \let\IfClassLoadedT\IfClassLoadedTF \fi
+  \ifdefined\IfClassLoadedF\else \let\IfClassLoadedF\IfClassLoadedTF \fi
+\fi
+% Fix for \IfPackageLoadedTF and its variants
+\ifdefined\IfPackageLoadedTF
+  \ifdefined\IfPackageLoadedT\else \let\IfPackageLoadedT\IfPackageLoadedTF \fi
+  \ifdefined\IfPackageLoadedF\else \let\IfPackageLoadedF\IfPackageLoadedTF \fi
+\else
+  % Fallback for older kernels if bidi expects these
+  \ifdefined\@ifpackageloaded
+    \newcommand{\IfPackageLoadedTF}[3]{\@ifpackageloaded{#1}{#2}{#3}}
+    \newcommand{\IfPackageLoadedT}[2]{\@ifpackageloaded{#1}{#2}{}}
+    \newcommand{\IfPackageLoadedF}[2]{\@ifpackageloaded{#1}{}{#2}}
   \fi
 \fi
 \makeatother
