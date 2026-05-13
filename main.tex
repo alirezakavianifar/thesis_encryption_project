@@ -13,15 +13,9 @@
 % ============================================================================
 \pagenumbering{abjad} 
 
-% 1. Blank Page
-\mbox{}
-\thispagestyle{empty}
-\newpage
-
-\input{01_titlepage} % Should be Page 'ب' (hidden)
-\newpage
-
-\input{01_bismillah} % Page 'ج'
+\input{01_titlepage} % Now Page 'الف'
+\setcounter{page}{2}
+\input{01_bismillah} % Page 'ب'
 \input{01_jury}
 \input{01_originality}
 \input{01_ethics}
@@ -62,9 +56,6 @@
 \input{10_abstract_en}
 \input{11_titlepage_en}
 
-% 8. Blank Page
-\newpage
-\mbox{}
-\thispagestyle{empty}
+
 
 \end{document}
