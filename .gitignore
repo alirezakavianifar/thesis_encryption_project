@@ -1,0 +1,156 @@
+# LaTeX Build Artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.fmt
+*.fot
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.maf
+*.makefile
+*.out
+*.pdf
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.xdv
+*-blx.bib
+*.dpth
+*.md5
+*.auxlock
+
+# LaTeX Editor/IDE Files
+.texpadtmp
+*.texpadtmp
+*.texpadignore
+texput.log
+*~
+
+# Overleaf
+*.overleaf
+
+# BibTeX
+*.bib.bak
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv
+venv/
+ENV/
+env/
+.env
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# PyCharm
+.pytest_cache/
+.coverage
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Windows
+Thumbs.db
+*.lnk
+$RECYCLE.BIN/
+
+# macOS
+*.app
+
+# Linux
+.directory
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# Generated Documentation
+docs/_build/
+
+# Project Specific
+results/
+output/
+temp/
+.cache/
+
+# Compiled binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Git
+.gitignore.bak
+.git/hooks/
+
+# Node (if using npm packages)
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Keep important files
+!.gitkeep
+!preamble.tex
+!main.tex
+!*.tex
+!README.md
