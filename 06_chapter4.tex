@@ -1,5 +1,5 @@
 % ============================================================================
-% CHAPTER ۴: IMPLEMENTATION AND RESULTS ANALYSIS
+% CHAPTER 4: IMPLEMENTATION AND RESULTS ANALYSIS
 % ============================================================================
 
 \chapter{پیاده‌سازی الگوریتم پیشنهادی}
@@ -34,79 +34,79 @@
 
 \begin{figure}[htbp]
     \centering
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11}
         \caption{اصلی (\lr{Tree})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image12}
         \caption{رمزشده (\lr{Tree})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11_dec}
         \caption{رمزگشایی (\lr{Tree})}
     \end{subfigure}
 
-    \vspace{۰.2em}
+    \vspace{0.2em}
 
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13}
         \caption{اصلی (\lr{Peppers})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image14}
         \caption{رمزشده (\lr{Peppers})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13_dec}
         \caption{رمزگشایی (\lr{Peppers})}
     \end{subfigure}
 
-    \vspace{۰.2em}
+    \vspace{0.2em}
 
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15}
         \caption{اصلی (\lr{Baboon})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image16}
         \caption{رمزشده (\lr{Baboon})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15_dec}
         \caption{رمزگشایی (\lr{Baboon})}
     \end{subfigure}
 
-    \vspace{۰.2em}
+    \vspace{0.2em}
 
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17}
         \caption{اصلی (\lr{Airplane})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image18}
         \caption{رمزشده (\lr{Airplane})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۳۱\textwidth}
+    \begin{subfigure}{0.31\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17_dec}
         \caption{رمزگشایی (\lr{Airplane})}
@@ -136,9 +136,9 @@
 \section{تحلیل آنتروپی}
 آنتروپی شانون\LTRfootnote{Shannon Entropy} یکی از مهم‌ترین شاخص‌ها برای ارزیابی میزان تصادفی بودن توزیع مقادیر در یک تصویر رمزشده است. برای یک منبع اطلاعاتی $m$، آنتروپی از رابطه زیر محاسبه می‌شود:
 \begin{equation} \label{eq:entropy_ch4}
-H(m) = -\sum_{i=۰}^{۲۵۵} P(m_i) \log_2 P(m_i)
+H(m) = -\sum_{i=0}^{255} P(m_i) \log_2 P(m_i)
 \end{equation}
-که در آن $P(m_i)$ احتمال رخداد سطح خاکستری $m_i$ است. برای یک تصویر رمزشده ۸-بیتی کاملاً تصادفی، مقدار ایده‌آل آنتروپی برابر ۸ می‌باشد. این شاخص در واقع «درجه تصادفی بودن» یا «بی‌نظمی» تصویر را به‌صورت کمی‌بیان می‌کند.
+که در آن $P(m_i)$ احتمال رخداد سطح خاکستری $m_i$ است. برای یک تصویر رمزشده 8-بیتی کاملاً تصادفی، مقدار ایده‌آل آنتروپی برابر 8 می‌باشد. این شاخص در واقع «درجه تصادفی بودن» یا «بی‌نظمی» تصویر را به‌صورت کمی‌بیان می‌کند.
 
 \subsection{مقادیر آنتروپی}
 مقادیر آنتروپی برای تصاویر مختلف در جدول \ref{tab:entropy_results} گزارش شده است.
@@ -148,23 +148,23 @@ H(m) = -\sum_{i=۰}^{۲۵۵} P(m_i) \log_2 P(m_i)
 \caption{نتایج تحلیل آنتروپی (\lr{Shannon Entropy}) تصاویر رمزشده} \label{tab:entropy_results}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-\textbf{تصویر} & \textbf{اصلی} & \textbf{رمزشده} & \textbf{افزایش} & \textbf{نزدیکی به ۸} \\ \hline
-\lr{Tree} & ۷٫۵۳۷۱ & ۷٫۹۹۴۴ & +۰٫۴۵۷۳ & ۹۹٫۹۳\% \\ \hline
-\lr{Peppers} & ۷٫۶۶۹۸ & ۷٫۹۹۱۶ & +۰٫۳۲۱۸ & ۹۹٫۹۰\% \\ \hline
-\lr{Baboon} & ۷٫۷۶۲۴ & ۷٫۹۸۳۳ & +۰٫۲۲۰۹ & ۹۹٫۷۹\% \\ \hline
-\lr{Airplane} & ۶٫۶۶۳۹ & ۷٫۹۴۶۱ & +۱٫۲۸۲۲ & ۹۹٫۳۳\% \\ \hline
-\textbf{میانگین} & ۷٫۴۰۸۳ & ۷٫۹۷۸۹ & +۰٫۵۷۰۶ & ۹۹٫۷۴\% \\ \hline
+\textbf{تصویر} & \textbf{اصلی} & \textbf{رمزشده} & \textbf{افزایش} & \textbf{نزدیکی به 8} \\ \hline
+\lr{Tree} & 7.5371 & 7.9944 & +0.4573 & 99.93\% \\ \hline
+\lr{Peppers} & 7.6698 & 7.9916 & +0.3218 & 99.90\% \\ \hline
+\lr{Baboon} & 7.7624 & 7.9833 & +0.2209 & 99.79\% \\ \hline
+\lr{Airplane} & 6.6639 & 7.9461 & +1.2822 & 99.33\% \\ \hline
+\textbf{میانگین} & 7.4083 & 7.9789 & +0.5706 & 99.74\% \\ \hline
 \end{tabular}
 \end{table}
 
-مقادیر آنتروپی تصاویر رمزشده که بین ۷٫۹۴۶۱ تا ۷٫۹۹۴۴ قرار دارند، امضای یک الگوریتم رمزنگاری قدرتمند هستند. آنتروپی نزدیک به ۸ بیت نشان می‌دهد:
+مقادیر آنتروپی تصاویر رمزشده که بین 7.9461 تا 7.9944 قرار دارند، امضای یک الگوریتم رمزنگاری قدرتمند هستند. آنتروپی نزدیک به 8 بیت نشان می‌دهد:
 \begin{itemize}
     \item توزیع پیکسل‌ها تقریباً تصادفی است.
     \item احتمال حدس یا حمله آماری نزدیک به صفر است.
-    \item وجود ۹ سیستم آشوبی متفاوت، نقش تعیین‌کننده‌ای در افزایش بی‌نظمی‌ایفا می‌کند.
+    \item وجود 9 سیستم آشوبی متفاوت، نقش تعیین‌کننده‌ای در افزایش بی‌نظمی‌ایفا می‌کند.
 \end{itemize}
 
-این بخش به‌طور مستقیم \textbf{فرضیه ۳} را تأیید می‌کند: \textit{انتخاب تصادفی سیستم آشوبی برای هر پیکسل آنتروپی را به شکل محسوس افزایش می‌دهد.}
+این بخش به‌طور مستقیم \textbf{فرضیه 3} را تأیید می‌کند: \textit{انتخاب تصادفی سیستم آشوبی برای هر پیکسل آنتروپی را به شکل محسوس افزایش می‌دهد.}
 
 \section{تحلیل همبستگی پیکسل‌های مجاور}
 در یک تصویر عادی، همبستگی آماری شدیدی بین پیکسل‌های مجاور در جهت‌های افقی، عمودی و مورب وجود دارد. یک سیستم رمزنگاری قوی باید این همبستگی را به حداقل ممکن (نزدیک به صفر) برساند. ضریب همبستگی $r_{xy}$ با استفاده از روابط زیر محاسبه می‌شود:
@@ -173,47 +173,47 @@ r_{xy} = \frac{\operatorname{cov}(x,y)}{\sqrt{D(x)} \sqrt{D(y)}}
 \end{equation}
 تعاریف میانگین ($E(x)$)، واریانس ($D(x)$) و کوواریانس ($\operatorname{cov}(x,y)$) به شرح زیر است:
 \begin{equation} \label{eq:corr_details_ch4}
-E(x) = \frac{۱}{N} \sum_{i=۱}^N x_i, \quad D(x) = \frac{۱}{N} \sum_{i=۱}^N (x_i - E(x))^۲
+E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i - E(x))^2
 \end{equation}
 \begin{equation} \label{eq:cov_ch4}
-\operatorname{cov}(x,y) = \frac{۱}{N} \sum_{i=۱}^N (x_i - E(x))(y_i - E(y))
+\operatorname{cov}(x,y) = \frac{1}{N} \sum_{i=1}^N (x_i - E(x))(y_i - E(y))
 \end{equation}
 که در آن $x$ و $y$ مقادیر دو پیکسل مجاور و $N$ تعداد جفت‌پیکسل‌های انتخاب شده است.
 
-\subsection{ضریب همبستگی کلی (۱۰۰۰۰ جفت تصادفی)}
+\subsection{ضریب همبستگی کلی (10000 جفت تصادفی)}
 نتایج مربوط به همبستگی پیکسل‌های مجاور در جدول \ref{tab:correlation_results} ارائه شده است.
 
 \begin{table}[h]
 \centering
-\caption{ضریب همبستگی کلی (\lr{Correlation Coefficient}) (۱۰۰۰۰ جفت تصادفی)} \label{tab:correlation_results}
+\caption{ضریب همبستگی کلی (\lr{Correlation Coefficient}) (10000 جفت تصادفی)} \label{tab:correlation_results}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{همبستگی اصلی (میانگین سه جهت)} & \textbf{همبستگی رمزشده} & \textbf{کاهش} \\ \hline
-\lr{Tree} & ~۰٫۹۶ & ۰٫۰۰۴۷ & ۹۹٫۵۱\% \\ \hline
-\lr{Peppers} & ~۰٫۹۷ & ۰٫۰۰۸۳ & ۹۹٫۱۴\% \\ \hline
-\lr{Baboon} & ~۰٫۹۴ & ۰٫۰۰۳۴ & ۹۹٫۶۴\% \\ \hline
-\lr{Airplane} & ~۰٫۹۱ & -۰٫۰۰۳۵ & ۱۰۰٫۳۸\% \\ \hline
+\lr{Tree} & ~0.96 & 0.0047 & 99.51\% \\ \hline
+\lr{Peppers} & ~0.97 & 0.0083 & 99.14\% \\ \hline
+\lr{Baboon} & ~0.94 & 0.0034 & 99.64\% \\ \hline
+\lr{Airplane} & ~0.91 & -0.0035 & 100.38\% \\ \hline
 \end{tabular}
 \end{table}
 
-همبستگی پیکسل‌های مجاور در تصاویر اصلی حدود ۰٫۹۴ تا ۰٫۹۷ بوده است که ماهیت عکس‌برداری طبیعی است. اما در تصاویر رمزشده، مقدار همبستگی به کمتر از ۰٫۰۰۸ رسیده است. این کاهش شدید (حدود \textbf{۹۹٫۵\%}) نشان می‌دهد:
+همبستگی پیکسل‌های مجاور در تصاویر اصلی حدود 0.94 تا 0.97 بوده است که ماهیت عکس‌برداری طبیعی است. اما در تصاویر رمزشده، مقدار همبستگی به کمتر از 0.008 رسیده است. این کاهش شدید (حدود \textbf{99.5\%}) نشان می‌دهد:
 \begin{itemize}
     \item سیستم \lr{Chen} در مرحله جایگشت، ساختار مکانی تصویر را کاملاً از بین برده است.
     \item هیچ رابطه‌ای میان پیکسل‌های مجاور باقی نمانده است.
     \item تصویر رمزشده از دید تحلیل‌گر، یک آرایه تصادفی بدون ساختار تلقی می‌شود.
 \end{itemize}
 
-این بخش به صورت عینی \textbf{فرضیه ۲} را تأیید می‌کند.
+این بخش به صورت عینی \textbf{فرضیه 2} را تأیید می‌کند.
 
 \begin{figure}[h!]
     \centering
-    \begin{subfigure}{۰٫۴۵\textwidth}
+    \begin{subfigure}{0.45\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image19}
         \caption{همبستگی تصویر اصلی}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{۰٫۴۵\textwidth}
+    \begin{subfigure}{0.45\textwidth}}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image20}
         \caption{همبستگی تصویر رمزشده}
@@ -226,16 +226,16 @@ E(x) = \frac{۱}{N} \sum_{i=۱}^N x_i, \quad D(x) = \frac{۱}{N} \sum_{i=۱}^N (
 
 فرمول محاسباتی \lr{NPCR} به شرح زیر است:
 \begin{equation} \label{eq:npcr_ch4}
-\mathrm{NPCR} = \frac{\sum_{i=۱}^{M} \sum_{j=۱}^{N} D(i,j)}{M \times N} \times ۱۰۰\text{\%}
+\mathrm{NPCR} = \frac{\sum_{i=1}^{M} \sum_{j=1}^{N} D(i,j)}{M \times N} \times 100\text{\%}
 \end{equation}
 که در آن $M$ و $N$ ابعاد تصویر هستند و $D(i,j)$ به صورت زیر تعریف می‌شود:
 \begin{equation} \label{eq:npcr_d_ch4}
-D(i,j) = \begin{cases} ۰ & C_1(i,j) = C_2(i,j) \\ ۱ & C_1(i,j) \neq C_2(i,j) \end{cases}
+D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \end{cases}
 \end{equation}
 
 همچنین شاخص \mathrm{UACI} از رابطه زیر به‌دست می‌آید:
 \begin{equation} \label{eq:uaci_ch4}
-\mathrm{UACI} = \frac{۱}{M \times N} \left[ \sum_{i=۱}^{M} \sum_{j=۱}^{N} \frac{|C_1(i,j) - C_2(i,j)|}{۲۵۵} \right] \times ۱۰۰\text{\%}
+\mathrm{UACI} = \frac{1}{M \times N} \left[ \sum_{i=1}^{M} \sum_{j=1}^{N} \frac{|C_1(i,j) - C_2(i,j)|}{255} \right] \times 100\text{\%}
 \end{equation}
 
 
@@ -248,15 +248,15 @@ D(i,j) = \begin{cases} ۰ & C_1(i,j) = C_2(i,j) \\ ۱ & C_1(i,j) \neq C_2(i,j) \
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{\lr{NPCR (\%)}} & \textbf{\lr{UACI (\%)}} \\ \hline
-\lr{Tree} & ۹۹٫۶۱ & ۳۲٫۱۳ \\ \hline
-\lr{Peppers} & ۹۹٫۶۳ & ۳۲٫۶۹ \\ \hline
-\lr{Baboon} & ۹۹٫۶۳ & ۳۱٫۲۴ \\ \hline
-\lr{Airplane} & ۹۹٫۵۴ & ۳۲٫۴۴ \\ \hline
-\textbf{میانگین} & ۹۹٫۶۰ & ۳۲٫۱۳ \\ \hline
+\lr{Tree} & 99.61 & 32.13 \\ \hline
+\lr{Peppers} & 99.63 & 32.69 \\ \hline
+\lr{Baboon} & 99.63 & 31.24 \\ \hline
+\lr{Airplane} & 99.54 & 32.44 \\ \hline
+\textbf{میانگین} & 99.60 & 32.13 \\ \hline
 \end{tabular}
 \end{table}
 
-این مقادیر بسیار نزدیک به محدوده تئوریک \textbf{رمزنگاری کاملاً تصادفی} هستند. چنین عملکردی نشان می‌دهد که الگوریتم پیشنهادی نسبت به تغییر کوچک در ورودی (مثلاً تغییر یک پیکسل) حساسیت فوق‌العاده بالایی نشان می‌دهد. این حساسیت «اثر آوالانچ» را تضمین می‌کند. این بخش مستقیماً \textbf{فرضیه ۱} را تأیید می‌کند.
+این مقادیر بسیار نزدیک به محدوده تئوریک \textbf{رمزنگاری کاملاً تصادفی} هستند. چنین عملکردی نشان می‌دهد که الگوریتم پیشنهادی نسبت به تغییر کوچک در ورودی (مثلاً تغییر یک پیکسل) حساسیت فوق‌العاده بالایی نشان می‌دهد. این حساسیت «اثر آوالانچ» را تضمین می‌کند. این بخش مستقیماً \textbf{فرضیه 1} را تأیید می‌کند.
 
 \section{تحلیل جامع زمان اجرا}
 \subsection{زمان اجرا (ثانیه)}
@@ -268,30 +268,30 @@ D(i,j) = \begin{cases} ۰ & C_1(i,j) = C_2(i,j) \\ ۱ & C_1(i,j) \neq C_2(i,j) \
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{رمزنگاری} & \textbf{رمزگشایی} & \textbf{مجموع} \\ \hline
-\lr{Tree} & ۳٫۱۲ & ۲٫۷۵ & ۵٫۸۷ \\ \hline
-\lr{Peppers} & ۲٫۹۵ & ۲٫۶۰ & ۵٫۵۵ \\ \hline
-\lr{Baboon} & ۳٫۰۵ & ۲٫۶۸ & ۵٫۷۳ \\ \hline
-\lr{Airplane} & ۲٫۸۴ & ۲٫۴۹ & ۵٫۳۳ \\ \hline
-\textbf{میانگین} & ۲٫۹۹ & ۲٫۶۳ & ۵٫۶۲ \\ \hline
+\lr{Tree} & 3.12 & 2.75 & 5.87 \\ \hline
+\lr{Peppers} & 2.95 & 2.60 & 5.55 \\ \hline
+\lr{Baboon} & 3.05 & 2.68 & 5.73 \\ \hline
+\lr{Airplane} & 2.84 & 2.49 & 5.33 \\ \hline
+\textbf{میانگین} & 2.99 & 2.63 & 5.62 \\ \hline
 \end{tabular}
 \end{table}
 
-با وجود پیچیدگی نظری الگوریتم و وجود ۹ سیستم آشوبی، زمان اجرای آن برای تصاویر ۵۱۲×۵۱۲ کمتر از ۳ ثانیه است. میانگین زمان رمزنگاری و رمزگشایی مجموعاً حدود ۵٫۶۲ ثانیه است که برای استفاده‌های واقعی و در مقایسه با روش‌های مشابه بسیار قابل قبول و رقابتی است. این موضوع \textbf{فرضیه ۴} را به صورت کامل تأیید می‌کند: \textit{الگوریتم پیشنهادی با حفظ امنیت بالا، کارایی محاسباتی مطلوبی دارد.}
+با وجود پیچیدگی نظری الگوریتم و وجود 9 سیستم آشوبی، زمان اجرای آن برای تصاویر 512×512 کمتر از 3 ثانیه است. میانگین زمان رمزنگاری و رمزگشایی مجموعاً حدود 5.62 ثانیه است که برای استفاده‌های واقعی و در مقایسه با روش‌های مشابه بسیار قابل قبول و رقابتی است. این موضوع \textbf{فرضیه 4} را به صورت کامل تأیید می‌کند: \textit{الگوریتم پیشنهادی با حفظ امنیت بالا، کارایی محاسباتی مطلوبی دارد.}
 
 \section{تحلیل حساسیت به کلید (\lr{Key Sensitivity Analysis})}
-یک سیستم رمزنگاری ایمن باید نسبت به تغییرات بسیار جزئی در کلید رمزنگاری حساس باشد. در این پژوهش، حساسیت به کلید با تغییر مقدار $۱۰^{-۱۶}$ در یکی از پارامترهای سیستم چن مورد آزمایش قرار گرفت. نتایج نشان داد که تصویر رمزشده با کلیدِ با تغییر جزئی، کاملاً متفاوت از تصویر اصلی است و هیچ اطلاعاتی از تصویر اولیه بازگردانده نمی‌شود. این موضوع تضمین‌کننده امنیت بالا در برابر حملات تحلیل کلید است.
+یک سیستم رمزنگاری ایمن باید نسبت به تغییرات بسیار جزئی در کلید رمزنگاری حساس باشد. در این پژوهش، حساسیت به کلید با تغییر مقدار $10^{-16}$ در یکی از پارامترهای سیستم چن مورد آزمایش قرار گرفت. نتایج نشان داد که تصویر رمزشده با کلیدِ با تغییر جزئی، کاملاً متفاوت از تصویر اصلی است و هیچ اطلاعاتی از تصویر اولیه بازگردانده نمی‌شود. این موضوع تضمین‌کننده امنیت بالا در برابر حملات تحلیل کلید است.
 
 \section{ارزیابی مقاومت در برابر حملات (\lr{Robustness Analysis})}
 الگوریتم‌های رمزنگاری تصویر علاوه بر امنیت آماری، باید در برابر نویزهای احتمالی در کانال انتقال و یا حذف بخشی از داده (حمله برش) مقاوم باشند.
 
 \subsection{مقاومت در برابر نویز (\lr{Noise Attack})}
-در این آزمایش، نویز نمک و فلفل\LTRfootnote{Salt \& Pepper Noise} با چگالی‌های مختلف (۰٫۰۱ تا ۰٫۰۵) به تصویر رمزشده اضافه گردید. نتایج نشان داد که به دلیل مکانیزم انتشار دینامیک مبتنی بر ۹ سیستم آشوبی، تأثیر نویز در سطح کل تصویر پخش شده و پس از رمزگشایی، ساختار اصلی تصویر با \lr{PSNR} قابل قبول همچنان قابل تشخیص است.
+در این آزمایش، نویز نمک و فلفل\LTRfootnote{Salt \& Pepper Noise} با چگالی‌های مختلف (0.01 تا 0.05) به تصویر رمزشده اضافه گردید. نتایج نشان داد که به دلیل مکانیزم انتشار دینامیک مبتنی بر 9 سیستم آشوبی، تأثیر نویز در سطح کل تصویر پخش شده و پس از رمزگشایی، ساختار اصلی تصویر با \lr{PSNR} قابل قبول همچنان قابل تشخیص است.
 
 \subsection{مقاومت در برابر حمله برش (\lr{Cropping Attack})}
-در این آزمایش، بخش‌های مختلفی از تصویر رمزشده (نظیر گوشه‌ها یا مرکز تصویر با ابعاد ۶۴×۶۴) با مقادیر صفر جایگزین شدند. به دلیل مکانیزم جایگشت مبتنی بر سیستم \lr{Chen}، پیکسل‌های حذف شده در تصویر نهایی به‌صورت پراکنده ظاهر می‌شوند. نتایج تجربی تأیید کرد که حتی با حذف بخشی از داده‌های تصویر رمزشده، تصویر اصلی با کیفیت بصری مناسب بازیابی می‌شود که این امر نشان‌دهنده ویژگی خودترمیمی‌الگوریتم است.
+در این آزمایش، بخش‌های مختلفی از تصویر رمزشده (نظیر گوشه‌ها یا مرکز تصویر با ابعاد 64×64) با مقادیر صفر جایگزین شدند. به دلیل مکانیزم جایگشت مبتنی بر سیستم \lr{Chen}، پیکسل‌های حذف شده در تصویر نهایی به‌صورت پراکنده ظاهر می‌شوند. نتایج تجربی تأیید کرد که حتی با حذف بخشی از داده‌های تصویر رمزشده، تصویر اصلی با کیفیت بصری مناسب بازیابی می‌شود که این امر نشان‌دهنده ویژگی خودترمیمی‌الگوریتم است.
 
 \section{ارزیابی مقایسه‌ای با سایر روش‌ها}
-در این بخش، عملکرد الگوریتم پیشنهادی با برخی از روش‌های مطرح و نوین سال‌های اخیر مورد مقایسه قرار گرفته است. جدول \ref{tab:comparison_metrics} نتایج این مقایسه جامع را برای تصویر معیار \lr{Lena} (۵۱۲×۵۱۲) نشان می‌دهد.
+در این بخش، عملکرد الگوریتم پیشنهادی با برخی از روش‌های مطرح و نوین سال‌های اخیر مورد مقایسه قرار گرفته است. جدول \ref{tab:comparison_metrics} نتایج این مقایسه جامع را برای تصویر معیار \lr{Lena} (512×512) نشان می‌دهد.
 
 \begin{table}[h]
 \centering
@@ -300,14 +300,14 @@ D(i,j) = \begin{cases} ۰ & C_1(i,j) = C_2(i,j) \\ ۱ & C_1(i,j) \neq C_2(i,j) \
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 \textbf{الگوریتم / مرجع} & \textbf{آنتروپی} & \textbf{\lr{NPCR (\%)}} & \textbf{\lr{UACI (\%)}} & \textbf{زمان (ثانیه)} & \textbf{فضای کلید} \\ \hline
-\textbf{روش پیشنهادی} & \textbf{۷٫۹۹۹۵} & \textbf{۹۹٫۶۲} & \textbf{۳۳٫۴۸} & \textbf{۲٫۹۹} & \lr{$> 2^{600}$} \\ \hline
-ژانگ و وانگ \cite{ref51} (۲۰۲۵) & ۷٫۹۹۹۴ & ۹۹٫۶۱ & ۳۳٫۴۷ & ۳٫۸۰ & \lr{$2^{512}$} \\ \hline
-چن و لی \cite{ref62} (۲۰۲۵) & ۷٫۹۹۸۹ & ۹۹٫۶۰ & ۳۳٫۴۴ & ۱٫۸۰ & \lr{$2^{256}$} \\ \hline
-وانگ و همکاران \cite{ref61} (۲۰۲۴) & ۷٫۹۹۹۲ & ۹۹٫۶۱ & ۳۳٫۴۶ & ۳٫۲۰ & \lr{$2^{300}$} \\ \hline
-حسنی و همکاران \cite{ref13} (۲۰۲۴) & ۷٫۹۹۹۳ & ۹۹٫۶۱ & ۳۳٫۴۵ & ۳٫۴۵ & \lr{$2^{256}$} \\ \hline
-گِه و همکاران \cite{ref12} (۲۰۲۱) & ۷٫۹۹۹۱ & ۹۹٫۶۰ & ۳۳٫۴۶ & ۴٫۱۲ & \lr{$2^{256}$} \\ \hline
+\textbf{روش پیشنهادی} & \textbf{7.9995} & \textbf{99.62} & \textbf{33.48} & \textbf{2.99} & \lr{$> 2^{600}$} \\ \hline
+ژانگ و وانگ \cite{ref51} (2025) & 7.9994 & 99.61 & 33.47 & 3.80 & \lr{$2^{512}$} \\ \hline
+چن و لی \cite{ref62} (2025) & 7.9989 & 99.60 & 33.44 & 1.80 & \lr{$2^{256}$} \\ \hline
+وانگ و همکاران \cite{ref61} (2024) & 7.9992 & 99.61 & 33.46 & 3.20 & \lr{$2^{300}$} \\ \hline
+حسنی و همکاران \cite{ref13} (2024) & 7.9993 & 99.61 & 33.45 & 3.45 & \lr{$2^{256}$} \\ \hline
+گِه و همکاران \cite{ref12} (2021) & 7.9991 & 99.60 & 33.46 & 4.12 & \lr{$2^{256}$} \\ \hline
 \end{tabular}
 \end{table}
 
 \section{نتیجه‌گیری فصل}
-در این فصل، الگوریتم پیشنهادی از جنبه‌های مختلف امنیتی و عملکردی مورد ارزیابی قرار گرفت. نتایج به‌دست‌آمده، از جمله آنتروپی اطلاعات نزدیک به ۸ (\lr{7.9995})، مقادیر \lr{NPCR} و \lr{UACI} بسیار مطلوب و از بین رفتن کامل همبستگی میان پیکسل‌های مجاور، همگی نشان‌دهنده امنیت بالای این روش هستند. همچنین، مقاومت الگوریتم در برابر حملات قطع داده و نویز، کارایی آن را در محیط‌های مخابراتی ناامن به اثبات رساند. فضای کلید بسیار بزرگ ($> 2^{600}$) و زمان اجرای بهینه، این الگوریتم را به گزینه‌ای مناسب برای کاربردهای عملی در امنیت تصاویر رنگی تبدیل کرده است.
+در این فصل، الگوریتم پیشنهادی از جنبه‌های مختلف امنیتی و عملکردی مورد ارزیابی قرار گرفت. نتایج به‌دست‌آمده، از جمله آنتروپی اطلاعات نزدیک به 8 (\lr{7.9995})، مقادیر \lr{NPCR} و \lr{UACI} بسیار مطلوب و از بین رفتن کامل همبستگی میان پیکسل‌های مجاور، همگی نشان‌دهنده امنیت بالای این روش هستند. همچنین، مقاومت الگوریتم در برابر حملات قطع داده و نویز، کارایی آن را در محیط‌های مخابراتی ناامن به اثبات رساند. فضای کلید بسیار بزرگ ($> 2^{600}$) و زمان اجرای بهینه، این الگوریتم را به گزینه‌ای مناسب برای کاربردهای عملی در امنیت تصاویر رنگی تبدیل کرده است.
