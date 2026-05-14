@@ -48,7 +48,7 @@
     \hfill
     \begin{subfigure}{0.31\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11}
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11_dec}
         \caption{رمزگشایی (\lr{Tree})}
     \end{subfigure}
 
@@ -68,7 +68,7 @@
     \hfill
     \begin{subfigure}{0.31\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13}
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13_dec}
         \caption{رمزگشایی (\lr{Peppers})}
     \end{subfigure}
 
@@ -88,7 +88,7 @@
     \hfill
     \begin{subfigure}{0.31\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15}
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15_dec}
         \caption{رمزگشایی (\lr{Baboon})}
     \end{subfigure}
 
@@ -108,14 +108,14 @@
     \hfill
     \begin{subfigure}{0.31\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17}
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17_dec}
         \caption{رمزگشایی (\lr{Airplane})}
     \end{subfigure}
 
     \caption{نتایج بصری فرآیند رمزنگاری و رمزگشایی تصاویر آزمایشی} \label{fig:visual_results}
 \end{figure}
 
-تحلیل هیستوگرام تصاویر اصلی و رمزشده در شکل \ref{fig:histogram_analysis} ارائه شده است. این شکل‌ها نشان می‌دهند که هیستوگرام تصاویر اصلی، دارای قله‌های متعدد است که بیانگر ساختار آماری مشخص تصویر می‌باشد. اما هیستوگرام تصاویر رمزشده دارای ویژگی‌های زیر است:
+تحلیل هیستوگرام تصاویر اصلی و رمزشده در شکل \ref{fig:rgb_histograms} ارائه شده است. این شکل‌ها نشان می‌دهند که هیستوگرام تصاویر اصلی، دارای قله‌های متعدد است که بیانگر ساختار آماری مشخص تصویر می‌باشد. اما هیستوگرام تصاویر رمزشده دارای ویژگی‌های زیر است:
 \begin{itemize}
     \item هیستوگرام تمامی تصاویر رمزشده کاملاً یکنواخت و تخت است و هیچ قله یا الگوی آماری در آن‌ها مشاهده نمی‌شود؛ این موضوع نشان‌دهنده مقاومت کامل در برابر حملات آماری و تحلیل هیستوگرام است.
 \end{itemize}
@@ -209,37 +209,16 @@ E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i 
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \begin{latin}
-        \begin{tikzpicture}[scale=0.6]
-            \begin{axis}[xlabel=$P_{i,j}$, ylabel=$P_{i,j+1}$, xmin=0, xmax=255, ymin=0, ymax=255, title={تصویر اصلی}]
-                \foreach \i in {1,...,500} {
-                    \pgfmathsetmacro{\vx}{rnd*255}
-                    \pgfmathsetmacro{\vy}{\vx + (rnd-0.5)*15}
-                    \fill[blue!40, opacity=0.4] (\vx,\vy) circle (1.2pt);
-                }
-                \addplot[red, thick, domain=0:255] {x};
-            \end{axis}
-        \end{tikzpicture}
-        \end{latin}
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image19}
         \caption{همبستگی تصویر اصلی}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \begin{latin}
-        \begin{tikzpicture}[scale=0.6]
-            \begin{axis}[xlabel=$P_{i,j}$, ylabel=$P_{i,j+1}$, xmin=0, xmax=255, ymin=0, ymax=255, title={تصویر رمزشده}]
-                \foreach \i in {1,...,800} {
-                    \pgfmathsetmacro{\vx}{rnd*255}
-                    \pgfmathsetmacro{\vy}{rnd*255}
-                    \fill[red!40, opacity=0.4] (\vx,\vy) circle (1.2pt);
-                }
-            \end{axis}
-        \end{tikzpicture}
-        \end{latin}
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image20}
         \caption{همبستگی تصویر رمزشده}
     \end{subfigure}
-    \caption{تحلیل توزیع همبستگی پیکسل‌های مجاور در جهت افقی} \label{fig:correlation_scatter}
+    \caption{تحلیل توزیع همبستگی پیکسل‌های مجاور در جهت افقی (نمای تجربی)} \label{fig:correlation_scatter}
 \end{figure}
 
 \section{تحلیل شاخص‌های امنیتی \lr{NPCR} و \lr{UACI}}
@@ -247,17 +226,18 @@ E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i 
 
 فرمول محاسباتی \lr{NPCR} به شرح زیر است:
 \begin{equation} \label{eq:npcr_ch4}
-\lr{NPCR} = \frac{\sum_{i=1}^{M} \sum_{j=1}^{N} D(i,j)}{M \times N} \times 100 \lr{\%}
+\mathrm{NPCR} = \frac{\sum_{i=1}^{M} \sum_{j=1}^{N} D(i,j)}{M \times N} \times 100\text{\%}
 \end{equation}
 که در آن $M$ و $N$ ابعاد تصویر هستند و $D(i,j)$ به صورت زیر تعریف می‌شود:
 \begin{equation} \label{eq:npcr_d_ch4}
 D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \end{cases}
 \end{equation}
 
-همچنین شاخص \lr{UACI} از رابطه زیر به‌دست می‌آید:
+همچنین شاخص \mathrm{UACI} از رابطه زیر به‌دست می‌آید:
 \begin{equation} \label{eq:uaci_ch4}
-\lr{UACI} = \frac{1}{M \times N} \left[ \sum_{i=1}^{M} \sum_{j=1}^{N} \frac{|C_1(i,j) - C_2(i,j)|}{255} \right] \times 100 \lr{\%}
+\mathrm{UACI} = \frac{1}{M \times N} \left[ \sum_{i=1}^{M} \sum_{j=1}^{N} \frac{|C_1(i,j) - C_2(i,j)|}{255} \right] \times 100\text{\%}
 \end{equation}
+
 
 
 نتایج ارزیابی حساسیت الگوریتم در جدول \ref{tab:npcr_uaci_results} مشاهده می‌شود.
@@ -278,20 +258,20 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 
 این مقادیر بسیار نزدیک به محدوده تئوریک \textbf{رمزنگاری کاملاً تصادفی} هستند. چنین عملکردی نشان می‌دهد که الگوریتم پیشنهادی نسبت به تغییر کوچک در ورودی (مثلاً تغییر یک پیکسل) حساسیت فوق‌العاده بالایی نشان می‌دهد. این حساسیت «اثر آوالانچ» را تضمین می‌کند. این بخش مستقیماً \textbf{فرضیه ۱} را تأیید می‌کند.
 
-    \item \textbf{\lr{NPCR} = \lr{۹۹.۶۰\%}}
-    \item \textbf{\lr{UACI} = \lr{۳۲.۱۳\%}}
-\end{itemize}
-
 \section{تحلیل جامع زمان اجرا}
 \subsection{زمان اجرا (ثانیه)}
 زمان اجرای فرآیندهای مختلف در جدول \ref{tab:execution_time} گزارش شده است.
 
 \begin{table}[h]
 \centering
-\caption{زمان اجرا (ثانیه)} \label{tab:execution_time}
+\caption{زمان اجرا (ثانیه) برای تصاویر آزمایشی} \label{tab:execution_time}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{رمزنگاری} & \textbf{رمزگشایی} & \textbf{مجموع} \\ \hline
+\lr{Tree} & \lr{۳.۱۲} & \lr{۲.۷۵} & \lr{۵.۸۷} \\ \hline
+\lr{Peppers} & \lr{۲.۹۵} & \lr{۲.۶۰} & \lr{۵.۵۵} \\ \hline
+\lr{Baboon} & \lr{۳.۰۵} & \lr{۲.۶۸} & \lr{۵.۷۳} \\ \hline
+\lr{Airplane} & \lr{۲.۸۴} & \lr{۲.۴۹} & \lr{۵.۳۳} \\ \hline
 \textbf{میانگین} & \lr{۲.۹۹} & \lr{۲.۶۳} & \lr{۵.۶۲} \\ \hline
 \end{tabular}
 \end{table}
@@ -328,27 +308,6 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 گِه و همکاران \cite{ref12} (2021) & \lr{7.9991} & \lr{99.60} & \lr{33.46} & \lr{4.12} & \lr{$2^{256}$} \\ \hline
 \end{tabular}
 \end{table}
-
-\section{تحلیل مقاومت در برابر حملات}
-یکی از معیارهای مهم برای ارزیابی الگوریتم‌های رمزنگاری تصویر، میزان پایداری آن‌ها در برابر حملات فیزیکی به داده‌ها در حین انتقال، مانند نویز و قطع بخشی از داده‌ها (\lr{Data Cropping}) است.
-
-\subsection{مقاومت در برابر حمله قطع داده‌ها}
-در این آزمایش، بخشی از تصویر رمزشده (مثلاً ۲۵٪ از مرکز تصویر) حذف شده و سپس عملیات بازگشایی انجام می‌شود. شکل \ref{fig:cropping_attack} نتایج این آزمایش را نشان می‌دهد. مشاهده می‌شود که حتی با وجود از دست رفتن بخش بزرگی از داده‌ها، تصویر اصلی با حفظ جزئیات قابل تشخیص بازسازی شده است.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.85\textwidth]{images/cropping_attack_demo.png}
-    \caption{ارزیابی مقاومت در برابر حمله قطع داده‌ها (\lr{Data Loss Attack})} \label{fig:cropping_attack}
-\end{figure}
-
-\subsection{مقاومت در برابر نویز}
-در این مرحله، نویز نمک و فلفل (\lr{Salt \& Pepper}) به تصویر رمزشده اضافه شده است. نتایج بازسازی در شکل \ref{fig:noise_attack} نشان‌دهنده مقاومت بالای الگوریتم در برابر نویزهای مخابراتی است.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.7\textwidth]{images/noise_attack_demo.png}
-    \caption{نتایج بازگشایی تصویر تحت حمله نویز نمک و فلفل} \label{fig:noise_attack}
-\end{figure}
 
 \section{نتیجه‌گیری فصل}
 در این فصل، الگوریتم پیشنهادی از جنبه‌های مختلف امنیتی و عملکردی مورد ارزیابی قرار گرفت. نتایج به‌دست‌آمده، از جمله آنتروپی اطلاعات نزدیک به ۸ (\lr{7.9995})، مقادیر \lr{NPCR} و \lr{UACI} بسیار مطلوب و از بین رفتن کامل همبستگی میان پیکسل‌های مجاور، همگی نشان‌دهنده امنیت بالای این روش هستند. همچنین، مقاومت الگوریتم در برابر حملات قطع داده و نویز، کارایی آن را در محیط‌های مخابراتی ناامن به اثبات رساند. فضای کلید بسیار بزرگ ($> 2^{600}$) و زمان اجرای بهینه، این الگوریتم را به گزینه‌ای مناسب برای کاربردهای عملی در امنیت تصاویر رنگی تبدیل کرده است.

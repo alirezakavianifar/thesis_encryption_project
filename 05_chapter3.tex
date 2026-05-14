@@ -28,15 +28,15 @@
 \begin{tabular}{|l|l|}
 \hline
 \textbf{نام سیستم} & \textbf{تعریف ریاضی} \\ \hline
-\lr{LEL System} & $x_{i+1} = L(a, x_i) \ln(L(b, x_i) + c) = (۴ax_i(۱-x_i)) \ln(۴bx_i(۱-x_i) + c)$ \\ \hline
-\lr{LES System} & $x_{i+1} = L(a, x_i) \ln(S(b, x_i) + c) = (۴ax_i(۱-x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
-\lr{LET System} & $x_{i+1} = L(a, x_i) \ln(T(b, x_i) + c) = (۴ax_i(۱-x_i)) \ln(۲b \min(x_i, ۱-x_i) + c)$ \\ \hline
-\lr{SEL System} & $x_{i+1} = S(a, x_i) \ln(L(b, x_i) + c) = (a \sin(\pi x_i)) \ln(۴bx_i(۱-x_i) + c)$ \\ \hline
+\lr{LEL System} & $x_{i+1} = L(a, x_i) \ln(L(b, x_i) + c) = (4ax_i(1-x_i)) \ln(4bx_i(1-x_i) + c)$ \\ \hline
+\lr{LES System} & $x_{i+1} = L(a, x_i) \ln(S(b, x_i) + c) = (4ax_i(1-x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
+\lr{LET System} & $x_{i+1} = L(a, x_i) \ln(T(b, x_i) + c) = (4ax_i(1-x_i)) \ln(2b \min(x_i, 1-x_i) + c)$ \\ \hline
+\lr{SEL System} & $x_{i+1} = S(a, x_i) \ln(L(b, x_i) + c) = (a \sin(\pi x_i)) \ln(4bx_i(1-x_i) + c)$ \\ \hline
 \lr{SES System} & $x_{i+1} = S(a, x_i) \ln(S(b, x_i) + c) = (a \sin(\pi x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
-\lr{SET System} & $x_{i+1} = S(a, x_i) \ln(T(b, x_i) + c) = (a \sin(\pi x_i)) \ln(۲b \min(x_i, ۱-x_i) + c)$ \\ \hline
-\lr{TEL System} & $x_{i+1} = T(a, x_i) \ln(L(b, x_i) + c) = (۲a \min(x_i, ۱-x_i)) \ln(۴bx_i(۱-x_i) + c)$ \\ \hline
-\lr{TES System} & $x_{i+1} = T(a, x_i) \ln(S(b, x_i) + c) = (۲a \min(x_i, ۱-x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
-\lr{TET System} & $x_{i+1} = T(a, x_i) \ln(T(b, x_i) + c) = (۲a \min(x_i, ۱-x_i)) \ln(۲b \min(x_i, ۱-x_i) + c)$ \\ \hline
+\lr{SET System} & $x_{i+1} = S(a, x_i) \ln(T(b, x_i) + c) = (a \sin(\pi x_i)) \ln(2b \min(x_i, 1-x_i) + c)$ \\ \hline
+\lr{TEL System} & $x_{i+1} = T(a, x_i) \ln(L(b, x_i) + c) = (2a \min(x_i, 1-x_i)) \ln(4bx_i(1-x_i) + c)$ \\ \hline
+\lr{TES System} & $x_{i+1} = T(a, x_i) \ln(S(b, x_i) + c) = (2a \min(x_i, 1-x_i)) \ln(b \sin(\pi x_i) + c)$ \\ \hline
+\lr{TET System} & $x_{i+1} = T(a, x_i) \ln(T(b, x_i) + c) = (2a \min(x_i, 1-x_i)) \ln(2b \min(x_i, 1-x_i) + c)$ \\ \hline
 \end{tabular}
 \end{latin}
 \end{table}
@@ -51,6 +51,7 @@
 \subsection{انتخاب سیستم‌های آشوبی}
 به جای استفاده از یک سیستم آشوبی منفرد، از ۹ سیستم نمایی بالا برای رمزنگاری تصاویر استفاده شده است. این انتخاب باعث افزایش تصادفی بودن و پیچیدگی فرآیند رمزنگاری شده و امنیت الگوریتم را به‌طور قابل توجهی بهبود می‌بخشد.
 
+\subsection{مجموعه داده مورد مطالعه}
 برای ارزیابی عملکرد الگوریتم، مجموعه داده استاندارد \lr{USC-SIPI} مورد استفاده قرار گرفته است. این مجموعه شامل تصاویر رنگی با ابعاد ۲۵۶ × ۲۵۶ و ۵۱۲ × ۵۱۲ و ویژگی‌های متنوع می‌باشد. (نمونه‌هایی از این تصاویر در شکل \ref{fig:visual_results} آورده شده است).
 \section{فرآیند رمزنگاری}
 فرآیند رمزنگاری تصاویر در پنج مرحله اصلی انجام می‌شود که نمای کلی آن در شکل \ref{fig:encryption_pipeline} آورده شده است:
@@ -89,7 +90,7 @@
     پارامترهای $a$، $b$ و $c$ مقادیر ثابت هستند.
     \item \textbf{رمزنگاری با سیستم‌های آشوبی نمایی:} برای هر پیکسل، یک عدد بین ۱ تا ۹ تولید می‌شود که مشخص می‌کند کدام یک از ۹ سیستم آشوبی نمایی برای رمزنگاری آن پیکسل به کار رود.
     \item \textbf{انتشار مقادیر رنگی:} پس از جایگشت، مقادیر رنگی پیکسل‌ها با مقادیر تولید شده از سیستم آشوبی مربوطه ترکیب می‌شوند تا پیچیدگی و تصادفی بودن بیشتر شود.
-    \item \textbf{ترکیب نهایی:} خروجی مرحله قبلی با یکی دیگر از سیستم‌های آشوبی ترکیب شده و فرآیند رمزنگاری به‌صورت نهایی تکمیل می‌شود.
+    \item \textbf{ترکیب نهایی:} خروجی مرحله قبلی با استفاده از عملیات \lr{XOR} با دنباله تولیدشده توسط سیستم \lr{Chen} ترکیب شده و فرآیند رمزنگاری به‌صورت نهایی تکمیل می‌شود. این مرحله باعث تثبیت امنیت لایه انتشار می‌گردد.
 \end{enumerate}
 
 \section{پیاده‌سازی و تحلیل}
