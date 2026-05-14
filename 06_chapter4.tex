@@ -145,15 +145,15 @@ H(m) = -\sum_{i=0}^{255} P(m_i) \log_2 P(m_i)
 
 \begin{table}[h]
 \centering
-\caption{نتایج تحلیل آنتروپی تصاویر رمزشده} \label{tab:entropy_results}
+\caption{نتایج تحلیل آنتروپی (\lr{Shannon Entropy}) تصاویر رمزشده} \label{tab:entropy_results}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{اصلی} & \textbf{رمزشده} & \textbf{افزایش} & \textbf{نزدیکی به ۸} \\ \hline
-\lr{Tree} & \lr{۷.۵۳۷۱} & \lr{۷.۹۹۴۴} & \lr{+۰.۴۵۷۳} & \lr{۹۹.۹۳\%} \\ \hline
-\lr{Peppers} & \lr{۷.۶۶۹۸} & \lr{۷.۹۹۱۶} & \lr{+۰.۳۲۱۸} & \lr{۹۹.۹۰\%} \\ \hline
-\lr{Baboon} & \lr{۷.۷۶۲۴} & \lr{۷.۹۸۳۳} & \lr{+۰.۲۲۰۹} & \lr{۹۹.۷۹\%} \\ \hline
-\lr{Airplane} & \lr{۶.۶۶۳۹} & \lr{۷.۹۴۶۱} & \lr{+۱.۲۸۲۲} & \lr{۹۹.۳۳\%} \\ \hline
-\textbf{میانگین} & \lr{۷.۴۰۸۳} & \lr{۷.۹۷۸۹} & \lr{+۰.۵۷۰۶} & \lr{۹۹.۷۴\%} \\ \hline
+\lr{Tree} & ۷/۵۳۷۱ & ۷/۹۹۴۴ & +۰/۴۵۷۳ & ۹۹/۹۳\% \\ \hline
+\lr{Peppers} & ۷/۶۶۹۸ & ۷/۹۹۱۶ & +۰/۳۲۱۸ & ۹۹/۹۰\% \\ \hline
+\lr{Baboon} & ۷/۷۶۲۴ & ۷/۹۸۳۳ & +۰/۲۲۰۹ & ۹۹/۷۹\% \\ \hline
+\lr{Airplane} & ۶/۶۶۳۹ & ۷/۹۴۶۱ & +۱/۲۸۲۲ & ۹۹/۳۳\% \\ \hline
+\textbf{میانگین} & ۷/۴۰۸۳ & ۷/۹۷۸۹ & +۰/۵۷۰۶ & ۹۹/۷۴\% \\ \hline
 \end{tabular}
 \end{table}
 
@@ -185,18 +185,18 @@ E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i 
 
 \begin{table}[h]
 \centering
-\caption{ضریب همبستگی کلی (۱۰۰۰۰ جفت تصادفی)} \label{tab:correlation_results}
+\caption{ضریب همبستگی کلی (\lr{Correlation Coefficient}) (۱۰۰۰۰ جفت تصادفی)} \label{tab:correlation_results}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{همبستگی اصلی (میانگین سه جهت)} & \textbf{همبستگی رمزشده} & \textbf{کاهش} \\ \hline
-\lr{Tree} & \lr{~۰.۹۶} & \lr{۰.۰۰۴۷} & \lr{۹۹.۵۱\%} \\ \hline
-\lr{Peppers} & \lr{~۰.۹۷} & \lr{۰.۰۰۸۳} & \lr{۹۹.۱۴\%} \\ \hline
-\lr{Baboon} & \lr{~۰.۹۴} & \lr{۰.۰۰۳۴} & \lr{۹۹.۶۴\%} \\ \hline
-\lr{Airplane} & \lr{~۰.۹۱} & \lr{-۰.۰۰۳۵} & \lr{۱۰۰.۳۸\%} \\ \hline
+\lr{Tree} & ~۰/۹۶ & ۰/۰۰۴۷ & ۹۹/۵۱\% \\ \hline
+\lr{Peppers} & ~۰/۹۷ & ۰/۰۰۸۳ & ۹۹/۱۴\% \\ \hline
+\lr{Baboon} & ~۰/۹۴ & ۰/۰۰۳۴ & ۹۹/۶۴\% \\ \hline
+\lr{Airplane} & ~۰/۹۱ & -۰/۰۰۳۵ & ۱۰۰/۳۸\% \\ \hline
 \end{tabular}
 \end{table}
 
-همبستگی پیکسل‌های مجاور در تصاویر اصلی حدود ۰.۹۴ تا ۰.۹۷ بوده است که ماهیت عکس‌برداری طبیعی است. اما در تصاویر رمزشده، مقدار همبستگی به کمتر از ۰.۰۰۸ رسیده است. این کاهش شدید (حدود \textbf{\lr{99.5\%}}) نشان می‌دهد:
+همبستگی پیکسل‌های مجاور در تصاویر اصلی حدود ۰.۹۴ تا ۰.۹۷ بوده است که ماهیت عکس‌برداری طبیعی است. اما در تصاویر رمزشده، مقدار همبستگی به کمتر از ۰.۰۰۸ رسیده است. این کاهش شدید (حدود \textbf{۹۹/۵\%}) نشان می‌دهد:
 \begin{itemize}
     \item سیستم \lr{Chen} در مرحله جایگشت، ساختار مکانی تصویر را کاملاً از بین برده است.
     \item هیچ رابطه‌ای میان پیکسل‌های مجاور باقی نمانده است.
@@ -248,11 +248,11 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{\lr{NPCR (\%)}} & \textbf{\lr{UACI (\%)}} \\ \hline
-\lr{Tree} & \lr{۹۹.۶۱} & \lr{۳۲.۱۳} \\ \hline
-\lr{Peppers} & \lr{۹۹.۶۳} & \lr{۳۲.۶۹} \\ \hline
-\lr{Baboon} & \lr{۹۹.۶۳} & \lr{۳۱.۲۴} \\ \hline
-\lr{Airplane} & \lr{۹۹.۵۴} & \lr{۳۲.۴۴} \\ \hline
-\textbf{میانگین} & \lr{۹۹.۶۰} & \lr{۳۲.۱۳} \\ \hline
+\lr{Tree} & ۹۹.۶۱ & ۳۲.۱۳ \\ \hline
+\lr{Peppers} & ۹۹.۶۳ & ۳۲.۶۹ \\ \hline
+\lr{Baboon} & ۹۹.۶۳ & ۳۱.۲۴ \\ \hline
+\lr{Airplane} & ۹۹.۵۴ & ۳۲.۴۴ \\ \hline
+\textbf{میانگین} & ۹۹.۶۰ & ۳۲.۱۳ \\ \hline
 \end{tabular}
 \end{table}
 
@@ -264,15 +264,15 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 
 \begin{table}[h]
 \centering
-\caption{زمان اجرا (ثانیه) برای تصاویر آزمایشی} \label{tab:execution_time}
+\caption{زمان اجرا (\lr{Execution Time}) بر حسب ثانیه برای تصاویر آزمایشی} \label{tab:execution_time}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \textbf{تصویر} & \textbf{رمزنگاری} & \textbf{رمزگشایی} & \textbf{مجموع} \\ \hline
-\lr{Tree} & \lr{۳.۱۲} & \lr{۲.۷۵} & \lr{۵.۸۷} \\ \hline
-\lr{Peppers} & \lr{۲.۹۵} & \lr{۲.۶۰} & \lr{۵.۵۵} \\ \hline
-\lr{Baboon} & \lr{۳.۰۵} & \lr{۲.۶۸} & \lr{۵.۷۳} \\ \hline
-\lr{Airplane} & \lr{۲.۸۴} & \lr{۲.۴۹} & \lr{۵.۳۳} \\ \hline
-\textbf{میانگین} & \lr{۲.۹۹} & \lr{۲.۶۳} & \lr{۵.۶۲} \\ \hline
+\lr{Tree} & ۳/۱۲ & ۲/۷۵ & ۵/۸۷ \\ \hline
+\lr{Peppers} & ۲/۹۵ & ۲/۶۰ & ۵/۵۵ \\ \hline
+\lr{Baboon} & ۳/۰۵ & ۲/۶۸ & ۵/۷۳ \\ \hline
+\lr{Airplane} & ۲/۸۴ & ۲/۴۹ & ۵/۳۳ \\ \hline
+\textbf{میانگین} & ۲/۹۹ & ۲/۶۳ & ۵/۶۲ \\ \hline
 \end{tabular}
 \end{table}
 
@@ -300,12 +300,12 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
 \textbf{الگوریتم / مرجع} & \textbf{آنتروپی} & \textbf{\lr{NPCR (\%)}} & \textbf{\lr{UACI (\%)}} & \textbf{زمان (ثانیه)} & \textbf{فضای کلید} \\ \hline
-\textbf{روش پیشنهادی} & \textbf{\lr{7.9995}} & \textbf{\lr{99.62}} & \textbf{\lr{33.48}} & \textbf{\lr{2.99}} & \lr{$> 2^{600}$} \\ \hline
-ژانگ و وانگ \cite{ref51} (۲۰۲۵) & \lr{7.9994} & \lr{99.61} & \lr{33.47} & \lr{3.80} & \lr{$2^{512}$} \\ \hline
-چن و لی \cite{ref62} (۲۰۲۵) & \lr{7.9989} & \lr{99.60} & \lr{33.44} & \lr{1.80} & \lr{$2^{256}$} \\ \hline
-وانگ و همکاران \cite{ref61} (۲۰۲۴) & \lr{7.9992} & \lr{99.61} & \lr{33.46} & \lr{3.20} & \lr{$2^{300}$} \\ \hline
-حسنی و همکاران \cite{ref13} (۲۰۲۴) & \lr{7.9993} & \lr{99.61} & \lr{33.45} & \lr{3.45} & \lr{$2^{256}$} \\ \hline
-گِه و همکاران \cite{ref12} (2021) & \lr{7.9991} & \lr{99.60} & \lr{33.46} & \lr{4.12} & \lr{$2^{256}$} \\ \hline
+\textbf{روش پیشنهادی} & \textbf{۷/۹۹۹۵} & \textbf{۹۹/۶۲} & \textbf{۳۳/۴۸} & \textbf{۲/۹۹} & \lr{$> 2^{600}$} \\ \hline
+ژانگ و وانگ \cite{ref51} (۲۰۲۵) & ۷/۹۹۹۴ & ۹۹/۶۱ & ۳۳/۴۷ & ۳/۸۰ & \lr{$2^{512}$} \\ \hline
+چن و لی \cite{ref62} (۲۰۲۵) & ۷/۹۹۸۹ & ۹۹/۶۰ & ۳۳/۴۴ & ۱/۸۰ & \lr{$2^{256}$} \\ \hline
+وانگ و همکاران \cite{ref61} (۲۰۲۴) & ۷/۹۹۹۲ & ۹۹/۶۱ & ۳۳/۴۶ & ۳/۲۰ & \lr{$2^{300}$} \\ \hline
+حسنی و همکاران \cite{ref13} (۲۰۲۴) & ۷/۹۹۹۳ & ۹۹/۶۱ & ۳۳/۴۵ & ۳/۴۵ & \lr{$2^{256}$} \\ \hline
+گِه و همکاران \cite{ref12} (۲۰۲۱) & ۷/۹۹۹۱ & ۹۹/۶۰ & ۳۳/۴۶ & ۴/۱۲ & \lr{$2^{256}$} \\ \hline
 \end{tabular}
 \end{table}
 
