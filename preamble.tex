@@ -1,5 +1,6 @@
 \documentclass[a4paper,12pt]{report}
-\usepackage[numbers,square]{natbib}
+\usepackage{natbib}
+\setcitestyle{authoryear,round,aysep={,}}
 \usepackage{amsmath, amssymb, amsthm}
 
 % ============================================================================
@@ -61,8 +62,8 @@
 \ifXeTeX
   \usepackage{fontspec}
   \usepackage{xepersian}
-  \setlatintextfont{Times New Roman}
-  % Scale 1.166 for 14pt (if document base is 12pt)
+  \setlatintextfont[Scale=1.0]{Times New Roman} % 12pt (matches 12pt document base)
+  % Body: B Lotus (Nazok) 14pt -> Scale 1.166
   \settextfont[Scale=1.166,BoldFont={B Lotus Bold},ItalicFont={B Lotus}]{B Lotus}
   \setdigitfont[Scale=1.166,Mapping=persian-digits]{B Lotus}
   
@@ -72,13 +73,14 @@
     \renewcommand{\thePersianMathPercentSymbol}{\%}
   }
   \@ifundefined{thePersianMathDecimalSeparator}{}{
-    \renewcommand{\thePersianMathDecimalSeparator}{.}
+    \renewcommand{\thePersianMathDecimalSeparator}{/}
   }
   \makeatother
 
   % Custom font sizes for headers and captions
   \usepackage{caption}
-  \DeclareCaptionFont{persianfont}{\settextfont[Scale=0.916]{B Lotus}} % 11pt/12pt approx 0.916
+  % Captions: B Lotus Light 11pt -> Scale 11/12 = 0.916
+  \DeclareCaptionFont{persianfont}{\settextfont[Scale=0.916]{B Lotus}} 
   \captionsetup{font={small,persianfont}, labelfont={bf,persianfont}}
   \captionsetup[figure]{position=bottom}
   \captionsetup[table]{position=top}

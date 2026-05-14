@@ -13,16 +13,17 @@
 % ============================================================================
 \pagenumbering{gobble}
 \input{01_titlepage}
-\input{01_bismillah}
+\newpage
 
-\pagenumbering{harfi} 
-\input{01_jury}          % الف (Jury approval)
-\input{01_originality}   % ب (Authenticity undertaking)
-\input{01_ethics}        % پ (Research ethics)
-\input{02_dedication}    % ت (Dedication)
-\input{02_acknowledgments} % ث (Acknowledgments)
-\input{02_frontmatter}   % ج، چ، ح (TOC, LOT, LOF)
-\input{02_abbreviations} % خ (Abbreviations)
+\pagenumbering{abjad} 
+\input{01_bismillah}      % ا (الف)
+\input{01_jury}          % ب (Jury approval)
+\input{01_originality}   % ج (Authenticity undertaking)
+\input{01_ethics}        % د (Research ethics)
+\input{02_dedication}    % هـ (Dedication)
+\input{02_acknowledgments} % و (Acknowledgments)
+\input{02_frontmatter}   % ز، ح، ط (TOC, LOT, LOF)
+\input{02_abbreviations} % ي (Abbreviations)
 \clearpage
 
 % ============================================================================
@@ -54,8 +55,19 @@
 \input{10_abstract_en}
 \newpage
 
-% English Title Page (at the very end)
+% English Title Page
 \newgeometry{top=3cm,bottom=3cm,left=3cm,right=2cm,footskip=1.5cm}
 \input{11_titlepage_en}
+\newpage
+
+% English Back Cover
+\thispagestyle{empty}
+\input{12_backcover_en}
+\newpage
+
+% Final Blank Page
+\thispagestyle{empty}
+\mbox{}
+\newpage
 
 \end{document}
