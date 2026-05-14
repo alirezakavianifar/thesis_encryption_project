@@ -26,12 +26,15 @@
 \newpage
 
 % ============================================================================
-% SECTION 2: ABSTRACT & CHAPTERS (Arabic Numbering starts at 1)
+% SECTION 2: ABSTRACT & CHAPTERS
 % ============================================================================
-\pagenumbering{arabic}
 \input{02_abstract}
 \newpage
 
+\input{10_abstract_en}
+\newpage
+
+\pagenumbering{arabic}
 \input{03_chapter1}
 \newpage
 \input{04_chapter2}
@@ -51,11 +54,8 @@
 \input{09_appendix}
 \newpage
 
-% English Section (with mirrored margins for left-side binding)
+% English Title Page (at the very end)
 \newgeometry{top=3cm,bottom=3cm,left=3cm,right=2cm,footskip=1.5cm}
-\input{10_abstract_en}
 \input{11_titlepage_en}
-
-
 
 \end{document}

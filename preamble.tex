@@ -29,6 +29,7 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{xcolor}
+\usepackage{tikz}
 \usepackage{listings}
 
 % listings configuration for Python
@@ -59,12 +60,12 @@
 
 \ifXeTeX
   \usepackage{fontspec}
-  \usepackage[extrafootnotefeatures,digits=persian]{xepersian}
+  \usepackage{xepersian}
   \setlatintextfont{Times New Roman}
-  \settextfont[Scale=1.166]{B Lotus}
-  \setdigitfont[Scale=1.166]{B Nazanin}
+  \settextfont[Scale=1.1,BoldFont={B Lotus Bold},ItalicFont={B Lotus}]{B Lotus}
+  \setdigitfont[Scale=1.1]{B Lotus}
   \SepMark{-}
-  \renewcommand{\labelitemi}{\lr{\textbullet}}
+  \renewcommand{\labelitemi}{$\bullet$}
 \else
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
