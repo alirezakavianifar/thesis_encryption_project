@@ -22,7 +22,7 @@
 این موضوع امکان تحلیل عملکرد در شرایط واقعی و نه ایده‌آل را فراهم می‌کند.
 
 \section{تحلیل بصری خروجی‌های رمزنگاری}
-بر اساس شکل‌های ۴‌–‌۱ تا ۴‌–‌۱۲، خروجی‌های بصری سه نکته اساسی را نشان می‌دهند:
+نتایج حاصل از فرآیند رمزنگاری و رمزگشایی برای تصاویر آزمایشی در شکل \ref{fig:visual_results} نمایش داده شده است. بر اساس این تصاویر، خروجی‌های بصری سه نکته اساسی را نشان می‌دهند:
 
 \begin{enumerate}
     \item \textbf{تصاویر رمزشده ماهیت کاملاً نویزی دارند:} توزیع پیکسل‌های تصویر رمزشده به نحوی است که هیچ ویژگی بصری قابل تشخیص باقی نمی‌ماند. این یکی از مهم‌ترین شاخص‌های امنیتی محسوب می‌شود.
@@ -32,36 +32,92 @@
 
 این نتایج بیانگر صحت عملکرد و پایداری الگوریتم هستند.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
-    \begin{tabular}{ccc}
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image12} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11} \\
-    (۱) تصویر اصلی \lr{Tree} & (۲) تصویر رمزشده \lr{Tree} & (۳) تصویر رمزگشایی‌شده \\
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image14} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13} \\
-    (۴) تصویر اصلی \lr{Peppers} & (۵) تصویر رمزشده \lr{Peppers} & (۶) تصویر رمزگشایی‌شده \\
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image16} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15} \\
-    (۷) تصویر اصلی \lr{Baboon} & (۸) تصویر رمزشده \lr{Baboon} & (۹) تصویر رمزگشایی‌شده \\
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image18} &
-    \includegraphics[width=0.3\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17} \\
-    (۱۰) تصویر اصلی \lr{Airplane} & (۱۱) تصویر رمزشده \lr{Airplane} & (۱۲) تصویر رمزگشایی‌شده
-    \end{tabular}
-    \caption{نتایج بصری رمزنگاری و رمزگشایی تصاویر آزمایشی}
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11}
+        \caption{تصویر اصلی درخت (\lr{Tree})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image12}
+        \caption{تصویر رمزشده درخت (\lr{Tree})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11}
+        \caption{تصویر رمزگشایی‌شده درخت (\lr{Tree})}
+    \end{subfigure}
+
+    \vspace{1em}
+
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13}
+        \caption{تصویر اصلی فلفل‌ها (\lr{Peppers})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image14}
+        \caption{تصویر رمزشده فلفل‌ها (\lr{Peppers})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13}
+        \caption{تصویر رمزگشایی‌شده فلفل‌ها (\lr{Peppers})}
+    \end{subfigure}
+
+    \vspace{1em}
+
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15}
+        \caption{تصویر اصلی بابون (\lr{Baboon})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image16}
+        \caption{تصویر رمزشده بابون (\lr{Baboon})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15}
+        \caption{تصویر رمزگشایی‌شده بابون (\lr{Baboon})}
+    \end{subfigure}
+
+    \vspace{1em}
+
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17}
+        \caption{تصویر اصلی هواپیما (\lr{Airplane})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image18}
+        \caption{تصویر رمزشده هواپیما (\lr{Airplane})}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17}
+        \caption{تصویر رمزگشایی‌شده هواپیما (\lr{Airplane})}
+    \end{subfigure}
+
+    \caption{نتایج بصری رمزنگاری و رمزگشایی تصاویر آزمایشی استاندارد} \label{fig:visual_results}
 \end{figure}
 
-\section{تحلیل هیستوگرام و بررسی یکنواختی توزیع}
-شکل‌های ۴‌–‌۱۳ تا ۴‌–‌۱۶ نشان می‌دهند که هیستوگرام تصاویر اصلی، دارای قله‌های متعدد است که بیانگر ساختار آماری مشخص تصویر می‌باشد. اما هیستوگرام تصاویر رمزشده دارای ویژگی‌های زیر است:
+تحلیل هیستوگرام تصاویر اصلی و رمزشده در شکل \ref{fig:histogram_analysis} ارائه شده است. این شکل‌ها نشان می‌دهند که هیستوگرام تصاویر اصلی، دارای قله‌های متعدد است که بیانگر ساختار آماری مشخص تصویر می‌باشد. اما هیستوگرام تصاویر رمزشده دارای ویژگی‌های زیر است:
 \begin{itemize}
-    \item کاملاً یکنواخت؛
-    \item فاقد قله؛
-    \item فاقد توزیع متمرکز؛
-    \item و بسیار مشابه توزیع تصادفی ایده‌آل هستند.
+    \item هیستوگرام تمامی تصاویر رمزشده کاملاً یکنواخت و تخت است و هیچ قله یا الگوی آماری در آن‌ها مشاهده نمی‌شود؛ این موضوع نشان‌دهنده مقاومت کامل در برابر حملات آماری و تحلیل هیستوگرام است.
 \end{itemize}
 
 این تغییر ساختاری، اساس دفاع در برابر حملات آماری است و نشان می‌دهد که \textbf{الگوریتم قادر است ردّ آماری تصویر را به‌طور کامل محو کند}.
@@ -71,13 +127,13 @@
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image19}
-        \caption{مقایسه هیستوگرام تصویر \lr{Tree}}
+        \caption{توزیع هیستوگرام تصویر درخت (\lr{Tree})}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image20}
-        \caption{مقایسه هیستوگرام تصویر \lr{Peppers}}
+        \caption{توزیع هیستوگرام تصویر فلفل‌ها (\lr{Peppers})}
     \end{subfigure}
     
     \vspace{1em}
@@ -85,15 +141,15 @@
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image21}
-        \caption{مقایسه هیستوگرام تصویر \lr{Baboon}}
+        \caption{توزیع هیستوگرام تصویر بابون (\lr{Baboon})}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image22}
-        \caption{مقایسه هیستوگرام تصویر \lr{Airplane}}
+        \caption{توزیع هیستوگرام تصویر هواپیما (\lr{Airplane})}
     \end{subfigure}
-    \caption{تحلیل هیستوگرام تصاویر اصلی و رمزشده}
+    \caption{تحلیل هیستوگرام تصاویر اصلی و رمزشده برای ارزیابی یکنواختی} \label{fig:histogram_analysis}
 \end{figure}
 
 \section{تحلیل آنتروپی}

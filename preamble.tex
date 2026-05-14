@@ -1,5 +1,5 @@
 \documentclass[a4paper,12pt]{report}
-\usepackage{cite}
+\usepackage[numbers,square]{natbib}
 \usepackage{amsmath, amssymb, amsthm}
 
 % ============================================================================
@@ -59,7 +59,7 @@
 
 \ifXeTeX
   \usepackage{fontspec}
-  \usepackage[extrafootnotefeatures]{xepersian}
+  \usepackage[extrafootnotefeatures,digits=persian]{xepersian}
   \setlatintextfont{Times New Roman}
   \settextfont[Scale=1.166]{B Lotus}
   \setdigitfont[Scale=1.166]{B Nazanin}
@@ -72,6 +72,11 @@
 
 \usepackage[top=3cm,bottom=3cm,left=2cm,right=3cm,footskip=1.5cm]{geometry}
 \linespread{1.0}
+
+\usepackage{chngcntr}
+\counterwithin{equation}{chapter}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
 
 \author{}
 \date{}
