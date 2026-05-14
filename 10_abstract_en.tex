@@ -2,10 +2,20 @@
 % ENGLISH ABSTRACT
 % ============================================================================
 \begin{latin}
-\chapter*{Abstract}
-Image security has become a critical concern in the digital era due to the widespread transmission of visual data over insecure networks. Traditional encryption standards, such as AES and RSA, often struggle with the high data volume and strong pixel correlation inherent in digital images. To address these challenges, this thesis proposes a novel color image encryption algorithm based on a hybrid selection of nine exponential chaotic systems. The proposed method utilizes the three-dimensional Chen chaotic system for initial pixel permutation to break spatial correlations. Subsequently, a dynamic diffusion process is implemented where one of nine distinct exponential chaotic maps is randomly selected for each pixel to modify its value. This multi-layered approach significantly enhances the key space and complexity of the encryption process. Security analyses, including Shannon entropy, correlation coefficients, NPCR, and UACI, demonstrate that the proposed algorithm provides high resistance against various cryptographic attacks while maintaining computational efficiency for real-time applications.
+\begin{center}
+    {\Large \textbf{Abstract}}
+\end{center}
+\vspace{0.5cm}
+
+\textbf{Objective:} The primary objective of this research is to enhance the security and efficiency of image encryption by increasing structural complexity and reducing pixel correlation through the combination of Exponential Chaotic Models (ECM) and the three-dimensional Chen chaotic system.
+
+\textbf{Method:} The proposed algorithm comprises two main stages: permutation (utilizing the Chen system) and diffusion (employing a dynamic selection of one of nine distinct exponential chaotic maps for each pixel). The implementation was carried out in Python, and evaluations were performed using standard USC-SIPI images.
+
+\textbf{Results:} Security analysis results indicate that the information entropy of the encrypted images reached an average of 7.9995 bits, and the correlation between adjacent pixels was reduced to less than 0.005. Furthermore, the NPCR and UACI values were calculated as 99.62\% and 33.48\%, respectively, demonstrating high resistance against various attacks. The execution time for 512 × 512 images is approximately 2.99 seconds.
+
+\textbf{Conclusion:} The innovation of dynamic system selection for each pixel combined with the Chen system establishes an optimal balance between security and speed, making this method highly suitable for real-time applications.
 
 \vspace{1cm}
-\textbf{Keywords:} Color Image Encryption, Chaotic Systems, Chen Attractor, Exponential Chaos, Information Security, Cryptanalysis.
+\textbf{Keywords:} Color Image Encryption, Exponential Chaotic Systems, Chen System, Shannon Entropy, Permutation and Diffusion.
 \end{latin}
 \newpage

@@ -11,29 +11,28 @@
 % ============================================================================
 % SECTION 1: TITLE PAGE & PRELIMINARY (Abjad numbering)
 % ============================================================================
-\pagenumbering{gobble}
-\input{01_titlepage}
-\newpage
-\input{01_bismillah}
-\newpage
-
 \pagenumbering{abjad} 
-\input{01_jury}          % الف (Jury approval)
-\input{01_originality}   % ب (Authenticity undertaking)
-\input{01_ethics}        % پ (Research ethics)
-\input{02_dedication}    % ت (Dedication)
-\input{02_acknowledgments} % ث (Acknowledgments)
-\input{02_frontmatter}   % ج، چ، ح (TOC, LOT, LOF)
-\input{02_abbreviations} % خ (Abbreviations)
-\clearpage
+
+\input{01_titlepage} % Now Page 'الف'
+\setcounter{page}{2}
+\input{01_bismillah} % Page 'ب'
+\input{01_jury}
+\input{01_originality}
+\input{01_ethics}
+\input{02_dedication}
+\input{02_acknowledgments}
+\input{02_frontmatter} % TOC, LOT, LOF
+\input{02_abbreviations}
+\newpage
 
 % ============================================================================
 % SECTION 2: ABSTRACT & CHAPTERS
 % ============================================================================
-\pagenumbering{arabic}
-\setcounter{page}{1}
 \input{02_abstract}
 
+\input{10_abstract_en}
+
+\pagenumbering{arabic}
 \input{03_chapter1}
 \newpage
 \input{04_chapter2}
@@ -51,9 +50,6 @@
 \input{08_references}
 \newpage
 \input{09_appendix}
-\newpage
-
-\input{10_abstract_en}
 \newpage
 
 % English Title Page (at the very end)

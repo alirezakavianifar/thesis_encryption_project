@@ -62,8 +62,25 @@
   \usepackage{fontspec}
   \usepackage{xepersian}
   \setlatintextfont{Times New Roman}
-  \settextfont[Scale=1.1,BoldFont={B Lotus Bold},ItalicFont={B Lotus}]{B Lotus}
-  \setdigitfont[Scale=1.1,Mapping=persian-digits]{B Lotus}
+  % Scale 1.166 for 14pt (if document base is 12pt)
+  \settextfont[Scale=1.166,BoldFont={B Lotus Bold},ItalicFont={B Lotus}]{B Lotus}
+  \setdigitfont[Scale=1.166,Mapping=persian-digits]{B Lotus}
+  
+  % Fix for B Lotus missing Persian math symbols (U+066A, U+066B)
+  \makeatletter
+  \@ifundefined{thePersianMathPercentSymbol}{}{
+    \renewcommand{\thePersianMathPercentSymbol}{\%}
+  }
+  \@ifundefined{thePersianMathDecimalSeparator}{}{
+    \renewcommand{\thePersianMathDecimalSeparator}{.}
+  }
+  \makeatother
+
+  % Custom font sizes for headers and captions
+  \usepackage{caption}
+  \DeclareCaptionFont{persianfont}{\settextfont[Scale=0.916]{B Lotus}} % 11pt/12pt approx 0.916
+  \captionsetup{font={small,persianfont}, labelfont={bf,persianfont}}
+  
   \SepMark{-}
   \renewcommand{\labelitemi}{$\bullet$}
 \else
@@ -73,6 +90,15 @@
 
 \usepackage[top=3cm,bottom=3cm,left=2cm,right=3cm,footskip=1.5cm]{geometry}
 \linespread{1.0}
+
+% Heading styles (Bold 14pt)
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\huge\centering}{\chaptername\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\bfseries\large}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize}{\thesubsection}{1em}{}
 
 \usepackage{chngcntr}
 \counterwithin{equation}{chapter}
