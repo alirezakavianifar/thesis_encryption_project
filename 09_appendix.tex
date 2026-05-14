@@ -123,7 +123,7 @@ def shannon_entropy(img):
     return -np.sum(prob * np.log2(prob))
 
 def NPCR_UACI(img1, img2):
-    D = img1 != img2
+    D = img1!= img2
     NPCR = np.sum(D) / img1.size * 100
     UACI = np.mean(np.abs(img1.astype(int) - img2.astype(int)) / 255) * 100
     return NPCR, UACI
