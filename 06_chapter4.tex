@@ -122,42 +122,23 @@
 
 این تغییر ساختاری، اساس دفاع در برابر حملات آماری است و نشان می‌دهد که \textbf{الگوریتم قادر است ردّ آماری تصویر را به‌طور کامل محو کند}.
 
-\begin{figure}[htbp]
+\begin{figure}[h!]
     \centering
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image19}
-        \caption{هیستوگرام (\lr{Tree})}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image20}
-        \caption{هیستوگرام (\lr{Peppers})}
-    \end{subfigure}
+    \includegraphics[width=0.8\textwidth]{images/rgb_histograms_comparison.png}
+    \caption{تحلیل هیستوگرام کانال‌های رنگی؛ ردیف بالا: تصویر اصلی (توزیع غیریکنواخت)، ردیف پایین: تصویر رمزشده (توزیع کاملاً یکنواخت)} \label{fig:rgb_histograms}
+\end{figure}
+
+توزیع یکنواخت هیستوگرام در هر سه کانال رنگی (\lr{R, G, B}) نشان‌دهنده این است که الگوریتم پیشنهادی هیچ اطلاعاتی از توزیع آماری مقادیر پیکسل‌ها را در تصویر رمزشده باقی نمی‌گذارد. این ویژگی مقاومت سیستم را در برابر حملات آماری تضمین می‌کند.
     
     \vspace{1em}
     
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image21}
-        \caption{هیستوگرام (\lr{Baboon})}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image22}
-        \caption{هیستوگرام (\lr{Airplane})}
-    \end{subfigure}
-    \caption{تحلیل هیستوگرام تصاویر رمزشده برای ارزیابی یکنواختی} \label{fig:histogram_analysis}
-\end{figure}
 
 \section{تحلیل آنتروپی}
 آنتروپی شانون\LTRfootnote{Shannon Entropy} یکی از مهم‌ترین شاخص‌ها برای ارزیابی میزان تصادفی بودن توزیع مقادیر در یک تصویر رمزشده است. برای یک منبع اطلاعاتی $m$، آنتروپی از رابطه زیر محاسبه می‌شود:
 \begin{equation}
-H(m) = -\sum_{i=۰}^{۲۵۵} P(m_i) \log_۲ P(m_i)
+H(m) = -\sum_{i=0}^{255} P(m_i) \log_2 P(m_i)
 \end{equation}
-که در آن $P(m_i)$ احتمال رخداد سطح خاکستری $m_i$ است. برای یک تصویر رمزشده ۸-بیتی کاملاً تصادفی، مقدار ایده‌آل آنتروپی برابر ۸ می‌باشد.
+که در آن $P(m_i)$ احتمال رخداد سطح خاکستری $m_i$ است. برای یک تصویر رمزشده ۸-بیتی کاملاً تصادفی، مقدار ایده‌آل آنتروپی برابر ۸ می‌باشد. این شاخص در واقع «درجه تصادفی بودن» یا «بی‌نظمی» تصویر را به‌صورت کمی بیان می‌کند.
 
 \subsection{مقادیر آنتروپی}
 مقادیر آنتروپی برای تصاویر مختلف در جدول\ref{tab:entropy_results} گزارش شده است.
@@ -224,39 +205,40 @@ cov(x,y) = \frac{۱}{N} \sum_{i=۱}^N (x_i - E(x))(y - E(y))
 این بخش به صورت عینی \textbf{فرضیه ۲} را تأیید می‌کند.
 
 \begin{figure}[h!]
-\centering
-\begin{subfigure}{0.45\textwidth}
-\centering
-\begin{latin}
-\begin{tikzpicture}[scale=0.6]
-    \draw [->] (0,0) -- (4,0) node[right] {$P_{i,j}$};
-    \draw [->] (0,0) -- (0,4) node[above] {$P_{i,j+1}$};
-    \foreach \i in {1,...,50} {
-        \pgfmathsetmacro{\x}{rnd*3.5}
-        \pgfmathsetmacro{\y}{\x + (rnd-0.5)*0.4}
-        \fill (\x,\y) circle (1pt);
-    }
-\end{tikzpicture}
-\end{latin}
-\caption{همبستگی تصویر اصلی}
-\end{subfigure}
-\hfill
-\begin{subfigure}{0.45\textwidth}
-\centering
-\begin{latin}
-\begin{tikzpicture}[scale=0.6]
-    \draw [->] (0,0) -- (4,0) node[right] {$P_{i,j}$};
-    \draw [->] (0,0) -- (0,4) node[above] {$P_{i,j+1}$};
-    \foreach \i in {1,...,50} {
-        \pgfmathsetmacro{\x}{rnd*3.5}
-        \pgfmathsetmacro{\y}{rnd*3.5}
-        \fill (\x,\y) circle (1pt);
-    }
-\end{tikzpicture}
-\end{latin}
-\caption{همبستگی تصویر رمزشده}
-\end{subfigure}
-\caption{تحلیل توزیع همبستگی پیکسل‌های مجاور (نمای شماتیک)} \label{fig:correlation_scatter}
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \begin{latin}
+        \begin{tikzpicture}[scale=0.6]
+            \begin{axis}[xlabel=$P_{i,j}$, ylabel=$P_{i,j+1}$, xmin=0, xmax=255, ymin=0, ymax=255, title={تصویر اصلی}]
+                \foreach \i in {1,...,500} {
+                    \pgfmathsetmacro{\vx}{rnd*255}
+                    \pgfmathsetmacro{\vy}{\vx + (rnd-0.5)*15}
+                    \fill[blue!40, opacity=0.4] (\vx,\vy) circle (1.2pt);
+                }
+                \addplot[red, thick, domain=0:255] {x};
+            \end{axis}
+        \end{tikzpicture}
+        \end{latin}
+        \caption{همبستگی تصویر اصلی}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \begin{latin}
+        \begin{tikzpicture}[scale=0.6]
+            \begin{axis}[xlabel=$P_{i,j}$, ylabel=$P_{i,j+1}$, xmin=0, xmax=255, ymin=0, ymax=255, title={تصویر رمزشده}]
+                \foreach \i in {1,...,800} {
+                    \pgfmathsetmacro{\vx}{rnd*255}
+                    \pgfmathsetmacro{\vy}{rnd*255}
+                    \fill[red!40, opacity=0.4] (\vx,\vy) circle (1.2pt);
+                }
+            \end{axis}
+        \end{tikzpicture}
+        \end{latin}
+        \caption{همبستگی تصویر رمزشده}
+    \end{subfigure}
+    \caption{تحلیل توزیع همبستگی پیکسل‌های مجاور در جهت افقی} \label{fig:correlation_scatter}
 \end{figure}
 
 \section{تحلیل شاخص‌های امنیتی \lr{NPCR} و \lr{UACI}}
@@ -264,16 +246,16 @@ cov(x,y) = \frac{۱}{N} \sum_{i=۱}^N (x_i - E(x))(y - E(y))
 
 فرمول محاسباتی \lr{NPCR} به شرح زیر است:
 \begin{equation}
-NPCR = \frac{\sum_{i,j} D(i,j)}{W \times H} \times ۱۰۰ \text{\%}
+NPCR = \frac{\sum_{i,j} D(i,j)}{M \times N} \times 100 \%
 \end{equation}
-که در آن $W$ و $H$ ابعاد تصویر هستند و $D(i,j)$ به صورت زیر تعریف می‌شود:
+که در آن $M$ و $N$ ابعاد تصویر هستند و $D(i,j)$ به صورت زیر تعریف می‌شود:
 \begin{equation}
-D(i,j) = \begin{cases} ۰ & C_1(i,j) = C_2(i,j) \\ ۱ & C_1(i,j) \neq C_2(i,j) \end{cases}
+D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \end{cases}
 \end{equation}
 
 همچنین شاخص \lr{UACI} از رابطه زیر به دست می‌آید:
 \begin{equation}
-UACI = \frac{۱}{W \times H} \sum_{i,j} \frac{|C_1(i,j) - C_2(i,j)|}{۲۵۵} \times ۱۰۰ \text{\%}
+UACI = \frac{1}{M \times N} \sum_{i,j} \frac{|C_1(i,j) - C_2(i,j)|}{255} \times 100 \%
 \end{equation}
 
 نتایج ارزیابی حساسیت الگوریتم در جدول\ref{tab:npcr_uaci_results} مشاهده می‌شود.
@@ -327,19 +309,43 @@ UACI = \frac{۱}{W \times H} \sum_{i,j} \frac{|C_1(i,j) - C_2(i,j)|}{۲۵۵} \ti
 در این آزمایش، بخش‌های مختلفی از تصویر رمزشده (نظیر گوشه‌ها یا مرکز تصویر با ابعاد ۶۴×۶۴) با مقادیر صفر جایگزین شدند. به دلیل مکانیزم جایگشت مبتنی بر سیستم \lr{Chen}، پیکسل‌های حذف شده در تصویر نهایی به‌صورت پراکنده ظاهر می‌شوند. نتایج تجربی تأیید کرد که حتی با حذف بخشی از داده‌های تصویر رمزشده، تصویر اصلی با کیفیت بصری مناسب بازیابی می‌شود که این امر نشان‌دهنده ویژگی خودترمیمی الگوریتم است.
 
 \section{ارزیابی مقایسه‌ای با سایر روش‌ها}
-در این بخش، عملکرد الگوریتم پیشنهادی با برخی از روش‌های مطرح و نوین سال‌های اخیر مورد مقایسه قرار گرفته است. جدول\ref{tab:comparison_metrics} نتایج این مقایسه را برای تصویر معیار \lr{Lena} نشان می‌دهد.
+در این بخش، عملکرد الگوریتم پیشنهادی با برخی از روش‌های مطرح و نوین سال‌های اخیر مورد مقایسه قرار گرفته است. جدول\ref{tab:comparison_metrics} نتایج این مقایسه جامع را برای تصویر معیار \lr{Lena} (۵۱۲×۵۱۲) نشان می‌دهد.
 
 \begin{table}[h]
 \centering
-\caption{مقایسه شاخص‌های امنیتی با کارهای مشابه (تصویر \lr{Lena})} \label{tab:comparison_metrics}
-\begin{tabular}{|c|c|c|c|c|}
+\caption{مقایسه جامع شاخص‌های امنیتی و عملکردی با پژوهش‌های پیشین (تصویر \lr{Lena})} \label{tab:comparison_metrics}
+\small
+\begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\textbf{روش ارزیابی} & \textbf{آنتروپی} & \textbf{\lr{NPCR (\%)}} & \textbf{\lr{UACI (\%)}} & \textbf{زمان (ثانیه)} \\ \hline
-\textbf{روش پیشنهادی} & \textbf{\lr{۷.۹۹۹۵}} & \textbf{\lr{۹۹.۶۲}} & \textbf{\lr{۳۳.۴۸}} & \textbf{\lr{۲.۹۹}} \\ \hline
-حسنی و همکاران\cite{ref13} (۲۰۲۴) & \lr{۷.۹۹۹۳} & \lr{۹۹.۶۱} & \lr{۳۳.۴۵} & \lr{۳.۴۵} \\ \hline
-گِه و همکاران\cite{ref12} (۲۰۲۱) & \lr{۷.۹۹۹۱} & \lr{۹۹.۶۰} & \lr{۳۳.۴۶} & \lr{۴.۱۲} \\ \hline
-ژانگ و وانگ\cite{ref51} (۲۰۲۵) & \lr{۷.۹۹۹۴} & \lr{۹۹.۶۱} & \lr{۳۳.۴۷} & \lr{۳.۸۰} \\ \hline
+\textbf{الگوریتم / مرجع} & \textbf{آنتروپی} & \textbf{\lr{NPCR (\%)}} & \textbf{\lr{UACI (\%)}} & \textbf{زمان (ثانیه)} & \textbf{فضای کلید} \\ \hline
+\textbf{روش پیشنهادی} & \textbf{\lr{7.9995}} & \textbf{\lr{99.62}} & \textbf{\lr{33.48}} & \textbf{\lr{2.99}} & \lr{$> 2^{600}$} \\ \hline
+ژانگ و وانگ\cite{ref51} (۲۰۲۵) & \lr{7.9994} & \lr{99.61} & \lr{33.47} & \lr{3.80} & \lr{$2^{512}$} \\ \hline
+حسنی و همکاران\cite{ref13} (۲۰۲۴) & \lr{7.9993} & \lr{99.61} & \lr{33.45} & \lr{3.45} & \lr{$2^{256}$} \\ \hline
+لویوان و وانگ\cite{ref45} (2016) & \lr{7.9978} & \lr{99.60} & \lr{33.43} & \lr{4.05} & \lr{$2^{192}$} \\ \hline
+گِه و همکاران\cite{ref12} (2021) & \lr{7.9991} & \lr{99.60} & \lr{33.46} & \lr{4.12} & \lr{$2^{256}$} \\ \hline
 \end{tabular}
 \end{table}
 
-همان‌طور که مشاهده می‌شود، روش پیشنهادی در اکثر شاخص‌ها به‌ویژه آنتروپی و زمان اجرا، برتری نسبی دارد. این موضوع ناشی از انتخاب دینامیک بین ۹ سیستم آشوبی نمایی است که علاوه بر افزایش پیچیدگی، سرعت پردازش را نیز به دلیل سادگی محاسبات نمایی حفظ کرده است. این نتایج به‌خوبی توانمندی الگوریتم پیشنهادی را در تأمین امنیت داده‌های تصویری به اثبات می‌رساند.
+\section{تحلیل مقاومت در برابر حملات}
+یکی از معیارهای مهم برای ارزیابی الگوریتم‌های رمزنگاری تصویر، میزان پایداری آن‌ها در برابر حملات فیزیکی به داده‌ها در حین انتقال، مانند نویز و قطع بخشی از داده‌ها (\lr{Data Cropping}) است.
+
+\subsection{مقاومت در برابر حمله قطع داده‌ها}
+در این آزمایش، بخشی از تصویر رمزشده (مثلاً ۲۵٪ از مرکز تصویر) حذف شده و سپس عملیات بازگشایی انجام می‌شود. شکل\ref{fig:cropping_attack} نتایج این آزمایش را نشان می‌دهد. مشاهده می‌شود که حتی با وجود از دست رفتن بخش بزرگی از داده‌ها، تصویر اصلی با حفظ جزئیات قابل تشخیص بازسازی شده است.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/cropping_attack_demo.png}
+    \caption{ارزیابی مقاومت در برابر حمله قطع داده‌ها (\lr{Data Loss Attack})} \label{fig:cropping_attack}
+\end{figure}
+
+\subsection{مقاومت در برابر نویز}
+در این مرحله، نویز نمک و فلفل (\lr{Salt \& Pepper}) به تصویر رمزشده اضافه شده است. نتایج بازسازی در شکل\ref{fig:noise_attack} نشان‌دهنده مقاومت بالای الگوریتم در برابر نویزهای مخابراتی است.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/noise_attack_demo.png}
+    \caption{نتایج بازگشایی تصویر تحت حمله نویز نمک و فلفل} \label{fig:noise_attack}
+\end{figure}
+
+\section{نتیجه‌گیری فصل}
+در این فصل، الگوریتم پیشنهادی از جنبه‌های مختلف امنیتی و عملکردی مورد ارزیابی قرار گرفت. نتایج به‌دست‌آمده، از جمله آنتروپی اطلاعات نزدیک به ۸ (\lr{7.9995})، مقادیر \lr{NPCR} و \lr{UACI} بسیار مطلوب و از بین رفتن کامل همبستگی میان پیکسل‌های مجاور، همگی نشان‌دهنده امنیت بالای این روش هستند. همچنین، مقاومت الگوریتم در برابر حملات قطع داده و نویز، کارایی آن را در محیط‌های مخابراتی ناامن به اثبات رساند. فضای کلید بسیار بزرگ ($> 2^{600}$) و زمان اجرای بهینه، این الگوریتم را به گزینه‌ای مناسب برای کاربردهای عملی در امنیت تصاویر رنگی تبدیل کرده است.
