@@ -1,5 +1,5 @@
 % ============================================================================
-% CHAPTER 4: IMPLEMENTATION AND RESULTS ANALYSIS
+% CHAPTER ۴: IMPLEMENTATION AND RESULTS ANALYSIS
 % ============================================================================
 
 \chapter{پیاده‌سازی الگوریتم پیشنهادی}
@@ -14,7 +14,7 @@
 محیط اجرایی استاندارد و قابل بازتولید، شامل موارد زیر است:
 \begin{itemize}
     \item \lr{Python 3.11} برای پردازش داده
-    \item کتابخانه‌های علمی \lr{SciPy}، \lr{OpenCV}، و \lr{NumPy}
+    \item کتابخانه‌های علمی‌\lr{SciPy}، \lr{OpenCV}، و \lr{NumPy}
     \item پردازنده: \lr{Intel Core i7}
     \item بدون \lr{GPU}
 \end{itemize}
@@ -25,8 +25,8 @@
 نتایج حاصل از فرآیند رمزنگاری و رمزگشایی برای تصاویر آزمایشی در شکل \ref{fig:visual_results} نمایش داده شده است. بر اساس این تصاویر، خروجی‌های بصری سه نکته اساسی را نشان می‌دهند:
 
 \begin{enumerate}
-    \item \textbf{تصاویر رمزشده ماهیت کاملاً نویزی دارند:} توزیع پیکسل‌های تصویر رمزشده به نحوی است که هیچ ویژگی بصری قابل تشخیص باقی نمی ماند. این یکی از مهم‌ترین شاخص‌های امنیتی محسوب می‌شود.
-    \item \textbf{تصاویر بدون کوچک‌ترین خطا رمزگشایی می‌شوند:} \lr{PSNR} بین تصویر اصلی و رمزگشایی‌شده برابر $\infty$ بوده است؛ این یعنی الگوریتم در سطح عملیاتی هیچ تخریب داده ایجاد نمی کند.
+    \item \textbf{تصاویر رمزشده ماهیت کاملاً نویزی دارند:} توزیع پیکسل‌های تصویر رمزشده به نحوی است که هیچ ویژگی بصری قابل تشخیص باقی نمی‌ماند. این یکی از مهم‌ترین شاخص‌های امنیتی محسوب می‌شود.
+    \item \textbf{تصاویر بدون کوچک‌ترین خطا رمزگشایی می‌شوند:} \lr{PSNR} بین تصویر اصلی و رمزگشایی‌شده برابر $\infty$ بوده است؛ این یعنی الگوریتم در سطح عملیاتی هیچ تخریب داده ایجاد نمی‌کند.
     \item \textbf{تغییرات رنگی کاملاً از بین رفته‌اند:} ترکیب جایگشت و انتشار باعث شده که حتی کوچک‌ترین نشانه رنگی از تصویر اولیه نیز قابل بازیابی نباشد.
 \end{enumerate}
 
@@ -34,79 +34,79 @@
 
 \begin{figure}[htbp]
     \centering
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11}
         \caption{اصلی (\lr{Tree})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image12}
         \caption{رمزشده (\lr{Tree})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image11_dec}
         \caption{رمزگشایی (\lr{Tree})}
     \end{subfigure}
 
-    \vspace{0.2em}
+    \vspace{۰.2em}
 
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13}
         \caption{اصلی (\lr{Peppers})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image14}
         \caption{رمزشده (\lr{Peppers})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image13_dec}
         \caption{رمزگشایی (\lr{Peppers})}
     \end{subfigure}
 
-    \vspace{0.2em}
+    \vspace{۰.2em}
 
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15}
         \caption{اصلی (\lr{Baboon})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image16}
         \caption{رمزشده (\lr{Baboon})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image15_dec}
         \caption{رمزگشایی (\lr{Baboon})}
     \end{subfigure}
 
-    \vspace{0.2em}
+    \vspace{۰.2em}
 
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17}
         \caption{اصلی (\lr{Airplane})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image18}
         \caption{رمزشده (\lr{Airplane})}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.31\textwidth}
+    \begin{subfigure}{۰٫۳۱\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image17_dec}
         \caption{رمزگشایی (\lr{Airplane})}
@@ -117,7 +117,7 @@
 
 تحلیل هیستوگرام تصاویر اصلی و رمزشده در شکل \ref{fig:rgb_histograms} ارائه شده است. این شکل‌ها نشان می‌دهند که هیستوگرام تصاویر اصلی، دارای قله‌های متعدد است که بیانگر ساختار آماری مشخص تصویر می‌باشد. اما هیستوگرام تصاویر رمزشده دارای ویژگی‌های زیر است:
 \begin{itemize}
-    \item هیستوگرام تمامی تصاویر رمزشده کاملاً یکنواخت و تخت است و هیچ قله یا الگوی آماری در آن‌ها مشاهده نمی شود؛ این موضوع نشان‌دهنده مقاومت کامل در برابر حملات آماری و تحلیل هیستوگرام است.
+    \item هیستوگرام تمامی‌تصاویر رمزشده کاملاً یکنواخت و تخت است و هیچ قله یا الگوی آماری در آن‌ها مشاهده نمی‌شود؛ این موضوع نشان‌دهنده مقاومت کامل در برابر حملات آماری و تحلیل هیستوگرام است.
 \end{itemize}
 
 این تغییر ساختاری، اساس دفاع در برابر حملات آماری است و نشان می‌دهد که \textbf{الگوریتم قادر است ردّ آماری تصویر را به‌طور کامل محو کند}.
@@ -128,7 +128,7 @@
     \caption{تحلیل هیستوگرام کانال‌های رنگی؛ ردیف بالا: تصویر اصلی (توزیع غیریکنواخت)، ردیف پایین: تصویر رمزشده (توزیع کاملاً یکنواخت)} \label{fig:rgb_histograms}
 \end{figure}
 
-توزیع یکنواخت هیستوگرام در هر سه کانال رنگی (\lr{R, G, B}) نشان‌دهنده این است که الگوریتم پیشنهادی هیچ اطلاعاتی از توزیع آماری مقادیر پیکسل‌ها را در تصویر رمزشده باقی نمی گذارد. این ویژگی مقاومت سیستم را در برابر حملات آماری تضمین می‌کند.
+توزیع یکنواخت هیستوگرام در هر سه کانال رنگی (\lr{R, G, B}) نشان‌دهنده این است که الگوریتم پیشنهادی هیچ اطلاعاتی از توزیع آماری مقادیر پیکسل‌ها را در تصویر رمزشده باقی نمی‌گذارد. این ویژگی مقاومت سیستم را در برابر حملات آماری تضمین می‌کند.
     
     \vspace{1em}
     
@@ -136,9 +136,9 @@
 \section{تحلیل آنتروپی}
 آنتروپی شانون\LTRfootnote{Shannon Entropy} یکی از مهم‌ترین شاخص‌ها برای ارزیابی میزان تصادفی بودن توزیع مقادیر در یک تصویر رمزشده است. برای یک منبع اطلاعاتی $m$، آنتروپی از رابطه زیر محاسبه می‌شود:
 \begin{equation} \label{eq:entropy_ch4}
-H(m) = -\sum_{i=0}^{255} P(m_i) \log_2 P(m_i)
+H(m) = -\sum_{i=۰}^{۲۵۵} P(m_i) \log_2 P(m_i)
 \end{equation}
-که در آن $P(m_i)$ احتمال رخداد سطح خاکستری $m_i$ است. برای یک تصویر رمزشده ۸-بیتی کاملاً تصادفی، مقدار ایده‌آل آنتروپی برابر ۸ می‌باشد. این شاخص در واقع «درجه تصادفی بودن» یا «بی‌نظمی» تصویر را به‌صورت کمی بیان می‌کند.
+که در آن $P(m_i)$ احتمال رخداد سطح خاکستری $m_i$ است. برای یک تصویر رمزشده ۸-بیتی کاملاً تصادفی، مقدار ایده‌آل آنتروپی برابر ۸ می‌باشد. این شاخص در واقع «درجه تصادفی بودن» یا «بی‌نظمی» تصویر را به‌صورت کمی‌بیان می‌کند.
 
 \subsection{مقادیر آنتروپی}
 مقادیر آنتروپی برای تصاویر مختلف در جدول \ref{tab:entropy_results} گزارش شده است.
@@ -161,7 +161,7 @@ H(m) = -\sum_{i=0}^{255} P(m_i) \log_2 P(m_i)
 \begin{itemize}
     \item توزیع پیکسل‌ها تقریباً تصادفی است.
     \item احتمال حدس یا حمله آماری نزدیک به صفر است.
-    \item وجود ۹ سیستم آشوبی متفاوت، نقش تعیین‌کننده‌ای در افزایش بی‌نظمی ایفا می‌کند.
+    \item وجود ۹ سیستم آشوبی متفاوت، نقش تعیین‌کننده‌ای در افزایش بی‌نظمی‌ایفا می‌کند.
 \end{itemize}
 
 این بخش به‌طور مستقیم \textbf{فرضیه ۳} را تأیید می‌کند: \textit{انتخاب تصادفی سیستم آشوبی برای هر پیکسل آنتروپی را به شکل محسوس افزایش می‌دهد.}
@@ -173,10 +173,10 @@ r_{xy} = \frac{\operatorname{cov}(x,y)}{\sqrt{D(x)} \sqrt{D(y)}}
 \end{equation}
 تعاریف میانگین ($E(x)$)، واریانس ($D(x)$) و کوواریانس ($\operatorname{cov}(x,y)$) به شرح زیر است:
 \begin{equation} \label{eq:corr_details_ch4}
-E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i - E(x))^2
+E(x) = \frac{۱}{N} \sum_{i=۱}^N x_i, \quad D(x) = \frac{۱}{N} \sum_{i=۱}^N (x_i - E(x))^۲
 \end{equation}
 \begin{equation} \label{eq:cov_ch4}
-\operatorname{cov}(x,y) = \frac{1}{N} \sum_{i=1}^N (x_i - E(x))(y_i - E(y))
+\operatorname{cov}(x,y) = \frac{۱}{N} \sum_{i=۱}^N (x_i - E(x))(y_i - E(y))
 \end{equation}
 که در آن $x$ و $y$ مقادیر دو پیکسل مجاور و $N$ تعداد جفت‌پیکسل‌های انتخاب شده است.
 
@@ -207,13 +207,13 @@ E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i 
 
 \begin{figure}[h!]
     \centering
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{۰٫۴۵\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image19}
         \caption{همبستگی تصویر اصلی}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.45\textwidth}
+    \begin{subfigure}{۰٫۴۵\textwidth}
         \centering
         \includegraphics[width=\textwidth]{vertopal_6a6e478acc1947c1bfecfac3523ed62b/media/image20}
         \caption{همبستگی تصویر رمزشده}
@@ -226,16 +226,16 @@ E(x) = \frac{1}{N} \sum_{i=1}^N x_i, \quad D(x) = \frac{1}{N} \sum_{i=1}^N (x_i 
 
 فرمول محاسباتی \lr{NPCR} به شرح زیر است:
 \begin{equation} \label{eq:npcr_ch4}
-\mathrm{NPCR} = \frac{\sum_{i=1}^{M} \sum_{j=1}^{N} D(i,j)}{M \times N} \times 100\text{\%}
+\mathrm{NPCR} = \frac{\sum_{i=۱}^{M} \sum_{j=۱}^{N} D(i,j)}{M \times N} \times ۱۰۰\text{\%}
 \end{equation}
 که در آن $M$ و $N$ ابعاد تصویر هستند و $D(i,j)$ به صورت زیر تعریف می‌شود:
 \begin{equation} \label{eq:npcr_d_ch4}
-D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \end{cases}
+D(i,j) = \begin{cases} ۰ & C_1(i,j) = C_2(i,j) \\ ۱ & C_1(i,j) \neq C_2(i,j) \end{cases}
 \end{equation}
 
 همچنین شاخص \mathrm{UACI} از رابطه زیر به‌دست می‌آید:
 \begin{equation} \label{eq:uaci_ch4}
-\mathrm{UACI} = \frac{1}{M \times N} \left[ \sum_{i=1}^{M} \sum_{j=1}^{N} \frac{|C_1(i,j) - C_2(i,j)|}{255} \right] \times 100\text{\%}
+\mathrm{UACI} = \frac{۱}{M \times N} \left[ \sum_{i=۱}^{M} \sum_{j=۱}^{N} \frac{|C_1(i,j) - C_2(i,j)|}{۲۵۵} \right] \times ۱۰۰\text{\%}
 \end{equation}
 
 
@@ -279,7 +279,7 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 با وجود پیچیدگی نظری الگوریتم و وجود ۹ سیستم آشوبی، زمان اجرای آن برای تصاویر ۵۱۲×۵۱۲ کمتر از ۳ ثانیه است. میانگین زمان رمزنگاری و رمزگشایی مجموعاً حدود ۵٫۶۲ ثانیه است که برای استفاده‌های واقعی و در مقایسه با روش‌های مشابه بسیار قابل قبول و رقابتی است. این موضوع \textbf{فرضیه ۴} را به صورت کامل تأیید می‌کند: \textit{الگوریتم پیشنهادی با حفظ امنیت بالا، کارایی محاسباتی مطلوبی دارد.}
 
 \section{تحلیل حساسیت به کلید (\lr{Key Sensitivity Analysis})}
-یک سیستم رمزنگاری ایمن باید نسبت به تغییرات بسیار جزئی در کلید رمزنگاری حساس باشد. در این پژوهش، حساسیت به کلید با تغییر مقدار $۱۰^{-۱۶}$ در یکی از پارامترهای سیستم چن مورد آزمایش قرار گرفت. نتایج نشان داد که تصویر رمزشده با کلیدِ با تغییر جزئی، کاملاً متفاوت از تصویر اصلی است و هیچ اطلاعاتی از تصویر اولیه بازگردانده نمی شود. این موضوع تضمین‌کننده امنیت بالا در برابر حملات تحلیل کلید است.
+یک سیستم رمزنگاری ایمن باید نسبت به تغییرات بسیار جزئی در کلید رمزنگاری حساس باشد. در این پژوهش، حساسیت به کلید با تغییر مقدار $۱۰^{-۱۶}$ در یکی از پارامترهای سیستم چن مورد آزمایش قرار گرفت. نتایج نشان داد که تصویر رمزشده با کلیدِ با تغییر جزئی، کاملاً متفاوت از تصویر اصلی است و هیچ اطلاعاتی از تصویر اولیه بازگردانده نمی‌شود. این موضوع تضمین‌کننده امنیت بالا در برابر حملات تحلیل کلید است.
 
 \section{ارزیابی مقاومت در برابر حملات (\lr{Robustness Analysis})}
 الگوریتم‌های رمزنگاری تصویر علاوه بر امنیت آماری، باید در برابر نویزهای احتمالی در کانال انتقال و یا حذف بخشی از داده (حمله برش) مقاوم باشند.
@@ -288,7 +288,7 @@ D(i,j) = \begin{cases} 0 & C_1(i,j) = C_2(i,j) \\ 1 & C_1(i,j) \neq C_2(i,j) \en
 در این آزمایش، نویز نمک و فلفل\LTRfootnote{Salt \& Pepper Noise} با چگالی‌های مختلف (۰٫۰۱ تا ۰٫۰۵) به تصویر رمزشده اضافه گردید. نتایج نشان داد که به دلیل مکانیزم انتشار دینامیک مبتنی بر ۹ سیستم آشوبی، تأثیر نویز در سطح کل تصویر پخش شده و پس از رمزگشایی، ساختار اصلی تصویر با \lr{PSNR} قابل قبول همچنان قابل تشخیص است.
 
 \subsection{مقاومت در برابر حمله برش (\lr{Cropping Attack})}
-در این آزمایش، بخش‌های مختلفی از تصویر رمزشده (نظیر گوشه‌ها یا مرکز تصویر با ابعاد ۶۴×۶۴) با مقادیر صفر جایگزین شدند. به دلیل مکانیزم جایگشت مبتنی بر سیستم \lr{Chen}، پیکسل‌های حذف شده در تصویر نهایی به‌صورت پراکنده ظاهر می‌شوند. نتایج تجربی تأیید کرد که حتی با حذف بخشی از داده‌های تصویر رمزشده، تصویر اصلی با کیفیت بصری مناسب بازیابی می‌شود که این امر نشان‌دهنده ویژگی خودترمیمی الگوریتم است.
+در این آزمایش، بخش‌های مختلفی از تصویر رمزشده (نظیر گوشه‌ها یا مرکز تصویر با ابعاد ۶۴×۶۴) با مقادیر صفر جایگزین شدند. به دلیل مکانیزم جایگشت مبتنی بر سیستم \lr{Chen}، پیکسل‌های حذف شده در تصویر نهایی به‌صورت پراکنده ظاهر می‌شوند. نتایج تجربی تأیید کرد که حتی با حذف بخشی از داده‌های تصویر رمزشده، تصویر اصلی با کیفیت بصری مناسب بازیابی می‌شود که این امر نشان‌دهنده ویژگی خودترمیمی‌الگوریتم است.
 
 \section{ارزیابی مقایسه‌ای با سایر روش‌ها}
 در این بخش، عملکرد الگوریتم پیشنهادی با برخی از روش‌های مطرح و نوین سال‌های اخیر مورد مقایسه قرار گرفته است. جدول \ref{tab:comparison_metrics} نتایج این مقایسه جامع را برای تصویر معیار \lr{Lena} (۵۱۲×۵۱۲) نشان می‌دهد.
