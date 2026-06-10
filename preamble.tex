@@ -1,6 +1,5 @@
 \documentclass[a4paper,12pt]{report}
-\usepackage{natbib}
-\setcitestyle{authoryear,round,aysep={,}}
+\usepackage[numbers,square]{natbib}
 \usepackage{amsmath, amssymb, amsthm}
 
 % ============================================================================
@@ -69,12 +68,16 @@
   
   % Fix for B Lotus missing Persian math symbols (U+066A, U+066B)
   \makeatletter
+  % Handle math mode percent
   \@ifundefined{thePersianMathPercentSymbol}{}{
-    \renewcommand{\thePersianMathPercentSymbol}{\%}
+    \renewcommand{\thePersianMathPercentSymbol}{\text{\lr{\%}}}
   }
-  \@ifundefined{thePersianMathDecimalSeparator}{}{
-    \renewcommand{\thePersianMathDecimalSeparator}{/}
-  }
+  % Handle text mode percent (redefine \% to always use Latin font for the glyph)
+  \let\oldpercent\%
+  \renewcommand{\%}{\lr{\oldpercent}}
+  
+  % Redefine math decimal separator to standard slash (/) since B Lotus lacks U+066B (٫)
+  \def\decimalseparator{/}
   \makeatother
 
   % Custom font sizes for headers and captions

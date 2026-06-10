@@ -10,6 +10,10 @@ Ensure the remote `origin` points to this URL. If not configured, use: `git remo
 
 If `.gitignore` does not exist, create one based on the codebase structure and language. Adapt entries to match the project's technologies and build output locations.
 
+## README.md
+
+The GitHub repository must always contain a `README.md` file at the root of the project. This file should explain what the project is, how it is structured, how to run it, and any other instructions necessary for understanding or running the project.
+
 ## Git Push Workflow
 
 When the user uses the keyword "push" in a request (e.g., "please push these changes", "push", or similar), you MUST follow this specific workflow:
