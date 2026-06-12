@@ -27,6 +27,7 @@
 % ============================================================================
 
 \usepackage{graphicx}
+\graphicspath{{encrypted/}}
 \usepackage{subcaption}
 \usepackage{xcolor}
 \usepackage{tikz}
@@ -114,3 +115,31 @@
 
 \author{}
 \date{}
+
+% Redefine TOC/LOT/LOF to disable footnotes locally so they don't appear in lists
+\let\oldtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \begingroup
+    \renewcommand{\LTRfootnote}[1]{}%
+    \renewcommand{\footnote}[1]{}%
+    \oldtableofcontents
+  \endgroup
+}
+
+\let\oldlistoffigures\listoffigures
+\renewcommand{\listoffigures}{%
+  \begingroup
+    \renewcommand{\LTRfootnote}[1]{}%
+    \renewcommand{\footnote}[1]{}%
+    \oldlistoffigures
+  \endgroup
+}
+
+\let\oldlistoftables\listoftables
+\renewcommand{\listoftables}{%
+  \begingroup
+    \renewcommand{\LTRfootnote}[1]{}%
+    \renewcommand{\footnote}[1]{}%
+    \oldlistoftables
+  \endgroup
+}
