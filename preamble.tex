@@ -1,3 +1,4 @@
+% !TEX root = main.tex
 \documentclass[a4paper,12pt]{report}
 \usepackage[numbers,square]{natbib}
 \usepackage{amsmath, amssymb, amsthm}
@@ -31,41 +32,18 @@
 \usepackage{subcaption}
 \usepackage{xcolor}
 \usepackage{tikz}
-\usepackage{listings}
-
-% listings configuration for Python
-\lstset{
-  language=Python,
-  basicstyle=\ttfamily\small,
-  keywordstyle=\color{blue},
-  stringstyle=\color{red},
-  commentstyle=\color{green!60!black},
-  numbers=left,
-  numberstyle=\tiny\color{gray},
-  stepnumber=1,
-  numbersep=10pt,
-  backgroundcolor=\color{white},
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  frame=single,
-  rulecolor=\color{black},
-  tabsize=4,
-  captionpos=b,
-  breaklines=true,
-  breakatwhitespace=false
-}
 
 \usepackage[unicode=true,hidelinks]{hyperref}
 \usepackage{iftex}
 
 \ifXeTeX
   \usepackage{fontspec}
-  \usepackage{xepersian}
+  \usepackage[mathdigits=default]{xepersian}
   \setlatintextfont[Scale=1.0]{Times New Roman} % 12pt (matches 12pt document base)
+  \setlatinmonofont[Scale=1.0]{Courier New}
   % Body: B Lotus (Nazok) 14pt -> Scale 1.166
-  \settextfont[Scale=1.166,BoldFont={B Lotus Bold},ItalicFont={B Lotus}]{B Lotus}
-  \setdigitfont[Scale=1.166,Mapping=persian-digits]{B Lotus}
+  \settextfont[Scale=1.166,BoldFont={BLotusBd.ttf},ItalicFont={BLotus.ttf}]{BLotus.ttf}
+  \settextdigitfont[Scale=1.166,Mapping=persian-digits]{BLotus.ttf}
   
   % Fix for B Lotus missing Persian math symbols (U+066A, U+066B)
   \makeatletter
@@ -84,7 +62,7 @@
   % Custom font sizes for headers and captions
   \usepackage{caption}
   % Captions: B Lotus Light 11pt -> Scale 11/12 = 0.916
-  \DeclareCaptionFont{persianfont}{\settextfont[Scale=0.916]{B Lotus}} 
+  \DeclareCaptionFont{persianfont}{\settextfont[Scale=0.916]{BLotus.ttf}} 
   \captionsetup{font={small,persianfont}, labelfont={bf,persianfont}}
   \captionsetup[figure]{position=bottom}
   \captionsetup[table]{position=top}
@@ -108,12 +86,36 @@
 \titleformat{\subsection}
   {\normalfont\bfseries\normalsize}{\thesubsection}{1em}{}
 
-\usepackage{chngcntr}
+% \usepackage{chngcntr}
 \counterwithin{equation}{chapter}
 \counterwithin{figure}{chapter}
 \counterwithin{table}{chapter}
 
+% \usepackage{listings}
+% \lstset{
+%   language=Python,
+%   basicstyle=\ttfamily\small,
+%   keywordstyle=\color{blue},
+%   stringstyle=\color{red},
+%   commentstyle=\color{green!60!black},
+%   numbers=left,
+%   numberstyle=\tiny\color{gray},
+%   stepnumber=1,
+%   numbersep=10pt,
+%   backgroundcolor=\color{white},
+%   showspaces=false,
+%   showstringspaces=false,
+%   showtabs=false,
+%   frame=single,
+%   rulecolor=\color{black},
+%   tabsize=4,
+%   captionpos=b,
+%   breaklines=true,
+%   breakatwhitespace=false
+% }
+
 \author{}
+
 \date{}
 
 % Redefine TOC/LOT/LOF to disable footnotes locally so they don't appear in lists

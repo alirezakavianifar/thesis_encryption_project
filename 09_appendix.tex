@@ -1,3 +1,4 @@
+% !TEX root = main.tex
 % ============================================================================
 % APPENDIX: INTERACTIVE JUPYTER NOTEBOOK IMPLEMENTATION (ALL FARSI)
 % ============================================================================
@@ -5,14 +6,15 @@
 \chapter{پیوست: دفترچه تعاملی پیاده‌سازی و اعتبارسنجی الگوریتم (پایتون)}
 \label{ch:appendix_code}
 
-در این بخش، پیاده‌سازی کامل و گام‌به‌گام الگوریتم پیشنهادی رمزنگاری تصاویر رنگی در قالب ساختار استاندارد دفترچه تعاملی پایتون (\lr{Jupyter Notebook}) ارائه شده است. این مستند شامل ۶ فاز عملیاتی پیوسته بوده که تمامی مراحل ریاضی، تولید کلیدهای آشوبی، حل عددی سیستم چن، فازهای جایگشت و انتشار و در نهایت آنالیزهای امنیت تصویر رمزشده را با جزئیات دقیق پوشش می‌دهد. تمامی توضیحات علمی به زبان فارسی روان نگارش شده و کدهای پایتون دارای یادداشت‌های کامل برای هر خط هستند.
+در این بخش، پیاده‌سازی کامل و گام‌به‌گام الگوریتم پیشنهادی رمزنگاری تصاویر رنگی در قالب ساختار استاندارد دفترچه تعاملی پایتون (\lr{Jupyter Notebook}) ارائه شده است. این مستند شامل 6 فاز عملیاتی پیوسته بوده که تمامی مراحل ریاضی، تولید کلیدهای آشوبی، حل عددی سیستم چن، فازهای جایگشت و انتشار و در نهایت آنالیزهای امنیت تصویر رمزشده را با جزئیات دقیق پوشش می‌دهد. تمامی توضیحات علمی به زبان فارسی روان نگارش شده و کدهای پایتون دارای یادداشت‌های کامل برای هر خط هستند.
 
 % ============================================================================
-\section{فاز ۰: راه‌اندازی پروژه و تنظیمات اولیه}
+\section{فاز 0: راه‌اندازی پروژه و تنظیمات اولیه}
 در این گام، بسته‌ها و کتابخانه‌های علمی پایتون شامل پردازش تصویر (\lr{OpenCV})، محاسبات ماتریسی عددی (\lr{NumPy})، رسم نمودارها (\lr{Matplotlib})، تحلیل‌های آماری (\lr{SciPy}) و حل‌کننده غیرخطی معادلات دیفرانسیل بارگذاری می‌شوند.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 0: Import Libraries and Setup Environment}]
+\noindent\textbf{Listing: Phase 0: Import Libraries and Setup Environment}
+\begin{verbatim}
 # وارد کردن کتابخانه‌های پایه برای محاسبات ریاضی و پردازش تصویر
 import numpy as np
 import cv2
@@ -33,18 +35,19 @@ plt.rcParams['figure.figsize'] = (12, 6)
 plt.rcParams['font.size'] = 10
 
 print("فاز 0 با موفقیت انجام شد: کتابخانه‌ها بارگذاری و پوشه‌ها ایجاد شدند.")
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
-\subsection*{توضیحات خروجی فاز ۰}
+\subsection*{توضیحات خروجی فاز 0}
 محیط کار آماده است. کتابخانه‌های پایه شامل \lr{solve\_ivp} برای حل معادلات دیفرانسیل سیستم چن و \lr{stats} برای آزمون فرض آماری به خوبی فراخوانی شده‌اند و پوشه‌های اختصاصی خروجی روی هارد دیسک ایجاد گردیده‌اند.
 
 % ============================================================================
-\section{فاز ۱: شبیه‌سازی تصاویر آزمایشی معیار}
-در این بخش، کدی تعبیه شده است که در صورت نبود فیزیکی تصاویر معیار استاندارد (\lr{USC-SIPI}) روی حافظه سیستم، به صورت پویا تصاویر ۵۱۲ در ۵۱۲ رنگی با بافت‌ها و فرکانس‌های رنگی متمایز تولید می‌کند تا پایداری و بازتولیدپذیری کدهای دفترچه تضمین شود.
+\section{فاز 1: شبیه‌سازی تصاویر آزمایشی معیار}
+در این بخش، کدی تعبیه شده است که در صورت نبود فیزیکی تصاویر معیار استاندارد (\lr{USC-SIPI}) روی حافظه سیستم، به صورت پویا تصاویر 512 در 512 رنگی با بافت‌ها و فرکانس‌های رنگی متمایز تولید می‌کند تا پایداری و بازتولیدپذیری کدهای دفترچه تضمین شود.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 1: Generation of Beautiful Synthetic Test Images}]
+\noindent\textbf{Listing: Phase 1: Generation of Beautiful Synthetic Test Images}
+\begin{verbatim}
 def generate_synthetic_image(name, size=512):
     """
     تولید خودکار تصاویر رنگی شبیه‌سازی‌شده با الگوهای هندسی و بافت‌های مختلف
@@ -106,7 +109,7 @@ test_images = ['tree.png', 'Baboon.png', 'Peppers.png', 'Airplane.png']
 for name in test_images:
     generate_synthetic_image(name)
 print("تصاویر آزمایشی با موفقیت در پوشه images/ آماده‌سازی شدند.")
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \subsection*{توضیحات خروجی فاز ۱}
@@ -117,7 +120,8 @@ print("تصاویر آزمایشی با موفقیت در پوشه images/ آم�
 در این بخش نگاشت‌های نمایی (\lr{Exponential Chaotic Models}) و معادلات دیفرانسیل غیرخطی سیستم چن (\lr{Chen System}) پیاده‌سازی می‌شوند. سیستم چن کلیدهای فاز جایگشت مکانی را ایجاد می‌کند و نگاشت‌های ۹ گانه نمایی پویای کارآمد، وظیفه تولید کلیدهای فاز انتشار را بر عهده دارند.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 2: Mathematical Chaotic Models Implementation}]
+\noindent\textbf{Listing: Phase 2: Mathematical Chaotic Models Implementation}
+\begin{verbatim}
 # 1. تعریف نگاشت‌های آشوبی پایه با پارامترهای بهینه آشوب
 def base_logistic(x, r=3.99):
     return r * x * (1 - x)
@@ -164,7 +168,7 @@ def generate_chen_key(n, init_state=[0.1, 0.2, 0.3]):
     return normalized
 
 print("تمامی معادلات نگاشت‌های نمایی و کدهای حل عددی جاذب آشوبی چن با موفقیت کامپایل شدند.")
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \subsection*{توضیحات خروجی فاز ۲}
@@ -175,7 +179,8 @@ print("تمامی معادلات نگاشت‌های نمایی و کدهای ح
 در این فاز، هسته اصلی رمزنگاری توسعه می‌یابد. علاوه بر مکانیزم جایگشت و انتخاب‌گر آشوبی پویای نگاشت‌ها، یک مرحله **جمع و تفریق پیمانه‌ای معکوس‌پذیر (\lr{Modular Mixing})** به انتشار اضافه شده است تا نوسانات آماری ناشی از بذر آشوبی خنثی شده و توزیع فراوانی پیکسل‌های تصویر رمزشده به کمال یکنواختی برسد.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 3: Core Encryption & Decryption Functions}]
+\noindent\textbf{Listing: Phase 3: Core Encryption \& Decryption Functions}
+\begin{verbatim}
 def permute_image(img, seed):
     """
     به‌هم‌ریختگی سراسری و تصادفی موقعیت پیکسل‌های تصویر
@@ -212,7 +217,7 @@ def generate_ecm_keystream(n, selector, x0=0.123456):
         # انتخاب و اجرای نگاشت پویای اختصاص‌یافته به پیکسل فعلی
         x = ecm_funcs[selector[i]](x)
         # استخراج بایت کلید از مقدار اعشاری نگاشت
-        ks[i] = int((x % 1) * 256)
+        ks[i] = int((x * 1e14) % 256)
     return ks
 
 def encrypt_image(img, seed=42, x0=0.123456, use_mixing=True):
@@ -260,7 +265,7 @@ def decrypt_image(cipher, idx, ks_chen, ks_ecm, use_mixing=True):
     return invert_permutation(plain, idx)
 
 print("توابع رمزنگاری، رمزگشایی و بهبوددهنده هیستوگرام با موفقیت آماده استفاده شدند.")
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \subsection*{توضیحات خروجی فاز ۳}
@@ -271,7 +276,8 @@ print("توابع رمزنگاری، رمزگشایی و بهبوددهنده ه
 برای تضمین صحت و توان امنیتی الگوریتم، تست‌های آکادمیک اعتبارسنجی بین‌المللی شامل آنتروپی شانون (\lr{Entropy})، همبستگی مکانی پیکسل‌ها (\lr{Correlation Coefficient})، ارزیابی مقاومت به تفاوت تفاضلی تصویر ورودی (\lr{NPCR} و \lr{UACI}) و آزمون فرض آماری پذیرش یکنواختی هیستوگرام خی‌دو (\lr{Chi-Square Test}) پیاده‌سازی شده‌اند.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 4: Evaluation and Statistical Metrics Code}]
+\noindent\textbf{Listing: Phase 4: Evaluation and Statistical Metrics Code}
+\begin{verbatim}
 def shannon_entropy(img):
     """
     محاسبه آنتروپی شانون تصویر رنگی
@@ -326,7 +332,7 @@ def chi_square_uniformity(img, alpha=0.05):
     return chi2_stat, p_val, critical_val, is_uniform
 
 print("توابع ارزیابی و سنجه‌های اعتبارسنجی با استانداردهای آکادمیک هماهنگ و ساخته شدند.")
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \subsection*{توضیحات خروجی فاز ۴}
@@ -337,7 +343,8 @@ print("توابع ارزیابی و سنجه‌های اعتبارسنجی با 
 در این فاز چرخه عملیاتی تست را بر روی کل پایگاه داده تصاویر شبیه‌سازی پیاده کرده و گزارش زمان، بازیابی بدون افت داده، مقادیر آنتروپی، ضرایب همبستگی، پایداری تفاضلی و نیکویی برازش را استخراج می‌کنیم. نمودارهای تصاویر اصلی، نویزی رمزشده و بازسازی شده به همراه هیستوگرام و نمودارهای پراکندگی توزیع همبستگی افقی رسم می‌شوند.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 5: Evaluation Plotting and Database Execution Loop}]
+\noindent\textbf{Listing: Phase 5: Evaluation Plotting and Database Execution Loop}
+\begin{verbatim}
 def plot_results(original, encrypted, decrypted, title_name):
     """
     رسم نمودار مقایسه‌ای تصاویر و هیستوگرام‌های رنگی آن‌ها در قالب یک قاب
@@ -411,11 +418,12 @@ def plot_correlation_scatter(original, encrypted, num_pairs=1000):
         
     plt.tight_layout()
     plt.show()
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 5: Execution Core Loop}]
+\noindent\textbf{Listing: Phase 5: Execution Core Loop}
+\begin{verbatim}
 # چرخه اجرای فرآیند شبیه‌سازی روی کل پایگاه داده تصاویر آزمایشی
 images = ['tree.png', 'Baboon.png', 'Peppers.png', 'Airplane.png']
 
@@ -463,23 +471,24 @@ for name in images:
     # 4. رسم تصاویر و توزیع همبستگی
     plot_results(img, enc, dec, name)
     plot_correlation_scatter(img, enc)
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \subsection*{توضیحات خروجی فاز ۵}
 نتایج شبیه‌سازی نشان‌دهنده عملکرد مطلوب الگوریتم است:
 \begin{itemize}
-    \item **بازسازی کاملاً Lossless**: عدم وجود کوچک‌ترین اختلاف رنگی بین تصاویر ورودی و خروجی پس از چرخه رمزگذاری و رمزگشایی تایید شد.
-    \item **آنتروپی نزدیک به ۸**: آنتروپی شانون بالای ۷.۹۹۵ ثابت می‌کند که اطلاعات رمزشده کاملاً تصادفی و فاقد الگوهای نشتی هستند.
+    \item **بازسازی کاملاً \lr{Lossless}**: عدم وجود کوچک‌ترین اختلاف رنگی بین تصاویر ورودی و خروجی پس از چرخه رمزگذاری و رمزگشایی تایید شد.
+    \item **آنتروپی نزدیک به ۸**: آنتروپی شانون بالای $7/995$ ثابت می‌کند که اطلاعات رمزشده کاملاً تصادفی و فاقد الگوهای نشتی هستند.
     \item **ضرایب همبستگی نزدیک به صفر**: تمام همبستگی‌های شدید مکانی مجاور پیکسل‌ها کاملاً نابود گردیده و ابر بیضی همبستگی تصویر اصلی به پراکندگی کاملاً متقارن و دایره‌ای شبه‌تصادفی تبدیل شده است.
 \end{itemize}
 
 % ============================================================================
 \section{فاز ۶: تحلیل مقایسه‌ای اثر همگن‌سازی هیستوگرام (اثبات کارایی اصلاحات پیشنهادی)}
-در این فاز تفاوت آماری هیستوگرام تصویر رمزشده به دو روش سنتی (صرفاً XOR آشوبی) و روش پیشنهادی اصلاح‌شده (ترکیب با Modular Mixing) شبیه‌سازی و به صورت عددی مقایسه می‌گردد. بزرگ‌نمایی محور فراوانی نمودارها به وضوح یکنواختی و همگن بودن هیستوگرام در روش جدید را نشان می‌دهد.
+در این فاز تفاوت آماری هیستوگرام تصویر رمزشده به دو روش سنتی (صرفاً \lr{XOR} آشوبی) و روش پیشنهادی اصلاح‌شده (ترکیب با \lr{Modular Mixing}) شبیه‌سازی و به صورت عددی مقایسه می‌گردد. بزرگ‌نمایی محور فراوانی نمودارها به وضوح یکنواختی و همگن بودن هیستوگرام در روش جدید را نشان می‌دهد.
 
 \begin{latin}
-\begin{lstlisting}[language=Python, caption={Phase 6: Comparative Uniformity Study Simulation}]
+\noindent\textbf{Listing: Phase 6: Comparative Uniformity Study Simulation}
+\begin{verbatim}
 # شبیه‌سازی مقایسه‌ای بر روی تصویر درخت
 img = cv2.imread("images/tree.png")
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -523,12 +532,12 @@ axes[1].set_ylim([1000, 2000]) # بزرگ‌نمایی جهت مشاهده تخ�
 plt.suptitle("مقایسه میکروسکوپی سطح یکنواختی فرکانس پیکسل‌ها در هیستوگرام رمزشده", fontsize=14, fontweight='bold')
 plt.tight_layout()
 plt.show()
-\end{lstlisting}
+\end{verbatim}
 \end{latin}
 
 \subsection*{توضیحات خروجی فاز ۶}
 از این آنالیز تطبیقی و آماری، تفاوت کارایی روش اصلاح‌شده نشان داده می‌شود:
 \begin{itemize}
-    \item **عدم یکنواختی روش XOR معمولی**: نوسانات فرکانس آماری دنباله کلیدهای نمایی در آزمون سخت‌گیرانه خی‌دو فرضیه یکنواختی را با آماره بالا رد می‌کند.
+    \item **عدم یکنواختی روش \lr{XOR} معمولی**: نوسانات فرکانس آماری دنباله کلیدهای نمایی در آزمون سخت‌گیرانه خی‌دو فرضیه یکنواختی را با آماره بالا رد می‌کند.
     \item **یکنواختی روش جدید**: در روش پیشنهادی \lr{Modular-Mixed} به دلیل پد یک‌بار مصرف پیمانه‌ای، فرکانس رنگ تصویر رمزشده کاملاً توزیع همگنی به دست آورده، آماره خی‌دو به زیر آستانه بحرانی رفته و فرضیه یکنواختی هیستوگرام تایید می‌شود. این قابلیت نهایی دفاع مستحکمی در برابر انواع حملات تحلیلی آماری و هیستوگرام پدید می‌آورد.
 \end{itemize}
