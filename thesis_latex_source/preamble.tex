@@ -1,0 +1,152 @@
+% !TEX root = main.tex
+\documentclass[a4paper,12pt]{report}
+\usepackage[numbers,square]{natbib}
+\usepackage{amsmath, amssymb, amsthm}
+
+% ============================================================================
+% BIDI & XEPERSUAN COMPATIBILITY FIXES (For 2024/2025 LaTeX Kernel)
+% ============================================================================
+\makeatletter
+\providecommand{\IfFileLoadedTF}[3]{\@ifundefined{ver@#1}{#3}{#2}}
+\providecommand{\IfFileLoadedF}[2]{\@ifundefined{ver@#1}{#2}{}}
+\providecommand{\IfFileLoadedT}[2]{\@ifundefined{ver@#1}{}{#2}}
+\providecommand{\IfPackageLoadedTF}[3]{\@ifpackageloaded{#1}{#2}{#3}}
+\providecommand{\IfPackageLoadedF}[2]{\@ifpackageloaded{#1}{}{#2}}
+\providecommand{\IfPackageLoadedT}[2]{\@ifpackageloaded{#1}{#2}{}}
+\providecommand{\IfClassLoadedTF}[3]{\@ifclassloaded{#1}{#2}{#3}}
+\providecommand{\IfClassLoadedF}[2]{\@ifclassloaded{#1}{}{#2}}
+\providecommand{\IfClassLoadedT}[2]{\@ifclassloaded{#1}{#2}{}}
+\makeatother
+
+\usepackage{expl3}
+\ExplSyntaxOn
+% Force-define hyperref variables that are being lost/corrupted in 2024 kernel + xepersian
+\int_if_exist:NF \g__hyp_link_int { \int_new:N \g__hyp_link_int }
+\int_if_exist:NF \g__hyp_linknestlevel_int { \int_new:N \g__hyp_linknestlevel_int }
+\bool_if_exist:NF \l__hyp_annot_GoTo_bool { \bool_new:N \l__hyp_annot_GoTo_bool }
+\ExplSyntaxOff
+% ============================================================================
+
+\usepackage{graphicx}
+\graphicspath{{images/}{encrypted/}}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+\usepackage[unicode=true,hidelinks]{hyperref}
+\usepackage{iftex}
+
+\ifXeTeX
+  \usepackage{fontspec}
+  \usepackage[mathdigits=default]{xepersian}
+  \setlatintextfont[Scale=1.0]{Times New Roman} % 12pt (matches 12pt document base)
+  % Body: B Lotus (Nazok) 14pt -> Scale 1.166
+  \settextfont[Scale=1.166,BoldFont={BLotusBd.ttf},ItalicFont={BLotus.ttf}]{BLotus.ttf}
+  \settextdigitfont[Scale=1.166,Mapping=persian-digits]{BLotus.ttf}
+  
+  % Fix for B Lotus missing Persian math symbols (U+066A, U+066B)
+  \makeatletter
+  % Handle math mode percent
+  \@ifundefined{thePersianMathPercentSymbol}{}{
+    \renewcommand{\thePersianMathPercentSymbol}{\text{\lr{\%}}}
+  }
+  % Handle text mode percent (redefine \% to always use Latin font for the glyph)
+  \let\oldpercent\%
+  % NOTE: Percent tokens are wrapped as \lr{...} in body text.
+  % Redefining \% to \lr{...} can nest \lr and cause bidi reordering artifacts.
+  \renewcommand{\%}{\oldpercent}
+  
+  % Redefine math decimal separator to standard slash (/) since B Lotus lacks U+066B (٫)
+  \def\decimalseparator{/}
+  \makeatother
+
+  % Custom font sizes for headers and captions
+  \usepackage{caption}
+  % Captions: B Lotus Light 11pt -> Scale 11/12 = 0.916
+  \DeclareCaptionFont{persianfont}{\settextfont[Scale=0.916]{BLotus.ttf}} 
+  \captionsetup{font={small,persianfont}, labelfont={bf,persianfont}}
+  \captionsetup[figure]{position=bottom}
+  \captionsetup[table]{position=top}
+  
+  
+\SepMark{-}
+  \renewcommand{\labelitemi}{$\bullet$}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\fi
+
+% Use xepersian's LTR-aware citation command for all Latin-style numeric refs
+\AtBeginDocument{\let\cite\Latincite}
+
+\usepackage[top=3cm,bottom=3cm,left=2cm,right=3cm,footskip=1.5cm]{geometry}
+\linespread{1.0}
+
+% Heading styles (Bold 14pt)
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\huge\centering}{\chaptername\ \thechapter}{20pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\bfseries\large}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\bfseries\normalsize}{\thesubsection}{1em}{}
+
+% \usepackage{chngcntr}
+\counterwithin{equation}{chapter}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+
+% \usepackage{listings}
+% \lstset{
+%   language=Python,
+%   basicstyle=\ttfamily\small,
+%   keywordstyle=\color{blue},
+%   stringstyle=\color{red},
+%   commentstyle=\color{green!60!black},
+%   numbers=left,
+%   numberstyle=\tiny\color{gray},
+%   stepnumber=1,
+%   numbersep=10pt,
+%   backgroundcolor=\color{white},
+%   showspaces=false,
+%   showstringspaces=false,
+%   showtabs=false,
+%   frame=single,
+%   rulecolor=\color{black},
+%   tabsize=4,
+%   captionpos=b,
+%   breaklines=true,
+%   breakatwhitespace=false
+% }
+
+\author{}
+
+\date{}
+
+% Redefine TOC/LOT/LOF to disable footnotes locally so they don't appear in lists
+\let\oldtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{%
+  \begingroup
+    \renewcommand{\LTRfootnote}[1]{}%
+    \renewcommand{\footnote}[1]{}%
+    \oldtableofcontents
+  \endgroup
+}
+
+\let\oldlistoffigures\listoffigures
+\renewcommand{\listoffigures}{%
+  \begingroup
+    \renewcommand{\LTRfootnote}[1]{}%
+    \renewcommand{\footnote}[1]{}%
+    \oldlistoffigures
+  \endgroup
+}
+
+\let\oldlistoftables\listoftables
+\renewcommand{\listoftables}{%
+  \begingroup
+    \renewcommand{\LTRfootnote}[1]{}%
+    \renewcommand{\footnote}[1]{}%
+    \oldlistoftables
+  \endgroup
+}
