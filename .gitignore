@@ -88,6 +88,7 @@ env/
 # Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb
+!thesis_latex_source/thesis_appendix.ipynb
 
 # PyCharm
 .pytest_cache/
@@ -132,6 +133,7 @@ results/
 output/
 temp/
 .cache/
+thesis_latex_source/outputs/
 
 # Compiled binaries
 *.exe
