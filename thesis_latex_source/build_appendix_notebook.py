@@ -82,7 +82,7 @@ def inline_fig(code: str) -> str:
 FIGURE_NOTES = {
     "fig1": (
         "### شکل ۴-۱ — تصاویر اصلی، رمزشده و بازیابی‌شده\n\n"
-        "چهار تصویر Airplane، Baboon، Peppers و Tree در سه ستون نمایش داده شده‌اند. "
+        "تصاویر آزمایشی از پایگاه‌های داده USC-SIPI و Kodak در سه ستون نمایش داده شده‌اند. "
         "ستون وسط خروجی رمزنگاری و ستون سوم نتیجه رمزگشایی است؛ "
         "اگر MSE برابر صفر باشد، ستون سوم باید با ستون اول یکسان دیده شود."
     ),
@@ -118,7 +118,7 @@ FIGURE_NOTES = {
     ),
     "summary": (
         "### خلاصه نتایج عددی\n\n"
-        "میانگین آنتروپی رمزشده، NPCR، UACI و زمان اجرا برای هر چهار تصویر."
+        "میانگین آنتروپی رمزشده، NPCR، UACI و زمان اجرا برای تمام تصاویر آزمایشی از پایگاه‌های داده USC-SIPI و Kodak."
     ),
 }
 
@@ -167,7 +167,7 @@ SECTION_NOTES = {
 
 EXPERIMENT_NOTE = """## فاز ۶ — اجرای آزمایش
 
-چهار تصویر USC-SIPI بارگذاری می‌شوند. مسیر پوشه `images` با یک حلقه `for` پیدا می‌شود تا کد روی سیستم‌های مختلف هم اجرا شود.
+تصاویر استاندارد از پایگاه‌های داده مرجع USC-SIPI و Kodak بارگذاری می‌شوند. مسیر پوشه `images` با یک حلقه `for` پیدا می‌شود تا کد روی سیستم‌های مختلف هم اجرا شود.
 
 برای هر تصویر زمان رمزنگاری و رمزگشایی با `time.perf_counter()` ثبت می‌شود، معیارهای امنیتی محاسبه می‌گردد و تصاویر رمزشده در پوشه `outputs` ذخیره می‌شوند. در پایان همه نتایج در فایل `results.pkl` نگه‌داری می‌شود تا نمودارها بدون اجرای دوباره رمزنگاری رسم شوند."""
 
@@ -250,11 +250,11 @@ print('بارگذاری نتایج و آماده‌سازی نمودارها...'
 """
     cells.append(code_cell(plot_load))
 
-    plot_body = slice_code(raw, "fig, axes = plt.subplots(4, 3", None)
+    plot_body = slice_code(raw, "fig, axes = plt.subplots(len(NAMES), 3", None)
     fig_markers = [
-        ("fig1", 'fig, axes = plt.subplots(4, 3', 'print("fig1 done")'),
-        ("fig2", 'fig, axes = plt.subplots(4, 6', 'print("fig2 done")'),
-        ("fig3", 'fig, axes = plt.subplots(4, 6', 'print("fig3 done")'),
+        ("fig1", 'fig, axes = plt.subplots(len(NAMES), 3', 'print("fig1 done")'),
+        ("fig2", 'fig, axes = plt.subplots(len(NAMES), 6', 'print("fig2 done")'),
+        ("fig3", 'fig, axes = plt.subplots(len(NAMES), 6', 'print("fig3 done")'),
         ("fig4", 'fig, axes = plt.subplots(1, 2', 'print("fig4 done")'),
         ("fig5", 'fig, axes = plt.subplots(1, 2', 'print("fig5 done")'),
         ("fig6", 'fig, ax = plt.subplots', 'print("fig6 done")'),

@@ -368,6 +368,8 @@ if img_dir:
         'Baboon':   os.path.join(img_dir, 'Baboon.png'),
         'Peppers':  os.path.join(img_dir, 'Peppers.png'),
         'Tree':     os.path.join(img_dir, 'tree.png'),
+        'Kodak01':  os.path.join(img_dir, 'Kodak01.png'),
+        'Kodak02':  os.path.join(img_dir, 'Kodak02.png'),
     }
 else:
     # fallback to original paths
@@ -376,6 +378,8 @@ else:
         'Baboon':   '/mnt/user-data/uploads/1781810660626_Baboon.png',
         'Peppers':  '/mnt/user-data/uploads/1781810660627_Peppers.png',
         'Tree':     '/mnt/user-data/uploads/1781810660628_tree.png',
+        'Kodak01':  'images/Kodak01.png',
+        'Kodak02':  'images/Kodak02.png',
     }
 print("Resolved image paths:")
 for k, v in IMAGES.items():
@@ -421,7 +425,7 @@ for name, path in IMAGES.items():
     # ── invertibility check ────────────────────────────────────────────────
     mse_val, psnr_val = mse_psnr(img, dec)
     print(f"  MSE (original vs recovered): {mse_val:.6f}")
-    print(f"  PSNR: {'∞' if psnr_val == float('inf') else f'{psnr_val:.2f} dB'}")
+    print(f"  PSNR: {'inf dB' if psnr_val == float('inf') else f'{psnr_val:.2f} dB'}")
 
     # ── entropy ───────────────────────────────────────────────────────────
     channels_orig = ['B','G','R']
@@ -497,7 +501,7 @@ print('Results successfully loaded. Preparing figures.')
 
 # ==========================================================
 
-fig, axes = plt.subplots(4, 3, figsize=(12, 15))
+fig, axes = plt.subplots(len(NAMES), 3, figsize=(12, 3.5 * len(NAMES)))
 fig.suptitle('Figure 4-1: Original, Encrypted, and Decrypted Images',
              fontsize=14, fontweight='bold', y=0.995)
 
@@ -529,7 +533,7 @@ print("fig1 done")
 
 # ==========================================================
 
-fig, axes = plt.subplots(4, 6, figsize=(18, 11))
+fig, axes = plt.subplots(len(NAMES), 6, figsize=(18, 2.5 * len(NAMES)))
 fig.suptitle(
     'Figure 4-2: Histogram Comparison '
     '(Original vs Encrypted) - All Channels',
@@ -571,7 +575,7 @@ print("fig2 done")
 
 # ==========================================================
 
-fig, axes = plt.subplots(4, 6, figsize=(18, 11))
+fig, axes = plt.subplots(len(NAMES), 6, figsize=(18, 2.5 * len(NAMES)))
 fig.suptitle(
     'Figure 4-3: Pixel Correlation Scatter Plots '
     '(Green Channel) - Original vs Encrypted',
