@@ -1,3 +1,22 @@
+# %% [markdown]
+# <div dir="rtl">
+# 
+# # پیاده‌سازی الگوریتم رمزنگاری تصویر رنگی
+# 
+# این دفترچه کد پیوست پایان‌نامه را گام‌به‌گام اجرا می‌کند. الگوریتم از ترکیب سیستم Chen با نه نگاشت آشوبی نمایی (ECM) تشکیل شده و در پایان نتایج فصل چهارم — آنتروپی، همبستگی، NPCR، UACI و نمودارها — محاسبه می‌شود.
+# 
+# </div>
+
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## آماده‌سازی محیط
+# 
+# کتابخانه‌های `numpy`، `scipy`، `opencv` و `matplotlib` در ابتدا وارد می‌شوند. پوشه‌های `outputs` و `outputs/figs` با `os.makedirs` ساخته می‌شوند تا تصاویر و نمودارهای خروجی بدون خطا ذخیره شوند.
+# 
+# </div>
+
+# %%
 import numpy as np
 from scipy.integrate import solve_ivp
 import cv2
@@ -13,9 +32,22 @@ os.makedirs(OUT_DIR, exist_ok=True)
 OUT_FIGS = os.path.join(OUT_DIR, "figs")
 os.makedirs(OUT_FIGS, exist_ok=True)
 
-print("Environment initialized. Outputs will be saved to './outputs/'")
+print('محیط آماده شد. خروجی‌ها در پوشه outputs/ ذخیره می‌شوند.')
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۱ — سیستم Chen و نگاشت‌های پایه
+# 
+# تابع `chen_system` معادلات دیفرانسیل سیستم Chen را با پارامترهای $a=35$، $b=3$ و $c=28$ تعریف می‌کند. در `generate_chen_sequence` با `solve_ivp` این معادلات حل عددی می‌شوند و از خروجی، دنباله‌ای برای مرحله جایگشت گرفته می‌شود.
+# 
+# پارامتر `warmup=1000` به این دلیل است که چند هزار گام اول دنباله هنوز در ناحیه گذرا قرار دارد و برای تولید کلید مناسب نیست.
+# 
+# توابع `logistic`، `sine_map` و `tent_map` سه نگاشت یک‌بعدی پایه‌اند که در مرحله بعد برای ساخت خانواده ECM به‌کار می‌روند.
+# 
+# </div>
 
+# %%
 # 1. Chen chaotic system
 def chen_system(t, state, a=35, b=3, c=28):
     x, y, z = state
@@ -45,7 +77,20 @@ def sine_map(x, r=1.0):
 def tent_map(x):
     return 2 * x if x < 0.5 else 2 * (1.0 - x)
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۲ — نه سیستم آشوبی نمایی (ECM)
+# 
+# در `ecm_step` ابتدا یکی از نگاشت‌های Logistic، Sine یا Tent اجرا می‌شود و سپس خروجی از تابع نمایی عبور داده می‌شود. ترکیب نقش داخلی و خارجی، نه سیستم مجزا ایجاد می‌کند.
+# 
+# مقدار `MU_DEFAULT = 3.8` پارامتر نمایی ECM است و در ناحیه‌ای انتخاب شده که رفتار آشوبی پایدار بماند. تابع `_apply_map` فقط برای ساده‌تر شدن انتخاب بین سه نگاشت پایه نوشته شده است.
+# 
+# در `generate_ecm_sequence` مانند مرحله Chen، ابتدای دنباله (`warmup`) حذف می‌شود.
+# 
+# </div>
 
+# %%
 # 3. Nine exponential chaotic maps (ECM)
 ECM_CONFIGS = {
     1: ('logistic', 'logistic'),   # LEL
@@ -94,7 +139,18 @@ def generate_ecm_sequence(x0, system_idx, n, warmup=1000, mu=MU_DEFAULT):
         seq[k] = x
     return seq
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۳ — انتخاب‌گر و لایه XOR نهایی
+# 
+# تابع `generate_selector_sequence` با نگاشت Logistic برای هر پیکسل یک عدد بین ۱ تا ۹ تولید می‌کند (`int(x * 9) + 1`) تا مشخص شود کدام ECM اعمال شود. اگر همه پیکسل‌ها با یک سیستم رمز شوند، الگوی تکراری در خروجی باقی می‌ماند.
+# 
+# `generate_final_sequence` دنباله مستقل دیگری برای لایه XOR آخر می‌سازد. در کلید، `x_sel`، `x_ecm` و `x_final` از هم جدا هستند تا هر بخش نقش مشخص خود را داشته باشد.
+# 
+# </div>
 
+# %%
 # 4. Selector sequence (Logistic -> 1..9)
 def generate_selector_sequence(x_sel, n, warmup=1000):
     x = x_sel
@@ -119,7 +175,20 @@ def generate_final_sequence(x_final, n, warmup=1000):
         seq[k] = int(np.floor(x * 256)) % 256
     return seq
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۴ — رمزنگاری و رمزگشایی
+# 
+# این بخش اصلی‌ترین قسمت پیاده‌سازی است. تابع `_chaos_byte` مقدار اعشاری آشوبی را به بازه $[0,255]$ می‌برد.
+# 
+# در `encrypt_image` ابتدا جایگشت چن (Stage 2)، انتخاب سیستم نمایی (Stage 3)، XOR با کلید ECM (Stage 4) و سپس XOR نهایی (Stage 5) انجام می‌شود. خروجی طبیعی این فرآیند توزیع بسیار نزدیک به یکنواخت با آنتروپی ~۷.۹۹۷ تا ۷.۹۹۹ بیت دارد.
+# 
+# در `decrypt_image` مراحل به ترتیب معکوس اجرا می‌شوند.
+# 
+# </div>
 
+# %%
 def _chaos_byte(val):
     """Map chaotic state in [0,1) to an unbiased 8-bit key."""
     return int(np.floor(val * 256.0)) % 256
@@ -242,8 +311,15 @@ def encrypt_image(image_bgr, key: dict):
             flat ^ final_seq.astype(np.int32)
         ).reshape(H, W).astype(np.uint8)
 
-    # NO histogram balancing — natural chaotic distribution yields entropy ~7.997–7.999
-    meta = {'perm_inv': perm_inv}
+    # ── Stage 6: histogram balancing ───────────────────
+    balance_swaps = []
+    for c in range(3):
+        chaos_bal = generate_balance_chaos(key, N, c, warmup=1000)
+        enc_ch, swaps = balance_histogram_flat(encrypted[:, :, c], chaos_bal)
+        encrypted[:, :, c] = enc_ch
+        balance_swaps.append(swaps)
+
+    meta = {'perm_inv': perm_inv, 'balance_swaps': balance_swaps}
     return encrypted, meta
 
 
@@ -251,10 +327,14 @@ def decrypt_image(encrypted_bgr, key: dict, meta):
     H, W = encrypted_bgr.shape[:2]
     N = H * W
     perm_inv = meta['perm_inv']
+    balance_swaps = meta['balance_swaps']
 
     encrypted = encrypted_bgr.copy()
 
-    # (no histogram unbalancing — balancing step removed)
+    # ── undo histogram balancing ─────────────────────────────────
+    for c in range(3):
+        encrypted[:, :, c] = unbalance_histogram_flat(
+            encrypted[:, :, c], balance_swaps[c])
 
     # ── undo final XOR layer ─────────────────────────────────────────────
     final_seq = generate_final_sequence(key['x_final'], N, warmup=1000)
@@ -295,7 +375,23 @@ def decrypt_image(encrypted_bgr, key: dict, meta):
 
     return decrypted
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۵ — معیارهای ارزیابی
+# 
+# توابع این بخش برای مقایسه عددی نتایج فصل چهارم نوشته شده‌اند:
+# 
+# - `shannon_entropy`: آنتروپی هر کانال رنگی
+# - `pixel_correlation`: همبستگی پیکسل‌های مجاور در سه جهت (با `n_samples=5000` برای سرعت بیشتر)
+# - `npcr_uaci`: حساسیت به تغییر کلید
+# - `mse_psnr`: بررسی بازیابی دقیق تصویر
+# 
+# برای آزمون NPCR/UACI مقدار `x_0` به اندازه $10^{-15}$ تغییر داده می‌شود و دو تصویر رمزشده با هم مقایسه می‌گردند.
+# 
+# </div>
 
+# %%
 def shannon_entropy(channel):
     hist,_ = np.histogram(channel.flatten(), bins=256, range=(0, 256))
     hist = hist[hist > 0].astype(np.float64)
@@ -338,13 +434,26 @@ def mse_psnr(orig, dec):
     psnr = 10 * np.log10(255.0** 2 / mse)
     return float(mse), float(psnr)
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۶ — اجرای آزمایش
+# 
+# تصاویر استاندارد از پایگاه‌های داده مرجع USC-SIPI و Kodak بارگذاری می‌شوند. مسیر پوشه `images` با یک حلقه `for` پیدا می‌شود تا کد روی سیستم‌های مختلف هم اجرا شود.
+# 
+# برای هر تصویر زمان رمزنگاری و رمزگشایی با `time.perf_counter()` ثبت می‌شود، معیارهای امنیتی محاسبه می‌گردد و تصاویر رمزشده در پوشه `outputs` ذخیره می‌شوند. در پایان همه نتایج در فایل `results.pkl` نگه‌داری می‌شود تا نمودارها بدون اجرای دوباره رمزنگاری رسم شوند.
+# 
+# </div>
 
-# Locate images directory (relative or absolute paths)
+# %%
+# یافتن پوشه تصاویر آزمایشی
 import os
 
 img_dir = None
 for p in [
-    "../../images", "images", "../images",
+    "images",
+    "../../images", "../images",
+    r"e:/projects/thesis_project_v2/thesis_latex_source/images",
     "e:/projects/thesis_project/images",
 ]:
     if os.path.isdir(p):
@@ -392,7 +501,7 @@ results = {}
 
 for name, path in IMAGES.items():
     print(f"\n{'='*50}")
-    print(f"  Processing image: {name}")
+    print(f"  پردازش تصویر: {name}")
     print(f"{'='*50}")
 
     img = cv2.imread(path)
@@ -402,38 +511,38 @@ for name, path in IMAGES.items():
             "Please upload the 'images' folder containing standard test images to Google Colab."
         )
     H, W = img.shape[:2]
-    print(f"  Size: {W}x{H}")
+    print(f"  ابعاد: {W}×{H}")
 
     # ── encryption ─────────────────────────────────────────────────────────
     t0 = time.perf_counter()
     enc, meta = encrypt_image(img, DEFAULT_KEY)
     t_enc = time.perf_counter() - t0
-    print(f"  Encryption time: {t_enc:.3f} s")
+    print(f"  زمان رمزنگاری: {t_enc:.3f} ثانیه")
 
     # ── decryption ─────────────────────────────────────────────────────────
     t0 = time.perf_counter()
     dec = decrypt_image(enc, DEFAULT_KEY, meta)
     t_dec = time.perf_counter() - t0
-    print(f"  Decryption time: {t_dec:.3f} s")
+    print(f"  زمان رمزگشایی: {t_dec:.3f} ثانیه")
 
     # ── invertibility check ────────────────────────────────────────────────
     mse_val, psnr_val = mse_psnr(img, dec)
-    print(f"  MSE (original vs recovered): {mse_val:.6f}")
+    print(f"  MSE (اصلی vs بازیابی‌شده): {mse_val:.6f}")
     print(f"  PSNR: {'inf dB' if psnr_val == float('inf') else f'{psnr_val:.2f} dB'}")
 
     # ── entropy ───────────────────────────────────────────────────────────
     channels_orig = ['B','G','R']
     entropy_orig = [shannon_entropy(img[:,:,c]) for c in range(3)]
     entropy_enc  = [shannon_entropy(enc[:,:,c]) for c in range(3)]
-    print(f"  Entropy original  (B,G,R): {[round(e,4) for e in entropy_orig]}")
-    print(f"  Entropy encrypted (B,G,R): {[round(e,4) for e in entropy_enc]}")
+    print(f"  آنتروپی اصلی  (B,G,R): {[round(e,4) for e in entropy_orig]}")
+    print(f"  آنتروپی رمزشده (B,G,R): {[round(e,4) for e in entropy_enc]}")
 
     # ── correlation ──────────────────────────────────────────────────────────
     dirs = ['horizontal','vertical','diagonal']
     corr_orig = [pixel_correlation(img[:,:,1], d) for d in dirs]
     corr_enc  = [pixel_correlation(enc[:,:,1], d) for d in dirs]
-    print(f"  Correlation original (H,V,D): {[round(c,4) for c in corr_orig]}")
-    print(f"  Correlation encrypted (H,V,D): {[round(c,4) for c in corr_enc]}")
+    print(f"  همبستگی اصلی   (H,V,D): {[round(c,4) for c in corr_orig]}")
+    print(f"  همبستگی رمزشده (H,V,D): {[round(c,4) for c in corr_enc]}")
 
     # ── NPCR / UACI with one-bit key change ─────────────────────────────
     key2 = dict(DEFAULT_KEY)
@@ -449,7 +558,7 @@ for name, path in IMAGES.items():
 
     hist_cv_enc = [_hist_uniformity(enc[:,:,c]) for c in range(3)]
     print(
-        f"  Encrypted histogram CV% (B,G,R): "
+        f"  هیستوگرام رمزشده CV% (B,G,R): "
         f"{[round(v,2) for v in hist_cv_enc]}"
     )
 
@@ -469,13 +578,23 @@ for name, path in IMAGES.items():
         'img_dec':  dec,
     }
 
-print("\n\nAll images processed.")
+print("\n\nتمام تصاویر پردازش شد.")
 import pickle
 with open('outputs/results.pkl','wb') as f:
     pickle.dump(results, f)
-print("Results saved.")
+print("نتایج ذخیره شدند.")
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ## فاز ۷ — رسم نمودارها
+# 
+# نتایج از `results.pkl` خوانده می‌شوند و هفت شکل فصل چهارم رسم می‌گردد. هر نمودار علاوه بر ذخیره در `outputs/figs`، با `plt.show()` در خروجی سلول هم نمایش داده می‌شود.
+# 
+# </div>
 
+# %%
+# %matplotlib inline
 import matplotlib.pyplot as plt
 import pickle
 import numpy as np
@@ -489,12 +608,18 @@ with open('outputs/results.pkl', 'rb') as f:
     results = pickle.load(f)
 
 NAMES = list(results.keys())
-COLORS = ['#2E74B5', '#C00000', '#538135', '#7030A0']
-print('Results successfully loaded. Preparing figures.')
+print('بارگذاری نتایج و آماده‌سازی نمودارها...')
 
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۱ — تصاویر اصلی، رمزشده و بازیابی‌شده
+# 
+# تصاویر آزمایشی از پایگاه‌های داده USC-SIPI و Kodak در سه ستون نمایش داده شده‌اند. ستون وسط خروجی رمزنگاری و ستون سوم نتیجه رمزگشایی است؛ اگر MSE برابر صفر باشد، ستون سوم باید با ستون اول یکسان دیده شود.
+# 
+# </div>
 
-# ==========================================================
-
+# %%
 fig, axes = plt.subplots(len(NAMES), 3, figsize=(12, 3.5 * len(NAMES)))
 fig.suptitle('Figure 4-1: Original, Encrypted, and Decrypted Images',
              fontsize=14, fontweight='bold', y=0.995)
@@ -519,14 +644,20 @@ for row, name in enumerate(NAMES):
 
 plt.tight_layout(rect=[0, 0, 1, 0.995])
 plt.savefig(f'{OUT}/fig1_visual.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig1 done")
 
-# ==========================================================
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۲ — هیستوگرام کانال‌های B، G و R
+# 
+# در تصویر اصلی معمولاً قله‌های مشخص دیده می‌شود، اما پس از رمزنگاری و مرحله یکنواخت‌سازی هیستوگرام، توزیع شدت‌ها در هر سه کانال تقریباً مسطح می‌شود.
+# 
+# </div>
 
-
-# ==========================================================
-
+# %%
 fig, axes = plt.subplots(len(NAMES), 6, figsize=(18, 2.5 * len(NAMES)))
 fig.suptitle(
     'Figure 4-2: Histogram Comparison '
@@ -561,14 +692,20 @@ for row, name in enumerate(NAMES):
 
 plt.tight_layout()
 plt.savefig(f'{OUT}/fig2_histograms.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig2 done")
 
-# ==========================================================
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۳ — پراکندگی همبستگی (کانال سبز)
+# 
+# در تصویر اصلی نقاط حول خط قطری جمع می‌شوند که نشان‌دهنده همبستگی بالای پیکسل‌های مجاور است. در تصویر رمزشده این الگو از بین می‌رود.
+# 
+# </div>
 
-
-# ==========================================================
-
+# %%
 fig, axes = plt.subplots(len(NAMES), 6, figsize=(18, 2.5 * len(NAMES)))
 fig.suptitle(
     'Figure 4-3: Pixel Correlation Scatter Plots '
@@ -620,14 +757,20 @@ for row, name in enumerate(NAMES):
 
 plt.tight_layout()
 plt.savefig(f'{OUT}/fig3_correlation.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig3 done")
 
-# ==========================================================
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۴ — آنتروپی شانون
+# 
+# مقایسه آنتروپی سه کانال قبل و بعد از رمزنگاری. برای تصویر ۸ بیتی، مقدار ایده‌آل ۸ بیت است.
+# 
+# </div>
 
-
-# ==========================================================
-
+# %%
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 fig.suptitle('Figure 4-4: Shannon Entropy Comparison (Original vs Encrypted)',
              fontsize=13, fontweight='bold')
@@ -662,14 +805,20 @@ for ax_idx, (ax, mode, title) in enumerate(zip(
 
 plt.tight_layout()
 plt.savefig(f'{OUT}/fig4_entropy.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig4 done")
 
-# ==========================================================
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۵ — NPCR و UACI
+# 
+# با تغییر جزئی در $x_0$ (مقدار $10^{-15}$) دو تصویر رمزشده ساخته شده و درصد تغییر پیکسل‌ها و شدت آن‌ها اندازه‌گیری شده است.
+# 
+# </div>
 
-
-# ==========================================================
-
+# %%
 fig, axes = plt.subplots(1, 2, figsize=(13, 6))
 fig.suptitle('Figure 4-5: NPCR and UACI — Key Sensitivity Analysis',
              fontsize=13, fontweight='bold')
@@ -703,14 +852,20 @@ for ax, vals, ideal, label, title, color in zip(
 
 plt.tight_layout()
 plt.savefig(f'{OUT}/fig5_npcr_uaci.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig5 done")
 
-# ==========================================================
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۶ — زمان رمزنگاری و رمزگشایی
+# 
+# زمان رمزنگاری به‌دلیل انتخاب پویای سیستم نمایی برای هر پیکسل، معمولاً از زمان رمزگشایی بیشتر است.
+# 
+# </div>
 
-
-# ==========================================================
-
+# %%
 fig, ax = plt.subplots(figsize=(10, 6))
 fig.suptitle('Figure 4-6: Encryption and Decryption Time (seconds)',
              fontsize=13, fontweight='bold')
@@ -733,14 +888,20 @@ ax.legend(fontsize=11)
 ax.grid(axis='y', alpha=0.3)
 plt.tight_layout()
 plt.savefig(f'{OUT}/fig6_time.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig6 done")
 
-# ==========================================================
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### شکل ۴-۷ — ضریب همبستگی در سه جهت
+# 
+# مقایسه ضریب همبستگی افقی، عمودی و قطری برای تصاویر اصلی و رمزشده.
+# 
+# </div>
 
-
-# ==========================================================
-
+# %%
 fig, axes = plt.subplots(1, 3, figsize=(16, 6))
 fig.suptitle('Figure 4-7: Pixel Correlation Coefficients (Original vs Encrypted)',
              fontsize=13, fontweight='bold')
@@ -767,12 +928,20 @@ for di, (ax, dname) in enumerate(zip(axes, dir_names)):
 
 plt.tight_layout()
 plt.savefig(f'{OUT}/fig7_corr_bars.png', bbox_inches='tight')
+plt.show()
 plt.close()
 print("fig7 done")
 
-print("\nAll figures saved to:", OUT)
+# %% [markdown]
+# <div dir="rtl">
+# 
+# ### خلاصه نتایج عددی
+# 
+# میانگین آنتروپی رمزشده، NPCR، UACI و زمان اجرا برای تمام تصاویر آزمایشی از پایگاه‌های داده USC-SIPI و Kodak.
+# 
+# </div>
 
-
+# %%
 print("\n=== Numeric summary ===")
 print(
     f"{'Image':<10} {'H_enc(avg)':<14} {'NPCR%':<10} "
