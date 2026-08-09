@@ -40,6 +40,10 @@
   \usepackage{fontspec}
   \usepackage[mathdigits=default]{xepersian}
   \setlatintextfont[Scale=1.0]{Times New Roman} % 12pt (matches 12pt document base)
+  % Cascadia Mono has full Unicode box-drawing glyph coverage (unlike the
+  % default Latin Modern Mono), needed for the decorative separators used
+  % in the appendix's Python code listings.
+  \setmonofont[Scale=0.9]{Cascadia Mono}
   % Body: B Lotus (Nazok) 14pt -> Scale 1.166
   \settextfont[Scale=1.166,BoldFont={BLotusBd.ttf},ItalicFont={BLotus.ttf}]{BLotus.ttf}
   \settextdigitfont[Scale=1.166,Mapping=persian-digits]{BLotus.ttf}
