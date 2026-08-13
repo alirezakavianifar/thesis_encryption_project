@@ -1,0 +1,9 @@
+\documentclass[preview,border=4pt]{standalone}
+\usepackage{amsmath,amssymb}
+\begin{document}
+\begin{align}
+x_{\mathrm{final},k+1} &= 4\,x_{\mathrm{final},k}\,(1-x_{\mathrm{final},k}) \\
+\mathrm{final}_{\mathrm{byte}}(k) &= \lfloor x_{\mathrm{final},k} \cdot 256 \rfloor \bmod 256 \\
+C2_k &= C_k \oplus \mathrm{final}_{\mathrm{byte}}(k)
+\end{align}
+\end{document}

@@ -1,0 +1,8 @@
+\documentclass[preview,border=4pt]{standalone}
+\usepackage{amsmath,amssymb}
+\begin{document}
+\begin{align}
+\mathrm{perm} &= \mathrm{argsort}\left(x_{\mathrm{chen}}[1000:1000+N]\right) \\
+I_{\mathrm{perm}}[c] &= I_{\mathrm{original}}[c].\mathrm{flatten()}[\mathrm{perm}].\mathrm{reshape}(H,W)
+\end{align}
+\end{document}

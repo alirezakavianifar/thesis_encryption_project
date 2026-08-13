@@ -1,0 +1,15 @@
+\documentclass[preview,border=4pt]{standalone}
+\usepackage{amsmath,amssymb}
+\begin{document}
+\begin{align}
+x_{n+1} &= 4u(1-u), & u &= \left(e^{\mu\, [4x_n(1-x_n)]}\right) \bmod 1 & &\mathrm{(\lr{LEL})} \\
+x_{n+1} &= \tfrac{1}{4}\sin(\pi u), & u &= \left(e^{\mu\, [4x_n(1-x_n)]}\right) \bmod 1 & &\mathrm{(\lr{LES})} \\
+x_{n+1} &= T(u), & u &= \left(e^{\mu\, [4x_n(1-x_n)]}\right) \bmod 1 & &\mathrm{(\lr{LET})} \\
+x_{n+1} &= 4u(1-u), & u &= \left(e^{\mu\, [\frac{1}{4}\sin(\pi x_n)]}\right) \bmod 1 & &\mathrm{(\lr{SEL})} \\
+x_{n+1} &= \tfrac{1}{4}\sin(\pi u), & u &= \left(e^{\mu\, [\frac{1}{4}\sin(\pi x_n)]}\right) \bmod 1 & &\mathrm{(\lr{SES})} \\
+x_{n+1} &= T(u), & u &= \left(e^{\mu\, [\frac{1}{4}\sin(\pi x_n)]}\right) \bmod 1 & &\mathrm{(\lr{SET})} \\
+x_{n+1} &= 4u(1-u), & u &= \left(e^{\mu\, T(x_n)}\right) \bmod 1 & &\mathrm{(\lr{TEL})} \\
+x_{n+1} &= \tfrac{1}{4}\sin(\pi u), & u &= \left(e^{\mu\, T(x_n)}\right) \bmod 1 & &\mathrm{(\lr{TES})} \\
+x_{n+1} &= T(u), & u &= \left(e^{\mu\, T(x_n)}\right) \bmod 1 & &\mathrm{(\lr{TET})} 
+\end{align}
+\end{document}
