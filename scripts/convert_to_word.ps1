@@ -6,10 +6,7 @@
     Runs the custom python conversion pipeline inside thesis_latex_source/word-build/:
         1. make_reference.py -> reference.docx (B Lotus, RTL layout, 1.5 line height)
         2. build.py          -> preprocess main.tex, fix XePersian math, run pandoc -> _intermediate.docx
-        3. postprocess.py    -> apply RTL w:bidi tags, format table/captions -> thesis.docx & main_updated.docx
-
-.EXAMPLE
-    .\convert_to_word.ps1
+        3. postprocess.py    -> apply RTL w:bidi tags, format table/captions -> thesis.docx
 #>
 
 [CmdletBinding()]
@@ -56,11 +53,9 @@ try {
 
 $repoRoot = Split-Path -Parent $scriptDir
 $docx = Join-Path $repoRoot "thesis_latex_source\word-build\thesis.docx"
-$rootDocx = Join-Path $repoRoot "main_updated.docx"
 
 Write-Step "Done."
 if (Test-Path $docx) { Write-Ok "Word output: $docx" }
-if (Test-Path $rootDocx) { Write-Ok "Root output: $rootDocx" }
 
 if ($Open -and (Test-Path $docx)) {
     Invoke-Item $docx

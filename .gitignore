@@ -134,6 +134,10 @@ output/
 temp/
 .cache/
 thesis_latex_source/outputs/
+scratch/
+test_*.docx
+m_*.docx
+t_*.docx
 
 # Compiled binaries
 *.exe

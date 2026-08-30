@@ -11,7 +11,6 @@ class Config:
         self.reference_docx = os.path.join(self.word_build_dir, "reference.docx")
         self.intermediate_docx = os.path.join(self.word_build_dir, "_intermediate.docx")
         self.output_docx = os.path.join(self.word_build_dir, "thesis.docx")
-        self.root_docx = os.path.join(self.repo_root, "main_updated.docx")
         self.merged_tex = os.path.join(self.word_build_dir, "_thesis_body.tex")
         
         self.font_family_persian = "B Lotus"

@@ -19,7 +19,7 @@ Color image encryption using the Chen chaotic system and nine exponential chaoti
 | `thesis_latex_source/thesis_appendix.py` | VS Code-compatible interactive Python script version of the notebook |
 | `thesis_latex_source/images/` | Test images and Chapter 4 figures for the PDF |
 | `thesis_latex_source/outputs/` | Generated experiment outputs |
-| `main_updated.docx` | Generated Word version of the thesis |
+| `thesis_latex_source/word-build/thesis.docx` | Generated Word version of the thesis |
 
 ## Build the Word Document (.docx & .pdf)
 
@@ -36,7 +36,7 @@ This pipeline automatically:
 4. Enforces OpenXML Right-to-Left (`<w:bidi w:val="1"/>` and `<w:rtl w:val="1"/>`) at all document levels.
 5. Formats list indents, table captions, and native Word field instructions (`TOC`, `LOT`, `LOF`).
 6. Dynamically harvests body page numbers and builds formatted Table of Contents with dot leaders (`..................`).
-7. Outputs `thesis_latex_source/word-build/thesis.docx` and `main_updated.docx`.
+7. Outputs `thesis_latex_source/word-build/thesis.docx`.
 
 ## Build the PDF (XeLaTeX)
 

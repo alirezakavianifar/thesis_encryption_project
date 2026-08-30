@@ -28,6 +28,23 @@ def resolve_inputs(tex_filepath, visited=None):
         return resolve_inputs(sub_path, visited)
 
     content = re.sub(r"\\input\{([^}]+)\}", replacer, content)
+
+    def verbatim_replacer(match):
+        v_file = match.group(1).strip()
+        v_path = os.path.join(os.path.dirname(tex_filepath), v_file)
+        if not os.path.exists(v_path):
+            alt_path = os.path.join(CFG.latex_source_dir, v_file)
+            if os.path.exists(alt_path):
+                v_path = alt_path
+        if os.path.exists(v_path):
+            with open(v_path, "r", encoding="utf-8") as vf:
+                v_code = vf.read()
+            return f"\n\\begin{{verbatim}}\n{v_code}\n\\end{{verbatim}}\n"
+        else:
+            print(f"Warning: Verbatim file not found: {v_path}")
+            return f"% Missing verbatim file: {v_file}\n"
+
+    content = re.sub(r"\\(?:VerbatimInput|lstinputlisting)(?:\[[^\]]*\])?\{([^}]+)\}", verbatim_replacer, content)
     return content
 
 def preprocess_latex_for_pandoc(text):
@@ -87,7 +104,8 @@ def preprocess_latex_for_pandoc(text):
             if not re.match(r"^[\u06f0-\u06f90-9]+[\-\s]", title):
                 s_num += 1
                 ss_num = 0
-                prefix = f"{to_fa(c_num)}-{to_fa(s_num)}"
+                sss_num = 0
+                prefix = f"\u200f{to_fa(c_num)}\u200f-\u200f{to_fa(s_num)}\u200f"
                 line = f"\\section{{{prefix} {title}}}"
             new_lines.append(line)
             continue
@@ -97,8 +115,22 @@ def preprocess_latex_for_pandoc(text):
             title = subsec_m.group(1).strip()
             if not re.match(r"^[\u06f0-\u06f90-9]+[\-\s]", title):
                 ss_num += 1
-                prefix = f"{to_fa(c_num)}-{to_fa(s_num)}-{to_fa(ss_num)}"
+                sss_num = 0
+                prefix = f"\u200f{to_fa(c_num)}\u200f-\u200f{to_fa(s_num)}\u200f-\u200f{to_fa(ss_num)}\u200f"
                 line = f"\\subsection{{{prefix} {title}}}"
+            new_lines.append(line)
+            continue
+
+        subsubsec_m = re.search(r"\\subsubsection\{((?:[^{}]|\{[^{}]*\})+)\}", line)
+        if subsubsec_m and c_num > 0 and s_num > 0:
+            title = subsubsec_m.group(1).strip()
+            if not re.match(r"^[\u06f0-\u06f90-9]+[\-\s]", title):
+                sss_num += 1
+                if ss_num > 0:
+                    prefix = f"\u200f{to_fa(c_num)}\u200f-\u200f{to_fa(s_num)}\u200f-\u200f{to_fa(ss_num)}\u200f-\u200f{to_fa(sss_num)}\u200f"
+                else:
+                    prefix = f"\u200f{to_fa(c_num)}\u200f-\u200f{to_fa(s_num)}\u200f-\u200f{to_fa(sss_num)}\u200f"
+                line = f"\\subsubsection{{{prefix} {title}}}"
             new_lines.append(line)
             continue
 
@@ -154,6 +186,81 @@ def preprocess_latex_for_pandoc(text):
         return f"\\includegraphics{opts}{{{path}}}"
 
     text = re.sub(r"\\includegraphics(\[[^\]]*\])?\{([^}]+)\}", fix_img_path, text)
+
+    # 6. Auto-number figure and table captions & resolve LaTeX labels and references (\eqref, \ref)
+    label_map = {}
+    ch_num = 0
+    eq_num = 0
+    fig_num = 0
+    tab_num = 0
+    in_env = None
+    new_lines = []
+
+    lines = text.split('\n')
+    for line in lines:
+        ch_m = re.search(r"\\chapter\*?\{([^}]+)\}", line)
+        if ch_m:
+            t = ch_m.group(1)
+            if 'اول' in t or 'کلیات' in t: ch_num = 1
+            elif 'دوم' in t or 'مفاهیم' in t: ch_num = 2
+            elif 'سوم' in t or 'معرفی' in t: ch_num = 3
+            elif 'چهارم' in t or 'پیاده' in t: ch_num = 4
+            elif 'پنجم' in t or 'بحث' in t: ch_num = 5
+            else: ch_num = 0
+            eq_num = 0
+            fig_num = 0
+            tab_num = 0
+
+        if re.search(r"\\begin\{(figure|table)\}", line):
+            env_m = re.search(r"\\begin\{(figure|table)\}", line)
+            in_env = env_m.group(1)
+            if in_env == 'figure': fig_num += 1
+            if in_env == 'table': tab_num += 1
+
+        if re.search(r"\\begin\{(equation|align|gather)\*?\}", line):
+            eq_num += 1
+
+        cap_m = re.search(r"\\caption(?:\[[^\]]*\])?\{((?:[^{}]|\{[^{}]*\})+)\}", line)
+        if cap_m and in_env:
+            cap_txt = cap_m.group(1).strip()
+            cap_txt = re.sub(r"\s*\.\s*$", "", cap_txt)
+            if in_env == 'figure':
+                if not cap_txt.startswith("شکل"):
+                    prefix = f"شکل \u200f{to_fa(ch_num)}\u200f-\u200f{to_fa(fig_num)}\u200f: "
+                    line = line.replace(cap_m.group(0), f"\\caption{{{prefix}{cap_txt}}}")
+            elif in_env == 'table':
+                if not cap_txt.startswith("جدول"):
+                    prefix = f"جدول \u200f{to_fa(ch_num)}\u200f-\u200f{to_fa(tab_num)}\u200f: "
+                    line = line.replace(cap_m.group(0), f"\\caption{{{prefix}{cap_txt}}}")
+
+        for lbl in re.findall(r"\\label\{([^}]+)\}", line):
+            if lbl.startswith('eq:'):
+                label_map[lbl] = f"(\u200f{to_fa(ch_num)}\u200f-\u200f{to_fa(eq_num)}\u200f)"
+            elif lbl.startswith('tab:'):
+                label_map[lbl] = f"\u200f{to_fa(ch_num)}\u200f-\u200f{to_fa(tab_num)}\u200f"
+            elif lbl.startswith('fig:'):
+                label_map[lbl] = f"\u200f{to_fa(ch_num)}\u200f-\u200f{to_fa(fig_num)}\u200f"
+            else:
+                label_map[lbl] = f"(\u200f{to_fa(ch_num)}\u200f-\u200f{to_fa(eq_num)}\u200f)"
+
+        if re.search(r"\\end\{(figure|table)\}", line):
+            in_env = None
+
+        new_lines.append(line)
+
+    text = '\n'.join(new_lines)
+
+    def eqref_sub(m):
+        lbl = m.group(1).strip()
+        return label_map.get(lbl, f"({lbl})")
+
+    def ref_sub(m):
+        lbl = m.group(1).strip()
+        return label_map.get(lbl, lbl)
+
+    text = re.sub(r"\\eqref\{([^}]+)\}", eqref_sub, text)
+    text = re.sub(r"\\ref\{([^}]+)\}", ref_sub, text)
+    text = re.sub(r"\\label\{[^}]+\}", "", text)
 
     return text
 

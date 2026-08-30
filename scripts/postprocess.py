@@ -22,7 +22,7 @@ def add_page_break(p):
     r.append(br)
     p._p.append(r)
 
-def set_p_rtl(p, align="right"):
+def set_p_rtl(p, align="both"):
     pPr = p._p.get_or_add_pPr()
     
     # Enable paragraph-level bidi (RTL)
@@ -32,7 +32,7 @@ def set_p_rtl(p, align="right"):
         pPr.append(bidi)
     bidi.set(qn('w:val'), '1')
 
-    # Set paragraph alignment (center or right)
+    # Set paragraph alignment (both/justify, center, right, etc.)
     if align:
         jc = pPr.find(qn('w:jc'))
         if jc is None:
@@ -40,15 +40,50 @@ def set_p_rtl(p, align="right"):
             pPr.append(jc)
         jc.set(qn('w:val'), align)
 
+def is_in_math(element, stop_element=None):
+    cur = element.getparent()
+    while cur is not None and cur != stop_element:
+        tag = cur.tag
+        if isinstance(tag, str) and ('math' in tag.lower() or tag.endswith(('oMath', 'oMathPara', 'r', 'ctrlPr'))):
+            if 'http://schemas.openxmlformats.org/officeDocument/2006/math' in tag:
+                return True
+        cur = cur.getparent()
+    return False
+
 def apply_run_rtl_font(r, cs_font=CFG.font_family_persian, ascii_font=CFG.font_family_latin):
-    rPr = r._r.get_or_add_rPr()
+    r_el = r._r if hasattr(r, '_r') else r
+    rPr = r_el.get_or_add_rPr()
     
+    # 0. If run contains a footnoteReference or footnoteRef, enforce superscript & 9pt size
+    if r_el.find(qn('w:footnoteReference')) is not None or r_el.find(qn('w:footnoteRef')) is not None:
+        vert = rPr.find(qn('w:vertAlign'))
+        if vert is None:
+            vert = create_element('w:vertAlign')
+            rPr.append(vert)
+        vert.set(qn('w:val'), 'superscript')
+        sz = rPr.find(qn('w:sz'))
+        if sz is None:
+            sz = create_element('w:sz')
+            rPr.append(sz)
+        sz.set(qn('w:val'), '18')
+        szCs = rPr.find(qn('w:szCs'))
+        if szCs is None:
+            szCs = create_element('w:szCs')
+            rPr.append(szCs)
+        szCs.set(qn('w:val'), '18')
+
     # 1. Enable run-level RTL (Crucial for Persian font selection & correct colon placement)
     rtl = rPr.find(qn('w:rtl'))
     if rtl is None:
         rtl = create_element('w:rtl')
         rPr.append(rtl)
     rtl.set(qn('w:val'), '1')
+
+    lang = rPr.find(qn('w:lang'))
+    if lang is None:
+        lang = create_element('w:lang')
+        rPr.append(lang)
+    lang.set(qn('w:bidi'), 'fa-IR')
 
     # 2. Assign Complex Script (cs) font for Persian and ASCII font for Latin
     rFonts = rPr.find(qn('w:rFonts'))
@@ -65,6 +100,16 @@ def apply_run_rtl_font(r, cs_font=CFG.font_family_persian, ascii_font=CFG.font_f
         bCs = rPr.find(qn('w:bCs'))
         if bCs is None:
             rPr.append(create_element('w:bCs'))
+
+    # 4. Clean residual blue / theme colors from runs to ensure standard black text
+    color = rPr.find(qn('w:color'))
+    if color is not None:
+        if qn('w:themeColor') in color.attrib:
+            del color.attrib[qn('w:themeColor')]
+        if qn('w:themeShade') in color.attrib:
+            del color.attrib[qn('w:themeShade')]
+        if color.get(qn('w:val')) in ['003366', '004682', '365F91', '4F81BD', '243F60', '1F497D']:
+            color.set(qn('w:val'), '000000')
 
 def _inject_page_numbering(docx_path, persian_font, latin_font):
     """
@@ -584,20 +629,73 @@ def postprocess_doc():
         elif is_centered or txt.startswith("شکل") or txt.startswith("جدول"):
             align_val = "center"
         else:
-            align_val = "right"
+            align_val = "both"
+
+        # Fix BiDi ordering on Heading paragraphs (ensuring section numbers and embedded Latin words are placed correctly RTL)
+        if any(h in st_name for h in ["heading 1", "heading 2", "heading 3", "heading 4"]):
+            for r_el in p._p.iter(qn('w:r')):
+                for t in r_el.iter(qn('w:t')):
+                    if t.text:
+                        m_sec = re.match(r"^([\u200e\u200f]?[\u06f0-\u06f90-9]+(?:[\-\u200e\u200f][\u06f0-\u06f90-9]+)+[\u200e\u200f]?)\s+(.*)", t.text)
+                        if m_sec:
+                            raw_num = re.sub(r"[\u200e\u200f]", "", m_sec.group(1))
+                            parts = raw_num.split('-')
+                            bidi_num = "-".join(f"\u200f{part}\u200f" for part in parts)
+                            rest = m_sec.group(2)
+                            rest_clean = re.sub(r"(?<=\s)([A-Za-z0-9\-]+)(?=\s|$)", chr(0x200e) + r"\1" + chr(0x200f), rest)
+                            t.text = f"{bidi_num} {rest_clean}"
 
         # Apply CaptionTable / CaptionFigure styles so that LOT/LOF TOC fields
         # can collect them via TOC \t "CaptionTable,1" / "CaptionFigure,1"
-        if txt.startswith("جدول"):
+        clean_txt = re.sub(r"[\u200e\u200f\s]+", " ", txt).strip()
+        if clean_txt.startswith("جدول"):
             try:
                 p.style = "CaptionTable"
             except Exception:
                 pass
-        elif txt.startswith("شکل"):
+        elif clean_txt.startswith("شکل"):
             try:
                 p.style = "CaptionFigure"
             except Exception:
                 pass
+
+        # Handle SourceCode / Verbatim paragraphs (Python code listing in appendix)
+        st_name = p.style.name.lower()
+        if 'sourcecode' in st_name or 'verbatim' in st_name or p.style.name == 'SourceCode':
+            pPr = p._p.get_or_add_pPr()
+            bidi = pPr.find(qn('w:bidi'))
+            if bidi is None:
+                bidi = create_element('w:bidi')
+                pPr.append(bidi)
+            bidi.set(qn('w:val'), '0')
+            jc = pPr.find(qn('w:jc'))
+            if jc is None:
+                jc = create_element('w:jc')
+                pPr.append(jc)
+            jc.set(qn('w:val'), 'left')
+            for r_el in p._p.iter(qn('w:r')):
+                rPr = r_el.get_or_add_rPr()
+                rtl = rPr.find(qn('w:rtl'))
+                if rtl is not None:
+                    rtl.set(qn('w:val'), '0')
+                rFonts = rPr.find(qn('w:rFonts'))
+                if rFonts is None:
+                    rFonts = create_element('w:rFonts')
+                    rPr.append(rFonts)
+                rFonts.set(qn('w:ascii'), 'Consolas')
+                rFonts.set(qn('w:hAnsi'), 'Consolas')
+                rFonts.set(qn('w:cs'), 'Consolas')
+                sz = rPr.find(qn('w:sz'))
+                if sz is None:
+                    sz = create_element('w:sz')
+                    rPr.append(sz)
+                sz.set(qn('w:val'), '17')
+                szCs = rPr.find(qn('w:szCs'))
+                if szCs is None:
+                    szCs = create_element('w:szCs')
+                    rPr.append(szCs)
+                szCs.set(qn('w:val'), '17')
+            continue
 
         set_p_rtl(p, align=align_val)
 
@@ -612,11 +710,12 @@ def postprocess_doc():
                     if qn('w:left') in ind.attrib:
                         del ind.attrib[qn('w:left')]
 
-        # Check if paragraph is an English reference entry
+        # Check if paragraph is a pure English reference entry
+        has_persian = any('\u0600' <= ch <= '\u06ff' or '\u06f0' <= ch <= '\u06f9' for ch in txt)
         first_char = txt[0] if txt else ''
         is_english_text = first_char.isalpha() and ord(first_char) < 128
         
-        if is_english_text and not is_centered and ("(" in txt or len(txt) > 80):
+        if not has_persian and is_english_text and not is_centered and ("(" in txt or len(txt) > 80):
             jc = pPr.find(qn('w:jc'))
             if jc is None:
                 jc = create_element('w:jc')
@@ -626,18 +725,91 @@ def postprocess_doc():
             if bidi is not None:
                 bidi.set(qn('w:val'), '0')
 
-        # Apply run-level RTL & B Lotus font
-        for r in p.runs:
-            apply_run_rtl_font(r)
+        # Apply run-level RTL & B Lotus font (iterating all XML runs, skipping math)
+        for r_el in p._p.iter(qn('w:r')):
+            if not is_in_math(r_el, p._p):
+                apply_run_rtl_font(r_el)
 
-    # Enable RTL & fonts in table cells
+    # Format tables: enable grid borders, center alignment, cell padding, and RTL fonts
     for table in doc.tables:
-        for row in table.rows:
+        try:
+            table.style = 'Table Grid'
+        except Exception:
+            pass
+        
+        # Center table on page
+        tblPr = table._tbl.tblPr
+        jc = tblPr.find(qn('w:jc'))
+        if jc is None:
+            jc = create_element('w:jc')
+            tblPr.append(jc)
+        jc.set(qn('w:val'), 'center')
+        
+        # Format table borders
+        borders = tblPr.find(qn('w:tblBorders'))
+        if borders is None:
+            borders = create_element('w:tblBorders')
+            tblPr.append(borders)
+        for border_name, sz in [('top', '8'), ('bottom', '8'), ('left', '6'), ('right', '6'), ('insideH', '4'), ('insideV', '4')]:
+            b = borders.find(qn(f'w:{border_name}'))
+            if b is None:
+                b = create_element(f'w:{border_name}')
+                borders.append(b)
+            b.set(qn('w:val'), 'single')
+            b.set(qn('w:sz'), sz)
+            b.set(qn('w:space'), '0')
+            b.set(qn('w:color'), 'auto')
+
+        # Cell margins (padding)
+        cellMar = tblPr.find(qn('w:tblCellMar'))
+        if cellMar is None:
+            cellMar = create_element('w:tblCellMar')
+            tblPr.append(cellMar)
+        for m_name, val in [('top', '100'), ('bottom', '100'), ('left', '140'), ('right', '140')]:
+            m = cellMar.find(qn(f'w:{m_name}'))
+            if m is None:
+                m = create_element(f'w:{m_name}')
+                cellMar.append(m)
+            m.set(qn('w:w'), val)
+            m.set(qn('w:type'), 'dxa')
+
+        # Format header row and body rows
+        for r_idx, row in enumerate(table.rows):
+            trPr = row._tr.get_or_add_trPr()
+            cantSplit = trPr.find(qn('w:cantSplit'))
+            if cantSplit is None:
+                cantSplit = create_element('w:cantSplit')
+                trPr.append(cantSplit)
+            
+            if r_idx == 0:
+                tblHeader = trPr.find(qn('w:tblHeader'))
+                if tblHeader is None:
+                    tblHeader = create_element('w:tblHeader')
+                    trPr.append(tblHeader)
+
             for cell in row.cells:
+                tcPr = cell._tc.get_or_add_tcPr()
+                vAlign = tcPr.find(qn('w:vAlign'))
+                if vAlign is None:
+                    vAlign = create_element('w:vAlign')
+                    tcPr.append(vAlign)
+                vAlign.set(qn('w:val'), 'center')
+
                 for p in cell.paragraphs:
-                    set_p_rtl(p, align="right")
-                    for r in p.runs:
-                        apply_run_rtl_font(r)
+                    set_p_rtl(p, align="center")
+                    for r_el in p._p.iter(qn('w:r')):
+                        if not is_in_math(r_el, p._p):
+                            apply_run_rtl_font(r_el)
+                            if r_idx == 0:
+                                rPr = r_el.get_or_add_rPr()
+                                b = rPr.find(qn('w:b'))
+                                if b is None:
+                                    b = create_element('w:b')
+                                    rPr.append(b)
+                                bCs = rPr.find(qn('w:bCs'))
+                                if bCs is None:
+                                    bCs = create_element('w:bCs')
+                                    rPr.append(bCs)
 
     # Format native Word footnotes XML part
     for part in doc.part.package.parts:
@@ -645,33 +817,146 @@ def postprocess_doc():
             from docx.oxml import parse_xml
             root = parse_xml(part.blob)
             for fn in root.iter(qn('w:footnote')):
+                fn_id = fn.get(qn('w:id'))
+                if fn_id in ['0', '-1']:
+                    continue
                 for p in fn.iter(qn('w:p')):
                     pPr = p.find(qn('w:pPr'))
                     if pPr is None:
                         pPr = create_element('w:pPr')
                         p.append(pPr)
-                    bidi = pPr.find(qn('w:bidi'))
-                    if bidi is None:
-                        bidi = create_element('w:bidi')
-                        pPr.append(bidi)
-                    bidi.set(qn('w:val'), '1')
-                    for r in p.iter(qn('w:r')):
-                        rPr = r.find(qn('w:rPr'))
-                        if rPr is None:
-                            rPr = create_element('w:rPr')
-                            r.append(rPr)
-                        rtl = rPr.find(qn('w:rtl'))
-                        if rtl is None:
-                            rtl = create_element('w:rtl')
-                            rPr.append(rtl)
-                        rtl.set(qn('w:val'), '1')
-                        rFonts = rPr.find(qn('w:rFonts'))
-                        if rFonts is None:
-                            rFonts = create_element('w:rFonts')
-                            rPr.append(rFonts)
-                        rFonts.set(qn('w:cs'), CFG.font_family_persian)
-                        rFonts.set(qn('w:ascii'), CFG.font_family_latin)
-                        rFonts.set(qn('w:hAnsi'), CFG.font_family_latin)
+                    
+                    # Ensure FootnoteText style is referenced
+                    pStyle = pPr.find(qn('w:pStyle'))
+                    if pStyle is None:
+                        pStyle = create_element('w:pStyle')
+                        pPr.append(pStyle)
+                    pStyle.set(qn('w:val'), 'FootnoteText')
+
+                    # Gather full text of the footnote (excluding footnoteRef)
+                    full_p_text = ''.join(t.text or '' for t in p.iter(qn('w:t'))).strip()
+                    has_persian = any('\u0600' <= ch <= '\u06ff' or '\u06f0' <= ch <= '\u06f9' for ch in full_p_text)
+
+                    if not has_persian:
+                        # Pure Latin footnote (e.g. "Advanced Encryption Standard (AES)") -> LTR left-aligned
+                        bidi = pPr.find(qn('w:bidi'))
+                        if bidi is None:
+                            bidi = create_element('w:bidi')
+                            pPr.append(bidi)
+                        bidi.set(qn('w:val'), '0')
+                        jc = pPr.find(qn('w:jc'))
+                        if jc is None:
+                            jc = create_element('w:jc')
+                            pPr.append(jc)
+                        jc.set(qn('w:val'), 'left')
+
+                        for r in p.iter(qn('w:r')):
+                            rPr = r.find(qn('w:rPr'))
+                            if rPr is None:
+                                rPr = create_element('w:rPr')
+                                r.append(rPr)
+                            
+                            is_fn_ref = r.find(qn('w:footnoteRef')) is not None
+                            if is_fn_ref:
+                                vert = rPr.find(qn('w:vertAlign'))
+                                if vert is None:
+                                    vert = create_element('w:vertAlign')
+                                    rPr.append(vert)
+                                vert.set(qn('w:val'), 'superscript')
+                                sz = rPr.find(qn('w:sz'))
+                                if sz is None:
+                                    sz = create_element('w:sz')
+                                    rPr.append(sz)
+                                sz.set(qn('w:val'), '18')
+                            else:
+                                sz = rPr.find(qn('w:sz'))
+                                if sz is None:
+                                    sz = create_element('w:sz')
+                                    rPr.append(sz)
+                                sz.set(qn('w:val'), '20')
+
+                            rtl = rPr.find(qn('w:rtl'))
+                            if rtl is not None:
+                                rtl.set(qn('w:val'), '0')
+                            
+                            rFonts = rPr.find(qn('w:rFonts'))
+                            if rFonts is None:
+                                rFonts = create_element('w:rFonts')
+                                rPr.append(rFonts)
+                            rFonts.set(qn('w:ascii'), CFG.font_family_latin)
+                            rFonts.set(qn('w:hAnsi'), CFG.font_family_latin)
+                            rFonts.set(qn('w:cs'), CFG.font_family_persian)
+                    else:
+                        # Persian or Mixed footnote (e.g. "Differential Cryptanalysis: روشی...") -> RTL right-aligned
+                        bidi = pPr.find(qn('w:bidi'))
+                        if bidi is None:
+                            bidi = create_element('w:bidi')
+                            pPr.append(bidi)
+                        bidi.set(qn('w:val'), '1')
+                        jc = pPr.find(qn('w:jc'))
+                        if jc is None:
+                            jc = create_element('w:jc')
+                            pPr.append(jc)
+                        jc.set(qn('w:val'), 'right')
+
+                        for r in p.iter(qn('w:r')):
+                            rPr = r.find(qn('w:rPr'))
+                            if rPr is None:
+                                rPr = create_element('w:rPr')
+                                r.append(rPr)
+
+                            is_fn_ref = r.find(qn('w:footnoteRef')) is not None
+                            if is_fn_ref:
+                                vert = rPr.find(qn('w:vertAlign'))
+                                if vert is None:
+                                    vert = create_element('w:vertAlign')
+                                    rPr.append(vert)
+                                vert.set(qn('w:val'), 'superscript')
+                                sz = rPr.find(qn('w:sz'))
+                                if sz is None:
+                                    sz = create_element('w:sz')
+                                    rPr.append(sz)
+                                sz.set(qn('w:val'), '18')
+                                szCs = rPr.find(qn('w:szCs'))
+                                if szCs is None:
+                                    szCs = create_element('w:szCs')
+                                    rPr.append(szCs)
+                                szCs.set(qn('w:val'), '18')
+                            else:
+                                sz = rPr.find(qn('w:sz'))
+                                if sz is None:
+                                    sz = create_element('w:sz')
+                                    rPr.append(sz)
+                                sz.set(qn('w:val'), '20')
+                                szCs = rPr.find(qn('w:szCs'))
+                                if szCs is None:
+                                    szCs = create_element('w:szCs')
+                                    rPr.append(szCs)
+                                szCs.set(qn('w:val'), '20')
+
+                            rtl = rPr.find(qn('w:rtl'))
+                            if rtl is None:
+                                rtl = create_element('w:rtl')
+                                rPr.append(rtl)
+                            rtl.set(qn('w:val'), '1')
+
+                            rFonts = rPr.find(qn('w:rFonts'))
+                            if rFonts is None:
+                                rFonts = create_element('w:rFonts')
+                                rPr.append(rFonts)
+                            rFonts.set(qn('w:cs'), CFG.font_family_persian)
+                            rFonts.set(qn('w:ascii'), CFG.font_family_latin)
+                            rFonts.set(qn('w:hAnsi'), CFG.font_family_latin)
+
+                            # Handle mixed English term with Persian explanation like:
+                            # "Differential Cryptanalysis: روشی..."
+                            for t in r.iter(qn('w:t')):
+                                if t.text:
+                                    m_lead = re.match(r"^([A-Za-z0-9\s\-]+):\s*([\u0600-\u06FF].*)", t.text)
+                                    if m_lead:
+                                        eng_term = m_lead.group(1).strip()
+                                        fa_rest = m_lead.group(2)
+                                        t.text = f"\u200e{eng_term}\u200f: {fa_rest}"
             from lxml import etree
             part._blob = etree.tostring(root, encoding='utf-8', xml_declaration=True)
 
@@ -718,13 +1003,40 @@ def postprocess_doc():
                     rPr.append(rtl)
                 rtl.set(qn('w:val'), '1')
 
+                numFmt = lvl.find(qn('w:numFmt'))
+                numFmt_val = numFmt.get(qn('w:val')) if numFmt is not None else ''
+                lvlText = lvl.find(qn('w:lvlText'))
+                lvlText_val = lvlText.get(qn('w:val')) if lvlText is not None else ''
+
                 rFonts = rPr.find(qn('w:rFonts'))
                 if rFonts is None:
                     rFonts = create_element('w:rFonts')
                     rPr.append(rFonts)
-                rFonts.set(qn('w:cs'), CFG.font_family_persian)
-                rFonts.set(qn('w:ascii'), CFG.font_family_latin)
-                rFonts.set(qn('w:hAnsi'), CFG.font_family_latin)
+                
+                if numFmt_val == 'bullet':
+                    if '\uf0b7' in lvlText_val:
+                        rFonts.set(qn('w:ascii'), 'Symbol')
+                        rFonts.set(qn('w:hAnsi'), 'Symbol')
+                        rFonts.set(qn('w:cs'), 'Symbol')
+                        rFonts.set(qn('w:hint'), 'default')
+                    elif '\uf0a7' in lvlText_val:
+                        rFonts.set(qn('w:ascii'), 'Wingdings')
+                        rFonts.set(qn('w:hAnsi'), 'Wingdings')
+                        rFonts.set(qn('w:cs'), 'Wingdings')
+                        rFonts.set(qn('w:hint'), 'default')
+                    elif lvlText_val == 'o':
+                        rFonts.set(qn('w:ascii'), 'Courier New')
+                        rFonts.set(qn('w:hAnsi'), 'Courier New')
+                        rFonts.set(qn('w:cs'), 'Courier New')
+                        rFonts.set(qn('w:hint'), 'default')
+                    else:
+                        rFonts.set(qn('w:ascii'), 'Arial')
+                        rFonts.set(qn('w:hAnsi'), 'Arial')
+                        rFonts.set(qn('w:cs'), 'Arial')
+                else:
+                    rFonts.set(qn('w:cs'), CFG.font_family_persian)
+                    rFonts.set(qn('w:ascii'), CFG.font_family_latin)
+                    rFonts.set(qn('w:hAnsi'), CFG.font_family_latin)
             from lxml import etree
             part._blob = etree.tostring(root, encoding='utf-8', xml_declaration=True)
 
@@ -778,55 +1090,326 @@ def postprocess_doc():
         with zipfile.ZipFile(tmp_path, 'w', zipfile.ZIP_DEFLATED) as zout:
             for item in zin.infolist():
                 buffer = zin.read(item.filename)
-                if item.filename == 'word/styles.xml':
+                if item.filename == 'word/document.xml':
                     from lxml import etree
                     root = etree.fromstring(buffer)
-                    docDef = root.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}docDefaults')
+                    M_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/math'
+                    W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+                    ns = {'m': M_NS, 'w': W_NS}
+                    
+                    for math in root.xpath('//m:oMath | //m:oMathPara', namespaces=ns):
+                        for rPr in math.xpath('.//w:rPr', namespaces=ns):
+                            rFonts = rPr.find('{%s}rFonts' % W_NS)
+                            if rFonts is None:
+                                rFonts = etree.SubElement(rPr, '{%s}rFonts' % W_NS)
+                            rFonts.set('{%s}ascii' % W_NS, 'Cambria Math')
+                            rFonts.set('{%s}hAnsi' % W_NS, 'Cambria Math')
+                            rFonts.set('{%s}cs' % W_NS, 'Cambria Math')
+                            
+                            rtl = rPr.find('{%s}rtl' % W_NS)
+                            if rtl is None:
+                                rtl = etree.SubElement(rPr, '{%s}rtl' % W_NS)
+                            rtl.set('{%s}val' % W_NS, '0')
+                            
+                            for tag in ['bCs', 'iCs']:
+                                el = rPr.find('{%s}%s' % (W_NS, tag))
+                                if el is not None:
+                                    rPr.remove(el)
+                        
+                        for mr in math.xpath('.//m:r', namespaces=ns):
+                            rPr = mr.find('{%s}rPr' % W_NS)
+                            if rPr is None:
+                                rPr = etree.Element('{%s}rPr' % W_NS)
+                                mr.insert(0, rPr)
+                                rFonts = etree.SubElement(rPr, '{%s}rFonts' % W_NS)
+                                rFonts.set('{%s}ascii' % W_NS, 'Cambria Math')
+                                rFonts.set('{%s}hAnsi' % W_NS, 'Cambria Math')
+                                rFonts.set('{%s}cs' % W_NS, 'Cambria Math')
+                                rtl = etree.SubElement(rPr, '{%s}rtl' % W_NS)
+                                rtl.set('{%s}val' % W_NS, '0')
+                    
+                    # Ensure table borders and TableGrid style for all tables
+                    for tbl in root.xpath('//w:tbl', namespaces=ns):
+                        tblPr = tbl.find('{%s}tblPr' % W_NS)
+                        if tblPr is not None:
+                            st = tblPr.find('{%s}tblStyle' % W_NS)
+                            if st is not None:
+                                st.set('{%s}val' % W_NS, 'TableGrid')
+                            
+                            jc = tblPr.find('{%s}jc' % W_NS)
+                            if jc is None:
+                                jc = etree.SubElement(tblPr, '{%s}jc' % W_NS)
+                            jc.set('{%s}val' % W_NS, 'center')
+
+                            borders = tblPr.find('{%s}tblBorders' % W_NS)
+                            if borders is None:
+                                borders = etree.SubElement(tblPr, '{%s}tblBorders' % W_NS)
+                            for b_name, b_sz in [('top', '8'), ('bottom', '8'), ('left', '6'), ('right', '6'), ('insideH', '4'), ('insideV', '4')]:
+                                b = borders.find('{%s}%s' % (W_NS, b_name))
+                                if b is None:
+                                    b = etree.SubElement(borders, '{%s}%s' % (W_NS, b_name))
+                                b.set('{%s}val' % W_NS, 'single')
+                                b.set('{%s}sz' % W_NS, b_sz)
+                                b.set('{%s}space' % W_NS, '0')
+                                b.set('{%s}color' % W_NS, 'auto')
+                    
+                    buffer = etree.tostring(root, encoding='utf-8', xml_declaration=True)
+                elif item.filename == 'word/styles.xml':
+                    from lxml import etree
+                    root = etree.fromstring(buffer)
+                    W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+                    docDef = root.find('{%s}docDefaults' % W_NS)
                     if docDef is not None:
-                        pPrDef = docDef.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPrDefault')
+                        pPrDef = docDef.find('{%s}pPrDefault' % W_NS)
                         if pPrDef is not None:
-                            pPr = pPrDef.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPr')
+                            pPr = pPrDef.find('{%s}pPr' % W_NS)
                             if pPr is not None:
-                                bidi = pPr.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}bidi')
+                                bidi = pPr.find('{%s}bidi' % W_NS)
                                 if bidi is None:
-                                    bidi = etree.Element('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}bidi')
+                                    bidi = etree.Element('{%s}bidi' % W_NS)
                                     pPr.append(bidi)
-                                bidi.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', '1')
-                        rPrDef = docDef.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rPrDefault')
+                                bidi.set('{%s}val' % W_NS, '1')
+                                jc = pPr.find('{%s}jc' % W_NS)
+                                if jc is None:
+                                    jc = etree.Element('{%s}jc' % W_NS)
+                                    pPr.append(jc)
+                                jc.set('{%s}val' % W_NS, 'both')
+                        rPrDef = docDef.find('{%s}rPrDefault' % W_NS)
                         if rPrDef is not None:
-                            rPr = rPrDef.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rPr')
+                            rPr = rPrDef.find('{%s}rPr' % W_NS)
                             if rPr is not None:
-                                rtl = rPr.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rtl')
+                                rtl = rPr.find('{%s}rtl' % W_NS)
                                 if rtl is None:
-                                    rtl = etree.Element('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rtl')
+                                    rtl = etree.Element('{%s}rtl' % W_NS)
                                     rPr.append(rtl)
-                                rtl.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', '1')
-                                rFonts = rPr.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rFonts')
+                                rtl.set('{%s}val' % W_NS, '1')
+                                lang = rPr.find('{%s}lang' % W_NS)
+                                if lang is None:
+                                    lang = etree.Element('{%s}lang' % W_NS)
+                                    rPr.append(lang)
+                                lang.set('{%s}bidi' % W_NS, 'fa-IR')
+                                rFonts = rPr.find('{%s}rFonts' % W_NS)
                                 if rFonts is None:
-                                    rFonts = etree.Element('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}rFonts')
+                                    rFonts = etree.Element('{%s}rFonts' % W_NS)
                                     rPr.append(rFonts)
-                                rFonts.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}cs', CFG.font_family_persian)
-                                rFonts.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}ascii', CFG.font_family_latin)
-                                rFonts.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}hAnsi', CFG.font_family_latin)
+                                rFonts.set('{%s}cs' % W_NS, CFG.font_family_persian)
+                                rFonts.set('{%s}ascii' % W_NS, CFG.font_family_latin)
+                                rFonts.set('{%s}hAnsi' % W_NS, CFG.font_family_latin)
+                    
+                    # Ensure Normal, BodyText, and all paragraph styles have bidi, rtl, and fa-IR
+                    for s in root.iter('{%s}style' % W_NS):
+                        s_type = s.get('{%s}type' % W_NS)
+                        s_id = s.get('{%s}styleId' % W_NS, '')
+                        if s_type == 'paragraph':
+                            pPr = s.find('{%s}pPr' % W_NS)
+                            if pPr is None:
+                                pPr = etree.SubElement(s, '{%s}pPr' % W_NS)
+                            bidi = pPr.find('{%s}bidi' % W_NS)
+                            if bidi is None:
+                                bidi = etree.Element('{%s}bidi' % W_NS)
+                                pPr.append(bidi)
+                            bidi.set('{%s}val' % W_NS, '1')
+                            if s_id in ['Normal', 'BodyText', 'Body Text']:
+                                jc = pPr.find('{%s}jc' % W_NS)
+                                if jc is None:
+                                    jc = etree.Element('{%s}jc' % W_NS)
+                                    pPr.append(jc)
+                                jc.set('{%s}val' % W_NS, 'both')
+                            elif 'heading' in s_id.lower():
+                                jc = pPr.find('{%s}jc' % W_NS)
+                                if jc is None:
+                                    jc = etree.Element('{%s}jc' % W_NS)
+                                    pPr.append(jc)
+                                jc.set('{%s}val' % W_NS, 'right')
+                            
+                            rPr = s.find('{%s}rPr' % W_NS)
+                            if rPr is None:
+                                rPr = etree.SubElement(s, '{%s}rPr' % W_NS)
+                            rtl = rPr.find('{%s}rtl' % W_NS)
+                            if rtl is None:
+                                rtl = etree.Element('{%s}rtl' % W_NS)
+                                rPr.append(rtl)
+                            rtl.set('{%s}val' % W_NS, '1')
+                            lang = rPr.find('{%s}lang' % W_NS)
+                            if lang is None:
+                                lang = etree.Element('{%s}lang' % W_NS)
+                                rPr.append(lang)
+                            lang.set('{%s}bidi' % W_NS, 'fa-IR')
+                            
+                            if 'heading' in s_id.lower():
+                                color = rPr.find('{%s}color' % W_NS)
+                                if color is None:
+                                    color = etree.Element('{%s}color' % W_NS)
+                                    rPr.append(color)
+                                color.set('{%s}val' % W_NS, '000000')
+                                if '{%s}themeColor' % W_NS in color.attrib:
+                                    del color.attrib['{%s}themeColor' % W_NS]
+                                if '{%s}themeShade' % W_NS in color.attrib:
+                                    del color.attrib['{%s}themeShade' % W_NS]
+                                
+                                i_el = rPr.find('{%s}i' % W_NS)
+                                if i_el is not None:
+                                    rPr.remove(i_el)
+                                iCs_el = rPr.find('{%s}iCs' % W_NS)
+                                if iCs_el is not None:
+                                    rPr.remove(iCs_el)
+                                
+                                b_el = rPr.find('{%s}b' % W_NS)
+                                if b_el is None:
+                                    b_el = etree.Element('{%s}b' % W_NS)
+                                    rPr.append(b_el)
+                                bCs_el = rPr.find('{%s}bCs' % W_NS)
+                                if bCs_el is None:
+                                    bCs_el = etree.Element('{%s}bCs' % W_NS)
+                                    rPr.append(bCs_el)
+
+                        elif s_type == 'character' and 'heading' in s_id.lower():
+                            rPr = s.find('{%s}rPr' % W_NS)
+                            if rPr is not None:
+                                color = rPr.find('{%s}color' % W_NS)
+                                if color is None:
+                                    color = etree.Element('{%s}color' % W_NS)
+                                    rPr.append(color)
+                                color.set('{%s}val' % W_NS, '000000')
+                                if '{%s}themeColor' % W_NS in color.attrib:
+                                    del color.attrib['{%s}themeColor' % W_NS]
+                                if '{%s}themeShade' % W_NS in color.attrib:
+                                    del color.attrib['{%s}themeShade' % W_NS]
+                                i_el = rPr.find('{%s}i' % W_NS)
+                                if i_el is not None:
+                                    rPr.remove(i_el)
+                                iCs_el = rPr.find('{%s}iCs' % W_NS)
+                                if iCs_el is not None:
+                                    rPr.remove(iCs_el)
+                    
+                    # Ensure FootnoteReference character style in styles.xml
+                    fn_ref_style = root.find('.//{%s}style[@{%s}styleId="FootnoteReference"]' % (W_NS, W_NS))
+                    if fn_ref_style is None:
+                        fn_ref_style = etree.SubElement(root, '{%s}style' % W_NS)
+                        fn_ref_style.set('{%s}type' % W_NS, 'character')
+                        fn_ref_style.set('{%s}styleId' % W_NS, 'FootnoteReference')
+                        name_el = etree.SubElement(fn_ref_style, '{%s}name' % W_NS)
+                        name_el.set('{%s}val' % W_NS, 'Footnote Reference')
+                    rPr_fn = fn_ref_style.find('{%s}rPr' % W_NS)
+                    if rPr_fn is None:
+                        rPr_fn = etree.SubElement(fn_ref_style, '{%s}rPr' % W_NS)
+                    vert = rPr_fn.find('{%s}vertAlign' % W_NS)
+                    if vert is None:
+                        vert = etree.SubElement(rPr_fn, '{%s}vertAlign' % W_NS)
+                    vert.set('{%s}val' % W_NS, 'superscript')
+                    
+                    buffer = etree.tostring(root, encoding='utf-8', xml_declaration=True)
+                elif item.filename == 'word/numbering.xml':
+                    from lxml import etree
+                    root = etree.fromstring(buffer)
+                    W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+                    ns = {'w': W_NS}
+                    for lvl in root.xpath('//w:lvl', namespaces=ns):
+                        ilvl = int(lvl.get('{%s}ilvl' % W_NS, '0'))
+                        
+                        # 1. Level justification right
+                        lvlJc = lvl.find('{%s}lvlJc' % W_NS)
+                        if lvlJc is None:
+                            lvlJc = etree.SubElement(lvl, '{%s}lvlJc' % W_NS)
+                        lvlJc.set('{%s}val' % W_NS, 'right')
+                        
+                        # 2. pPr with RTL bidi and right indent
+                        pPr = lvl.find('{%s}pPr' % W_NS)
+                        if pPr is None:
+                            pPr = etree.SubElement(lvl, '{%s}pPr' % W_NS)
+                        bidi = pPr.find('{%s}bidi' % W_NS)
+                        if bidi is None:
+                            bidi = etree.SubElement(pPr, '{%s}bidi' % W_NS)
+                        bidi.set('{%s}val' % W_NS, '1')
+                        
+                        ind = pPr.find('{%s}ind' % W_NS)
+                        if ind is None:
+                            ind = etree.SubElement(pPr, '{%s}ind' % W_NS)
+                        right_val = 720 * (ilvl + 1)
+                        ind.set('{%s}right' % W_NS, str(right_val))
+                        ind.set('{%s}hanging' % W_NS, '360')
+                        if '{%s}left' % W_NS in ind.attrib:
+                            del ind.attrib['{%s}left' % W_NS]
+                        
+                        # 3. rPr with RTL
+                        rPr = lvl.find('{%s}rPr' % W_NS)
+                        if rPr is None:
+                            rPr = etree.SubElement(lvl, '{%s}rPr' % W_NS)
+                        rtl = rPr.find('{%s}rtl' % W_NS)
+                        if rtl is None:
+                            rtl = etree.SubElement(rPr, '{%s}rtl' % W_NS)
+                        rtl.set('{%s}val' % W_NS, '1')
+                        lang = rPr.find('{%s}lang' % W_NS)
+                        if lang is None:
+                            lang = etree.Element('{%s}lang' % W_NS)
+                            rPr.append(lang)
+                        lang.set('{%s}bidi' % W_NS, 'fa-IR')
+                        
+                        numFmt = lvl.find('{%s}numFmt' % W_NS)
+                        numFmt_val = numFmt.get('{%s}val' % W_NS) if numFmt is not None else ''
+                        lvlText = lvl.find('{%s}lvlText' % W_NS)
+                        lvlText_val = lvlText.get('{%s}val' % W_NS) if lvlText is not None else ''
+
+                        rFonts = rPr.find('{%s}rFonts' % W_NS)
+                        if rFonts is None:
+                            rFonts = etree.SubElement(rPr, '{%s}rFonts' % W_NS)
+                        
+                        if numFmt_val == 'bullet':
+                            if '\uf0b7' in lvlText_val:
+                                rFonts.set('{%s}ascii' % W_NS, 'Symbol')
+                                rFonts.set('{%s}hAnsi' % W_NS, 'Symbol')
+                                rFonts.set('{%s}cs' % W_NS, 'Symbol')
+                                rFonts.set('{%s}hint' % W_NS, 'default')
+                            elif '\uf0a7' in lvlText_val:
+                                rFonts.set('{%s}ascii' % W_NS, 'Wingdings')
+                                rFonts.set('{%s}hAnsi' % W_NS, 'Wingdings')
+                                rFonts.set('{%s}cs' % W_NS, 'Wingdings')
+                                rFonts.set('{%s}hint' % W_NS, 'default')
+                            elif lvlText_val == 'o':
+                                rFonts.set('{%s}ascii' % W_NS, 'Courier New')
+                                rFonts.set('{%s}hAnsi' % W_NS, 'Courier New')
+                                rFonts.set('{%s}cs' % W_NS, 'Courier New')
+                                rFonts.set('{%s}hint' % W_NS, 'default')
+                            else:
+                                rFonts.set('{%s}ascii' % W_NS, 'Arial')
+                                rFonts.set('{%s}hAnsi' % W_NS, 'Arial')
+                                rFonts.set('{%s}cs' % W_NS, 'Arial')
+                        else:
+                            rFonts.set('{%s}cs' % W_NS, CFG.font_family_persian)
+                            rFonts.set('{%s}ascii' % W_NS, CFG.font_family_latin)
+                            rFonts.set('{%s}hAnsi' % W_NS, CFG.font_family_latin)
+                    
                     buffer = etree.tostring(root, encoding='utf-8', xml_declaration=True)
                 elif item.filename == 'word/settings.xml':
                     from lxml import etree
                     root = etree.fromstring(buffer)
-                    uf = root.find('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}updateFields')
+                    W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+                    
+                    # Ensure bidi tag in settings
+                    bidi = root.find('{%s}bidi' % W_NS)
+                    if bidi is None:
+                        bidi = etree.Element('{%s}bidi' % W_NS)
+                        root.append(bidi)
+                    bidi.set('{%s}val' % W_NS, '1')
+                    
+                    # Ensure themeFontLang has bidi="fa-IR"
+                    tfl = root.find('{%s}themeFontLang' % W_NS)
+                    if tfl is None:
+                        tfl = etree.SubElement(root, '{%s}themeFontLang' % W_NS)
+                    tfl.set('{%s}bidi' % W_NS, 'fa-IR')
+                    tfl.set('{%s}val' % W_NS, 'en-US')
+                    
+                    uf = root.find('{%s}updateFields' % W_NS)
                     if uf is None:
-                        uf = etree.Element('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}updateFields')
+                        uf = etree.Element('{%s}updateFields' % W_NS)
                         root.append(uf)
-                    uf.set('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', 'true')
+                    uf.set('{%s}val' % W_NS, 'true')
                     buffer = etree.tostring(root, encoding='utf-8', xml_declaration=True)
                 zout.writestr(item, buffer)
     shutil.move(tmp_path, CFG.output_docx)
 
     # Inject dual-section page numbering via direct zip manipulation
     _inject_page_numbering(CFG.output_docx, CFG.font_family_persian, CFG.font_family_latin)
-
-    # Copy to root main_updated.docx
-    shutil.copyfile(CFG.output_docx, CFG.root_docx)
-    print(f"updated root copy: {CFG.root_docx}")
 
 if __name__ == "__main__":
     postprocess_doc()
